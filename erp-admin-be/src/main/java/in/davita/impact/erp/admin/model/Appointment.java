@@ -1,4 +1,4 @@
-package com.training.model;
+package in.davita.impact.erp.admin.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
