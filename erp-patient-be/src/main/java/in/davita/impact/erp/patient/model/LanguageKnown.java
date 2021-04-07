@@ -18,8 +18,8 @@ public class LanguageKnown {
 	private int languageId;
 	private String languageName;
 	
-	@ManyToOne
-	private Patient patient;
-	
+	/*
+	 * @ManyToOne private Patient patient;
+	 */
 	
 }

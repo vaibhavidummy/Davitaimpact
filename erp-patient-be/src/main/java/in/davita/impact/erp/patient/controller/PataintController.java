@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import in.davita.impact.erp.patient.model.Patient;
@@ -25,7 +26,7 @@ public class PataintController {
 	PatientServices patientServices;
 	
 	@PostMapping("/pataint/")
-	public Patient addPatientDetails(@Valid @ModelAttribute Patient patient , BindingResult result) {
+	public Patient addPatientDetails(@Valid @RequestBody Patient patient , BindingResult result) {
 		
 		return patientServices.addNewPatient(patient);
 		
