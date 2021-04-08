@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.citiustech.pms</groupId>
-	<artifactId>PMS-Procedure</artifactId>
+	<artifactId>procedure</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>PMS-Procedure</name>
 	<description>Demo project for Spring Boot</description>

@@ -1,8 +1,8 @@
-package com.citiustech.pms.service;
+package com.citiustech.pms.procedure.service;
 
 import org.springframework.stereotype.Service;
 
-import com.citiustech.pms.model.ProcedureDetail;
+import com.citiustech.pms.procedure.model.ProcedureDetail;
 
 @Service
 public interface ProcedureDetailService {

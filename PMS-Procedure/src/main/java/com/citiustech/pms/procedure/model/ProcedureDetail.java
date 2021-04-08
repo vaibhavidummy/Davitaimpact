@@ -1,4 +1,4 @@
-package com.citiustech.pms.model;
+package com.citiustech.pms.procedure.model;
 
 import java.io.Serializable;
 
@@ -18,23 +18,17 @@ import lombok.Setter;
 @Component
 @Entity
 public class ProcedureDetail implements Serializable {
-	
+
 	private static final long serialVersionUID = -3025916076728582932L;
 
-		@Id
-		@Column(name="procedure_id")
-		@GeneratedValue
-	    //@GeneratedValue(strategy =GenerationType.AUTO ,generator="system-uuid")
-		//@GenericGenerator(name="system-uuid", strategy = "uuid")
-		private long procedure_id;
-		
-		@Column(name="procedure_name")
-		private String procedure_name;
-		
-		@Column(name="procedure_description")
-		private String procedure_description;
-	
-	    
-	
+	@Id
+	@Column
+	@GeneratedValue
+	private long id;
 
+	@Column
+	private String name;
+
+	@Column
+	private String description;
 }
