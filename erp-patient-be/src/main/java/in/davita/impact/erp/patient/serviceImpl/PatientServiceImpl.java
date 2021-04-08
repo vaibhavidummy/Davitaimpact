@@ -4,11 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import in.davita.impact.erp.patient.model.Patient;
 import in.davita.impact.erp.patient.repository.PatientRepository;
 import in.davita.impact.erp.patient.service.PatientServices;
-
+@Service
 public class PatientServiceImpl implements PatientServices  {
 
 	@Autowired
@@ -20,7 +21,9 @@ public class PatientServiceImpl implements PatientServices  {
 		
 		
 		Patient addedPatient = patientRepository.save(patient);
-		return addedPatient;
+		String id=addedPatient.getId();
+		//System.out.println("ID ="id);
+		return patient;
 	}
 
 	@Override
