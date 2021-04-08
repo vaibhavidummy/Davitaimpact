@@ -6,11 +6,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import lombok.Getter;
@@ -21,11 +27,15 @@ import lombok.Setter;
 @Entity
 public class Patient {
 
-	@Id
+	
+	 @Id
+	 @GenericGenerator(name = "patient_sequence_id", strategy = "in.davita.impact.erp.patient.utilities.PatientIdGenerator")
+	 @GeneratedValue(generator = "patient_sequence_id")
 	private String id;
 	private String firstName;
 	private String lastName;
 	private String emailId;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date dateOfBirth;
 	private long contactNo;
 	private float age;
@@ -41,9 +51,10 @@ public class Patient {
 	private long emergency_contact_number;
 	private boolean is_access_approved;
 	private String emergencyContactEmailId;
-	@OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy = "patient")
-	private List<LanguageKnown>languageKnow =new ArrayList<>();
-	
+	/*
+	 * @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY,mappedBy = "patient")
+	 * private List<LanguageKnown>languageKnow =new ArrayList<>();
+	 */	
 	/*
 	 * created_by created_on modified_by modified_on meta_status
 	 */
