@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.citiustech.pms.model.Diagnosis;
 import com.citiustech.pms.repository.DiagnosisRepo;
-@Component
+@Service
 public class PmsDiagnosisServiceImpl implements PmsDiagnosisService{
 	@Autowired
 	DiagnosisRepo diagnosisRepo;
