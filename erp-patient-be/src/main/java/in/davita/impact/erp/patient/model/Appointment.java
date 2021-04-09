@@ -1,6 +1,8 @@
 package in.davita.impact.erp.patient.model;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,8 +38,6 @@ public class Appointment {
 	
 	
 	@NotBlank(message="PhysicianId is Required")
-	//@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	//@JoinColumn(name = "credential_id_fk")
 	private String physicianId;
 	
 	@NotBlank(message="patientId is Required")
@@ -46,32 +46,30 @@ public class Appointment {
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	@NotNull(message="Appointment date is required")
-	@FutureOrPresent(message="Appointment date must be past or present date") 
+	@FutureOrPresent(message="Appointment date must be future or present date") 
     @Column(nullable = false)
-	 private Date AppointmentDate;
+	 private Date appointmentDate;
+	
 	
 	@JsonFormat(pattern="yyyy-MM-dd")
 	@FutureOrPresent(message="Appointment date must be past or present date") 
 	private Date reScheduleDate;
 	
-	
-	/*
-	 * @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")
-	 * 
-	 * @Temporal(TemporalType.TIME)
-	 * 
-	 * @NotNull(message="Appointment Start time is required") private Date
-	 * startTime;
-	 * 
-	 * 
-	 * @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")
-	 * 
-	 * @Temporal(TemporalType.TIME)
-	 * 
-	 * @NotNull(message="Appointment End time is required") private Date endTime;
-	 */
-	
 	@Pattern(regexp = "Available|Booked")
 	private String appointmentStatus;
+	
+	
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")
+	@Temporal(TemporalType.TIME)
+	@NotNull(message="Appointment Start time is required") 
+	private Date startTime;
+	  
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm:ss")
+	@Temporal(TemporalType.TIME)
+    @NotNull(message="Appointment End time is required") 
+	private Date endTime;
+	 
+	
+	
 	
 }

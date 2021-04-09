@@ -22,21 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 import in.davita.impact.erp.patient.model.Appointment;
 import in.davita.impact.erp.patient.service.AppointmentService;
 
+/**
+ * 'Appointment service controller' Bounded Context
+ * REST Controller Service
+ * @version 1.0 09-04-2021
+ * @author VaibhaviB
+ * */
 @RestController
-@RequestMapping(value="/healthcare/appointment/")
+@RequestMapping(value="appointment-service")
 public class AppointmentController {
 	
 	@Autowired
 	AppointmentService appointmentService;
 	
-	@PostMapping
+	@PostMapping(value="/appointment")
 	public ResponseEntity<Appointment> createAppointment(@Valid @RequestBody Appointment appointment) {
 		Appointment AppointmentStatus = null;
 		AppointmentStatus = appointmentService.addAppointment(appointment);
 		return new ResponseEntity<Appointment>(AppointmentStatus, HttpStatus.CREATED);
 	}
 	
-	@PutMapping(value="/{appointmentId}")
+	@PutMapping(value="/appointment/{appointmentId}")
 	public ResponseEntity<Appointment> updateAppointment(@Valid @RequestBody Appointment appointment, @PathVariable String appointmentId) {
 		Appointment AppointmentStatus = null;
 		appointment.setAppointmentId(appointmentId);
@@ -44,25 +50,18 @@ public class AppointmentController {
 		return new ResponseEntity<Appointment>(AppointmentStatus, HttpStatus.OK);
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<Appointment>> GetAllAppointment( @PathVariable String appointmentId) {
+	@GetMapping(value="/appointment")
+	public ResponseEntity<List<Appointment>> GetAllAppointment() {
 		List<Appointment> AppointmentStatus=null;
 		AppointmentStatus = appointmentService.getAllAppointments();
 		return new ResponseEntity<List<Appointment>>(AppointmentStatus, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/{appointmentId}")
+	@GetMapping(value="/appointment/{appointmentId}")
 	public ResponseEntity<Optional<Appointment>> GetAppointment(@PathVariable String appointmentId) {
 		Optional<Appointment> AppointmentStatus=null;
 		AppointmentStatus =  appointmentService.getAppointment(appointmentId);
 		return new ResponseEntity<Optional<Appointment>>(AppointmentStatus, HttpStatus.OK);
 	}
 	
-	
-	
-	
-	
-	
-	
-
 }
