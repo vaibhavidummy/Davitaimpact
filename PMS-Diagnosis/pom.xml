@@ -9,10 +9,9 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath >..</relativePath> <!-- lookup parent from repository -->
 	</parent>
-	<packaging>jar</packaging>
-	<groupId>in.davita.impact.erp</groupId>
-	<artifactId>erp-patient-be</artifactId>
+	<groupId>com.citiustech.pms</groupId>
+	<artifactId>Diagnosis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>erp-admin-be</name>
-	<description>ERP admin be</description>
+	<name>PMS-Diagnosis</name>
+	<description>Diagnosis for PMS Project</description>
 </project>
