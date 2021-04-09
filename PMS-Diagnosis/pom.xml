@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.citiustech.pms</groupId>
-	<artifactId>PMS-Diagnosis</artifactId>
+	<artifactId>Diagnosis</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>PMS-Diagnosis</name>
 	<description>Diagnosis for PMS Project</description>
