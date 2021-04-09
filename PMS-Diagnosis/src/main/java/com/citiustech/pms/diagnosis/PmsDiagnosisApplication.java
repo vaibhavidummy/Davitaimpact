@@ -1,13 +1,9 @@
-package com.citiustech.pms.main;
+package com.citiustech.pms.diagnosis;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-@ComponentScan(basePackages = "com.citiustech.pms")
-@EnableAutoConfiguration
-@SpringBootApplication
 
+@SpringBootApplication
 public class PmsDiagnosisApplication {
 
 	public static void main(String[] args) {
