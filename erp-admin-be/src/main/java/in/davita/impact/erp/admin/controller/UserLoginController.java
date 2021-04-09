@@ -32,7 +32,7 @@ import io.swagger.annotations.ApiResponse;
  * @author PrashantW3
  * */
 @RestController
-@RequestMapping(value = "user-login-service")
+@RequestMapping(value = "authentication")
 @Api(value = "User login controller")
 public class UserLoginController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginController.class);
@@ -44,7 +44,7 @@ public class UserLoginController {
 
 	@ApiOperation(value = "Method for User login")
 	@ApiResponse(code = 200, message = "Response is ResponseEntity<UserRegistrationDetail>", response = UserRegistrationDetail.class)
-	@PostMapping(value = "/user_login")
+	@PostMapping(value = "/login")
 	public ResponseEntity<UserRegistrationDetail> userLogin(
 			@ApiParam(value = "Login class model") @RequestBody @Valid Login loginDtls) {
 		LOGGER.info("Inside login user method of UserLoginController");
@@ -67,7 +67,7 @@ public class UserLoginController {
 
 	@ApiOperation(value = "Method for token set and mail send")
 	@ApiResponse(code = 200, message = "Response is ResponseEntity<Boolean>", response = Boolean.class)
-	@PostMapping("/resetPassword")
+	@PostMapping("/resetpassword")
 	public ResponseEntity<Boolean> forgotPassword(HttpServletRequest request,
 			@ApiParam(value = "Login class model") @RequestParam("email") String userEmail) {
 		UserRegistrationDetail userRegistrationDetail = null;

@@ -93,10 +93,10 @@ protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotV
 }
 
 /****************************************************************************************************/
-@ExceptionHandler(UserRegistrationDetailNotFoundException.class)
-public final ResponseEntity<ErrorResponse> handleCustomException(UserRegistrationDetailNotFoundException ex,
+@ExceptionHandler(EntityDetailsNotFoundException.class)
+public final ResponseEntity<ErrorResponse> handleCustomException(EntityDetailsNotFoundException ex,
 		WebRequest request) throws Exception {
-	String errorCode = env.getProperty(ExceptionConstantsMap.USER_REIGISTRATION_DETAIL_NOT_FOUND);
+	String errorCode = env.getProperty(ExceptionConstantsMap.ENTITY_DETAILS_NOT_FOUND);
 	String errorMessage = messageSource.getMessage(errorCode, ex.getArgs(), LocaleContextHolder.getLocale());
 	ErrorResponse errorResponse = new ErrorResponse(errorCode, getTimestamp(), "", errorMessage, ex.getMessage());
 	LOGGER.error(errorResponse.getMessage());

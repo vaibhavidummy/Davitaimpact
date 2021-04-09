@@ -10,20 +10,12 @@ package in.davita.impact.erp.admin.exception;
 **/
 
 
-public class UserRegistrationDetailNotFoundException extends RuntimeException{
+public class EntityDetailsNotFoundException extends RuntimeException{
 
 	private static final long serialVersionUID = -3226630364916511527L;
 	private Object[] args; 
 	
-	public UserRegistrationDetailNotFoundException() {
-		super();
-	}
-	
-	public UserRegistrationDetailNotFoundException(String message) {
-		super(message);
-	}
-	
-	public UserRegistrationDetailNotFoundException(String message, Object[] args) {
+	public EntityDetailsNotFoundException(String message, Object[] args) {
 		super(message);
 		this.args = args;
 	}

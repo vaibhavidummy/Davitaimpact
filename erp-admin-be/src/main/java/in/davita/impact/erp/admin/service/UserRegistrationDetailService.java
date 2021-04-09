@@ -20,9 +20,9 @@ public interface UserRegistrationDetailService {
 	
 	Optional<UserRegistrationDetail> getUser(String userId);
 
-	int DisableUser(String userId);
+	int disableUser(String userId);
 
-	List<UserRegistrationDetail> getAllUser();
+	List<UserRegistrationDetail> getAllUsers();
 
 	UserRegistrationDetail checkForExistingEmail(String email);
 

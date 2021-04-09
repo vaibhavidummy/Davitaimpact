@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponse;
  * @author PrashantW3
  * */
 @RestController
-@RequestMapping(value = "user-registration-service")
+@RequestMapping(value = "registration")
 @Api(value = "User registration service controller")
 public class UserRegistrationDetailsController {
 	
@@ -43,7 +43,7 @@ public class UserRegistrationDetailsController {
 
 	@ApiOperation(value = "Method for User registartion")
 	@ApiResponse(code = 201, message = "Response is ResponseEntity<UserRegistrationDetail>", response = UserRegistrationDetail.class)
-	@PostMapping(value = "/user_register")
+	@PostMapping()
 	public ResponseEntity<UserRegistrationDetail> addUser(
 			@ApiParam(value = "UserRegistration class model") @RequestBody @Valid UserRegistrationDetail userRegistrationDtls) {
 		LOGGER.info("Inside add user method of UserRegistrationDeatilController");
@@ -58,7 +58,7 @@ public class UserRegistrationDetailsController {
 
 	@ApiOperation(value = "Method for updating UserRegistration detail")
 	@ApiResponse(code = 200, message = "Response is UserRegistrationDetail model", response = UserRegistrationDetail.class)
-	@PutMapping(value = "/user_register")
+	@PutMapping()
 	public ResponseEntity<UserRegistrationDetail> updateUser(
 			@ApiParam(value = "UserRegistration class model") @RequestBody @Valid UserRegistrationDetail userRegistrationDtls) {
 		LOGGER.info("Inside update user method of UserRegistrationDeatilController");
@@ -72,7 +72,7 @@ public class UserRegistrationDetailsController {
 
 	@ApiOperation(value = "Method to get existing UserRegistration deatil by userId")
 	@ApiResponse(code = 200, message = "Response is UserRegistrationDetail model", response = UserRegistrationDetail.class)
-	@GetMapping(value = "/user_register/{userId}")
+	@GetMapping(value = "/{userId}")
 	public ResponseEntity<Optional<UserRegistrationDetail>> getUser(
 			@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
 		LOGGER.info("Inside get user method of UserRegistrationDeatilController");
@@ -86,11 +86,11 @@ public class UserRegistrationDetailsController {
 
 	@ApiOperation(value = "Method to disable existing UserRegistration deatil by userId")
 	@ApiResponse(code = 200, message = "Response is Integer", response = Integer.class)
-	@DeleteMapping(value = "/user_register/{userId}")
-	public ResponseEntity<Integer> DisableUser(@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
+	@DeleteMapping(value = "/{userId}")
+	public ResponseEntity<Integer> disableUser(@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
 		LOGGER.info("Inside disable user method of UserRegistrationDeatilController");
 		int userRegistrationStatus = 0;
-		userRegistrationStatus = userRegistrationService.DisableUser(userId);
+		userRegistrationStatus = userRegistrationService.disableUser(userId);
 		if(userRegistrationStatus>0) {
 			LOGGER.info("Disabled User Data::{}",userRegistrationStatus);
 		}
@@ -99,11 +99,11 @@ public class UserRegistrationDetailsController {
 
 	@ApiOperation(value = "Method to get list of All existing UserRegistration deatils")
 	@ApiResponse(code = 200, message = "Response is List of UserRegistrationDetail", response = List.class)
-	@GetMapping(value = "/user_register")
-	public ResponseEntity<List<UserRegistrationDetail>> getAllUser() {
+	@GetMapping()
+	public ResponseEntity<List<UserRegistrationDetail>> getAllUsers() {
 		LOGGER.info("Inside get all user method of UserRegistrationDeatilController");
 		List<UserRegistrationDetail> userRegistrationStatus = null;
-		userRegistrationStatus = userRegistrationService.getAllUser();
+		userRegistrationStatus = userRegistrationService.getAllUsers();
 		if(null!=userRegistrationStatus) {
 			LOGGER.info("List Of User Data::{}",userRegistrationStatus);
 		}
@@ -117,7 +117,7 @@ public class UserRegistrationDetailsController {
 	 */
 	@ApiOperation(value = "Method to check existing email by email")
 	@ApiResponse(code = 200, message = "Response is String", response = String.class)
-	@PutMapping(value = "/user_register/{email}")
+	@PutMapping(value = "/{email}")
 	public ResponseEntity<UserRegistrationDetail> checkForExistingEmail(
 			@ApiParam(value = "email") @PathVariable("email") String email) {
 		LOGGER.info("Inside check for existing email by email method of UserRegistrationDeatilController");

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import in.davita.impact.erp.admin.exception.UserRegistrationDetailNotFoundException;
+import in.davita.impact.erp.admin.exception.EntityDetailsNotFoundException;
 import in.davita.impact.erp.admin.model.Role;
 import in.davita.impact.erp.admin.model.UserRegistrationDetail;
 import in.davita.impact.erp.admin.repository.UserRegistrationDetailRepository;
@@ -45,7 +45,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 		if (!userId.isEmpty()) {
 			result = userRegistrationDetailRepository.findById(userId);
 			if (result.isEmpty()) {
-				throw new UserRegistrationDetailNotFoundException("User registration detail not found",
+				throw new EntityDetailsNotFoundException("User registration detail not found",
 						new Object[] { userId });
 			}
 		}
@@ -53,7 +53,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 	}
 
 	@Override
-	public int DisableUser(String userId) {
+	public int disableUser(String userId) {
 		int result = 0;
 		if (null != userId) {
 			if (userRegistrationDetailRepository.existsById(userId)) {
@@ -64,7 +64,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 	}
 
 	@Override
-	public List<UserRegistrationDetail> getAllUser() {
+	public List<UserRegistrationDetail> getAllUsers() {
 
 		return userRegistrationDetailRepository.findAll();
 	}
@@ -76,7 +76,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 		{
 			result=userRegistrationDetailRepository.checkForExistingEmail(email);
 			if (null==result) {
-				throw new UserRegistrationDetailNotFoundException("User registration details not found exception",
+				throw new EntityDetailsNotFoundException("User registration details not found exception",
 						new Object [] {email});
 			}
 		}
