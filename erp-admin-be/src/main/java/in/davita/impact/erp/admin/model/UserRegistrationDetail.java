@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import in.davita.impact.erp.admin.util.Auditable;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,7 +34,6 @@ import lombok.ToString;
 
 @Component
 @Entity
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -45,9 +42,9 @@ import lombok.ToString;
 public class UserRegistrationDetail extends Auditable<String> {
 
 	@Id
-	@GenericGenerator(name = "seq_user_id", strategy = "in.davita.impact.erp.admin.util.StringPrefixedSequenceIdGenerator")
+	@GenericGenerator(name = "seq_user_id", strategy = "in.davita.impact.erp.admin.util.RandomIdGenerator")
 	@GeneratedValue(generator = "seq_user_id")
-
+	@Column(nullable = false, unique = true,updatable = false)
 	private String user_Id;
 
 	@NotNull(message = "Title field is required")
@@ -66,12 +63,7 @@ public class UserRegistrationDetail extends Auditable<String> {
 	@Length(max = 15, message = "LastName field allow only max 15 characters")
 	@Column(nullable = false, length = 15)
 	private String lastName;
-
-	@NotBlank(message = "Email field is required")
-	@Email
-	@Column(nullable = false, unique = true)
-	private String email;
-
+	
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	@NotNull(message = "Dob field is required")
 	@Column(nullable = false)
@@ -82,21 +74,23 @@ public class UserRegistrationDetail extends Auditable<String> {
 	@Digits(integer = 10, fraction = 0, message = "provide proper ContactNumber")
 	@Positive(message = "Please provide proper ContactNumber")
 	@Column(nullable = false, length = 10)
-	private long contactNumber;
-
-	@NotNull(message = "EmployeeId field is required")
-	private long empoyeeId;
+	private Long contactNumber;
 
 	@NotNull(message = "Role field is required")
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "credential_id_fk")
+	@JoinColumn(name = "credential_id_fk",nullable = false,unique = true,updatable = false)
 	UserCredentials userCredentials;
 	
 	@Column(nullable = false, length = 1)
-	String status = "A";
-
+	String Metastatus = "A";
+	
+	@Column(nullable = false, length = 1)
+	Boolean isPersonalDetailsRequired;
+	
+	@Column(nullable = false, length = 1)
+	Boolean isPasswordChangeRequired;
 	
 }
