@@ -7,5 +7,5 @@ import com.citiustech.pms.procedure.model.ProcedureDetail;
 @Service
 public interface ProcedureDetailService {
 
-	  ProcedureDetail addProcedure(ProcedureDetail procedureDetail);
+	 ProcedureDetail addProcedure(ProcedureDetail procedureDetail);
 }
