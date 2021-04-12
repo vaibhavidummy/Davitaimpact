@@ -20,18 +20,18 @@ public abstract class Auditable<Object> {
 
 
     @CreatedBy
-    //@Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     protected String createdBy;
 
     @CreatedDate
     protected Date creationOn;
 
     @LastModifiedBy
-   // @Column(nullable = false)
+    @Column(nullable = false)
     protected String lastModifiedBy;
 
     @LastModifiedDate
-    //@Column(nullable = false)
+    @Column(nullable = false)
     protected Date lastModifiedOn;
 
 }
