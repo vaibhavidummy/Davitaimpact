@@ -11,7 +11,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.Temporal;
 
 @SuppressWarnings("hiding")
 @MappedSuperclass
@@ -24,6 +23,7 @@ public abstract class Auditable<Object> {
     protected String createdBy;
 
     @CreatedDate
+    @Column(nullable = false, updatable = false)
     protected Date creationOn;
 
     @LastModifiedBy
