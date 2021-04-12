@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,19 +33,32 @@ import in.davita.impact.erp.patientdetails.service.PatientServices;
 @RequestMapping(value ="/healthcare")
 public class PataintController {
 	
-	//private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PataintController.class);
+	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PataintController.class);
 	@Autowired
 	PatientServices patientServices;
 	
 	@Autowired
 	PatientRepository patientRepository;
 	
+	/*
+	 * @PostMapping("/patient/")
+	 * 
+	 * @ResponseStatus(code =HttpStatus.ACCEPTED) public
+	 * ResponseEntity<PatientDetails> addPatientDetails(@Valid @RequestBody
+	 * PatientDetails patient , BindingResult result) {
+	 * //LOGGER.debug("inside addPatientDetails"); PatientDetails addNewPatients =
+	 * patientServices.addNewPatient(patient); return new
+	 * ResponseEntity<PatientDetails>(addNewPatients, HttpStatus.OK); }
+	 */
+	
 	@PostMapping("/patient/")
-	@ResponseStatus(code =HttpStatus.ACCEPTED)
-	public PatientDetails addPatientDetails(@Valid @RequestBody PatientDetails patient , BindingResult result) {
-		//LOGGER.debug("inside addPatientDetails");
-		return patientServices.addNewPatient(patient);
+	@ResponseBody
+	public String createUser(@RequestBody PatientDetails patient){
+		
+		 PatientDetails addNewPatients = patientServices.addNewPatient(patient);
+	     return addNewPatients.getId();
 	}
+	
 	@PutMapping("/patient/{userid}")
 	public ResponseEntity<PatientDetails> updatePatientDetails(@Valid @RequestBody PatientDetails patient , @PathVariable("userid") String id, BindingResult result) {
 		Optional<PatientDetails> findById = patientRepository.findById(patient.getId());

@@ -3,11 +3,13 @@ package in.davita.impact.erp.patientdetails.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Generated;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -28,20 +30,21 @@ import javax.validation.constraints.Positive;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import in.davita.impact.erp.patientdetails.utilities.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @Data
 @Entity
-public class PatientDetails {
+public class PatientDetails extends Auditable<String> {
 
 	@Id
 	@GenericGenerator(name = "patient_sequence_id", strategy = "in.davita.impact.erp.patientdetails.utilities.PatientDetailsIdGenerator")
@@ -83,7 +86,7 @@ public class PatientDetails {
 	@Column(nullable = false, length = 13)
 	private float age;
 
-	@NotNull(message = "Role field is required")
+	@NotNull(message = "Gender field is required")
 	@Enumerated(EnumType.STRING)
 	private Gender gender;
 
@@ -134,8 +137,11 @@ public class PatientDetails {
 	@Column(nullable = false, length = 10)
 	private long emergency_contact_number;
 	
+	
+		/*
+		 * @Pattern(regexp = "^true$|^false$", message = "Allowed input: true or false")
+		 */
 	 @NotNull
-	 @Pattern(regexp = "^true$|^false$", message = "Allowed input: true or false")
 	private boolean is_access_approved;
 	
 	
@@ -145,11 +151,21 @@ public class PatientDetails {
 	private String emergencyContactEmailId;
 
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "patientdetails_languageknown", joinColumns = @JoinColumn(name = "patientdetails_id"), 
-	inverseJoinColumns = @JoinColumn(name = "languageknown_id"))
-	List<LanguageKnown> languageKnown;
-
+	
+	  @ManyToMany(targetEntity =LanguageKnown.class ,fetch = FetchType.LAZY,
+	  cascade = { CascadeType.MERGE})
+	  @JoinTable(name = "patientdetails_languageknown", joinColumns
+	  = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns
+	  = @JoinColumn(name = "languageknown_id")) 
+	  Set<LanguageKnown> languageKnown;
+	  
+	  
+	  @ManyToMany(fetch = FetchType.LAZY,  cascade = {  CascadeType.MERGE })  
+	  @JoinTable(name = "patientdetails_allergies", joinColumns = @JoinColumn(name
+	  = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name =
+	  "allergies_id")) 
+	  Set<Allergies> allergies;
+	 
 	public PatientDetails() {
 		
 	}

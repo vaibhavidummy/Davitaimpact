@@ -1,18 +1,23 @@
 package in.davita.impact.erp.patientdetails.serviceImpl;
 
+import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import in.davita.impact.erp.patientdetails.controller.PataintController;
-import in.davita.impact.erp.patientdetails.model.LanguageKnown;
 import in.davita.impact.erp.patientdetails.model.PatientDetails;
 import in.davita.impact.erp.patientdetails.repository.LanguageKnownRepository;
 import in.davita.impact.erp.patientdetails.repository.PatientRepository;
 import in.davita.impact.erp.patientdetails.service.PatientServices;
 @Service
+@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
 public class PatientServiceImpl implements PatientServices  {
 
 	@Autowired
@@ -23,14 +28,9 @@ public class PatientServiceImpl implements PatientServices  {
 	
 	
 	@Override
+
 	public PatientDetails addNewPatient(PatientDetails patient) {
-		
-		
-		/*
-		 * String id2 = patient.getId(); List<LanguageKnown> languageKnow =
-		 * patient.getLanguageKnow(); //Patient.thisLanguageKnown.this.setPatient(id2);
-		 */		
-	
+		 
 		PatientDetails addedPatient =patientRepository.save(patient);
 		return addedPatient;
 	}
