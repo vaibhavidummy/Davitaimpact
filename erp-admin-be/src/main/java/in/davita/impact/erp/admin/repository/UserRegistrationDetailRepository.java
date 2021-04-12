@@ -1,7 +1,6 @@
 package in.davita.impact.erp.admin.repository;
 
 
-import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,7 +15,6 @@ public interface UserRegistrationDetailRepository extends JpaRepository<UserRegi
 
 
 	@Modifying
-	@Transactional
 	@Query(value="UPDATE user_registration_detail SET metastatus ='I' WHERE user_id=:userId", nativeQuery = true )
 	int DisableUser(@Param("userId") String userId);
 	
@@ -24,7 +22,6 @@ public interface UserRegistrationDetailRepository extends JpaRepository<UserRegi
 	UserRegistrationDetail checkForExistingEmail(@Param("email") String email);
 	
 	@Modifying
-	@Transactional
 	@Query(value="UPDATE user_registration_detail SET is_password_change_required =:isPasswordChangeReq,"
 			+ "is_personal_details_required=:isPersonalDeatilRequired WHERE user_id=:userId", nativeQuery = true )
 	int afterFirstAuthParamterChange(@Param("isPasswordChangeReq") boolean isPasswordChangeReq, 

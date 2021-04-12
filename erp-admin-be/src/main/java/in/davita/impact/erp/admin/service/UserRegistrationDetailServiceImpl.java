@@ -76,7 +76,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 		{
 			result=userRegistrationDetailRepository.checkForExistingEmail(email);
 			if (null==result) {
-				throw new EntityDetailsNotFoundException("User registration details not found exception",
+				throw new EntityDetailsNotFoundException("User registration details not found",
 						new Object [] {email});
 			}
 		}
