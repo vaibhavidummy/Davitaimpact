@@ -16,7 +16,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	AppointmentRepository appointmentRepository;
 
 	@Override
-	public Appointment addAppointment(Appointment Appointment) {
+	public Appointment addAppointment(Appointment appointment) {
 		return appointmentRepository.save(Appointment);
 	}
 
@@ -26,7 +26,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 
 	@Override
-	public Optional<Appointment> getAppointment(String AppointmentId) {
+	public Optional<Appointment> getAppointment(String appointmentId) {
 		return appointmentRepository.findById(AppointmentId);
 	}
 

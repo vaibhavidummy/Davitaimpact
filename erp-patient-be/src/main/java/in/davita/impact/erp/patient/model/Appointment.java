@@ -1,7 +1,5 @@
 package in.davita.impact.erp.patient.model;
 
-
-
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -20,16 +18,24 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import in.davita.impact.erp.patient.utilities.Auditable;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
-public class Appointment {
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class Appointment extends Auditable<String> {
 	
 	@Id
 	@GenericGenerator(name = "appointment_sequence_id", strategy = "in.davita.impact.erp.patient.utilities.AppointmentIdGenerator")

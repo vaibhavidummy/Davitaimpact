@@ -13,7 +13,7 @@ public interface AppointmentService {
 	
 	Appointment addAppointment(Appointment Appointment);
 	
-	Appointment UpdateAppointment(Appointment userRegistrationDtls);
+	Appointment UpdateAppointment(Appointment appointmentDtls);
 	
 	Optional<Appointment> getAppointment(String AppointmentId);
 	List<Appointment> getAllAppointments();
