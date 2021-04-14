@@ -3,9 +3,13 @@ package in.davita.impact.erp.admin.service;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import in.davita.impact.erp.admin.exception.EntityDetailsNotFoundException;
+import in.davita.impact.erp.admin.model.Role;
 import in.davita.impact.erp.admin.model.UserRegistrationDetail;
 import in.davita.impact.erp.admin.repository.UserRegistrationDetailRepository;
 /**
@@ -14,6 +18,7 @@ import in.davita.impact.erp.admin.repository.UserRegistrationDetailRepository;
  * @author PrashantW3
  * */
 @Service
+@Transactional
 public class UserRegistrationDetailServiceImpl implements UserRegistrationDetailService {
 
 	@Autowired
@@ -21,22 +26,34 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 
 	@Override
 	public UserRegistrationDetail addUser(UserRegistrationDetail userRegistrationDtls) {
+		Boolean isPasswordChangeRequired=userRegistrationDtls.getRole().equals(Role.Patient)?false:true;
+		userRegistrationDtls.setIsPasswordChangeRequired(isPasswordChangeRequired);
+		Boolean isPersonalDtlsRequired=userRegistrationDtls.getRole().equals(Role.Patient)?true:false;
+		userRegistrationDtls.setIsPersonalDetailsRequired(isPersonalDtlsRequired);
 		return userRegistrationDetailRepository.save(userRegistrationDtls);
 	}
 	
 	@Override
-	public UserRegistrationDetail UpdateUser(UserRegistrationDetail userRegistrationDtls) {
+	public UserRegistrationDetail updateUser(UserRegistrationDetail userRegistrationDtls) {
 		return userRegistrationDetailRepository.save(userRegistrationDtls);
 	}
 
 	
 	@Override
 	public Optional<UserRegistrationDetail> getUser(String userId) {
-		return userRegistrationDetailRepository.findById(userId);
+		Optional<UserRegistrationDetail> result = null;
+		if (!userId.isEmpty()) {
+			result = userRegistrationDetailRepository.findById(userId);
+			if (result.isEmpty()) {
+				throw new EntityDetailsNotFoundException("User registration detail not found",
+						new Object[] { userId });
+			}
+		}
+		return result;
 	}
 
 	@Override
-	public int DisableUser(String userId) {
+	public int disableUser(String userId) {
 		int result = 0;
 		if (null != userId) {
 			if (userRegistrationDetailRepository.existsById(userId)) {
@@ -47,32 +64,31 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 	}
 
 	@Override
-	public List<UserRegistrationDetail> getAllUser() {
+	public List<UserRegistrationDetail> getAllUsers() {
 
 		return userRegistrationDetailRepository.findAll();
 	}
 
 	@Override
-	public String checkForExistingEmail(String email) {
-		String result=null;
+	public UserRegistrationDetail checkForExistingEmail(String email) {
+		UserRegistrationDetail result=null;
 		if(!email.isEmpty())
 		{
 			result=userRegistrationDetailRepository.checkForExistingEmail(email);
+			if (null==result) {
+				throw new EntityDetailsNotFoundException("User registration details not found",
+						new Object [] {email});
+			}
 		}
 		return result;
 	}
 
 	@Override
-	public String checkForExistingUsername(String userName) {
-		String result=null;
-		if(!userName.isEmpty())
-		{
-			result=userRegistrationDetailRepository.checkForExistingUsername(userName);
-		}
-		return result;
+	public int afterFirstAuthParamterChange(boolean isPasswordChangeReq, boolean isPersonalDeatilRequired,
+			String userId) {
+		return userRegistrationDetailRepository.afterFirstAuthParamterChange(isPasswordChangeReq,isPersonalDeatilRequired,
+				userId);
 	}
-
-
 
 	
 }
