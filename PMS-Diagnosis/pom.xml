@@ -14,4 +14,20 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>PMS-Diagnosis</name>
 	<description>Diagnosis for PMS Project</description>
+	
+	
+	<!-- <dependencies>
+	<dependency>
+	<groupId>in.davita.impact.erp</groupId>
+    <artifactId>erp-patient-be</artifactId>
+     <version>0.0.1</version>
+     </dependency>
+	</dependencies>
+	 -->
+	<!-- <dependencies>
+	<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.11.1</version>
+</dependency></dependencies> -->
 </project>

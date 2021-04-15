@@ -3,12 +3,13 @@ package com.citiustech.pms.diagnosis.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -18,26 +19,25 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 
-
+@SuppressWarnings("serial")
 @Data
 @Entity
 @EnableJpaAuditing
-
 @EntityListeners(AuditingEntityListener.class)
 public class Diagnosis implements Serializable {
 
-	private static final long serialVersionUID = -3661065571206334359L;
-
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(updatable = false, nullable = false)
+	private Long seq_id;
+
 	@Column(name = "id")
-	@GeneratedValue
-	private Long id;
+	private String id;
 
 	@Column(name = "name")
 	private String name;
@@ -45,30 +45,31 @@ public class Diagnosis implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	// ManyToOne
+	// @JoinColumn(name="patient_visit_id", nullable=false)
+	// private Patient_Visit_Id patient_visit_id;
 	@Column(name = "patient_visit_id")
 	private String patient_visit_id;
-	
-	
-    @CreatedBy
-    @Column(nullable = false, updatable = false)
-    private String created_by="sweeta";
 
-    @CreatedDate
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-   @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, updatable = false)
-    private Date creation_on;
+	@CreatedBy
+	@Column(nullable = false, updatable = false)
+	private String created_by = "sweeta";
 
-    @LastModifiedBy
-    @Column(nullable = false)
-  
-    private String last_modified_by="sweeta";
+	@CreatedDate
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private Date creation_on;
 
+	@LastModifiedBy
+	@Column(nullable = false)
 
-    @LastModifiedDate
-    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
-     private Date last_modified_on;
+	private String last_modified_by = "sweeta";
+
+	@LastModifiedDate
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private Date last_modified_on;
 
 }
