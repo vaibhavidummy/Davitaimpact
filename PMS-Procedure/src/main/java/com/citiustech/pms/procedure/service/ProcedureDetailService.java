@@ -5,14 +5,18 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.citiustech.pms.procedure.model.ProcedureDetail;
+import com.citiustech.pms.procedure.model.ProcedureMain;
 import com.citiustech.pms.procedure.model.ProcedureMaster;
 
 @Service
 public interface ProcedureDetailService {
 
-	 ProcedureDetail addProcedure(ProcedureDetail procedureDetail);
+	 ProcedureMain addProcedure(ProcedureMain procedureDetail);
 	 
 	  List<ProcedureMaster> getAllProcedure();
 	  
-	  ProcedureDetail getProcedureByVisitId(ProcedureDetail procedureDetail);
+	  ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail);
+	  
+	  ProcedureMain getProcedureDescription(ProcedureDetail procedureDetailDesc);
+
 }
