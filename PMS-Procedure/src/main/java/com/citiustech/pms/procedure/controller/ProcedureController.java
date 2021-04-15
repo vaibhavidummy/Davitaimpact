@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citiustech.pms.procedure.model.ProcedureDetail;
+import com.citiustech.pms.procedure.model.ProcedureMain;
 import com.citiustech.pms.procedure.model.ProcedureMaster;
 import com.citiustech.pms.procedure.service.ProcedureDetailService;
+
+
 
 
 @RestController
@@ -27,25 +30,33 @@ public class ProcedureController {
 	private ProcedureDetailService procedureDetailService;
 	
 	@PostMapping
-	public ResponseEntity<ProcedureDetail> addProcedure(@RequestBody ProcedureDetail procedureDetail) {
+	public ResponseEntity<ProcedureMain> addProcedure(@RequestBody ProcedureMain procedureDetail) {
 		
 		LOGGER.info("inside addProcedure");
-		ProcedureDetail addProcedureDetail = null;
+		ProcedureMain addProcedureDetail = null;
 		addProcedureDetail = procedureDetailService.addProcedure(procedureDetail);
-		return new ResponseEntity<ProcedureDetail>(addProcedureDetail, HttpStatus.CREATED);
+		return new ResponseEntity<ProcedureMain>(addProcedureDetail, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getProcedureByVisitId")
-    public ResponseEntity<ProcedureDetail> getProcedureByVisitId(@RequestBody ProcedureDetail procedureDetail) 
+    public ResponseEntity<ProcedureMain> getProcedureByVisitId(@RequestBody ProcedureMain procedureDetail) 
     { 
-		ProcedureDetail procedureByVisitId =null;
+		ProcedureMain procedureByVisitId =null;
 		procedureByVisitId = procedureDetailService.getProcedureByVisitId(procedureDetail);
-         return new ResponseEntity<ProcedureDetail>(procedureByVisitId , HttpStatus.OK);
+         return new ResponseEntity<ProcedureMain>(procedureByVisitId , HttpStatus.OK);
     }
 	
 	@GetMapping("/getallProcedure")
     public List<ProcedureMaster> getAllProcedure() {
-         System.out.println("the all getAllProcedure is"+ procedureDetailService.getAllProcedure());
          return procedureDetailService.getAllProcedure();
     }
+	
+	@PostMapping("/ProcedureDetailDesc")
+	public ResponseEntity<ProcedureMain> getProcedureDetailDesc(@RequestBody ProcedureDetail procedureDetail) 
+    { 
+		LOGGER.info("inside getProcedureDetailDesc: "+procedureDetail);
+		ProcedureMain pocDesc = null;
+		pocDesc = procedureDetailService.getProcedureDescription(procedureDetail);
+		return new ResponseEntity<ProcedureMain>(pocDesc , HttpStatus.OK);
+    }	
 }
