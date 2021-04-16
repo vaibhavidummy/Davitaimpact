@@ -1,10 +1,10 @@
-package in.davita.impact.erp.patientdetails.service;
+package in.davita.impact.erp.patient.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import in.davita.impact.erp.patientdetails.model.PatientDetails;
+import in.davita.impact.erp.patient.model.PatientDetails;
 
 @Service
 public interface PatientServices {

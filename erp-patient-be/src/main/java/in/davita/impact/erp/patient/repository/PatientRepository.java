@@ -1,9 +1,9 @@
-package in.davita.impact.erp.patientdetails.repository;
+package in.davita.impact.erp.patient.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import in.davita.impact.erp.patientdetails.model.PatientDetails;
+import in.davita.impact.erp.patient.model.PatientDetails;
 @Repository
 public interface PatientRepository extends JpaRepository<PatientDetails, String>{
 

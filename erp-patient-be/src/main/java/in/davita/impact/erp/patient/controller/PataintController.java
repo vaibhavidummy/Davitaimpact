@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patientdetails.controller;
+package in.davita.impact.erp.patient.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import in.davita.impact.erp.patientdetails.model.LanguageKnown;
-import in.davita.impact.erp.patientdetails.model.PatientDetails;
-import in.davita.impact.erp.patientdetails.repository.PatientRepository;
-import in.davita.impact.erp.patientdetails.service.PatientServices;
+import in.davita.impact.erp.patient.model.LanguageKnown;
+import in.davita.impact.erp.patient.model.PatientDetails;
+import in.davita.impact.erp.patient.model.PatientVisitDetails;
+import in.davita.impact.erp.patient.repository.PatientRepository;
+import in.davita.impact.erp.patient.service.PatientServices;
+import in.davita.impact.erp.patient.service.PatientVisitDetailsServices;
 
 @RestController()
 @RequestMapping(value ="/healthcare")
@@ -39,6 +40,9 @@ public class PataintController {
 	
 	@Autowired
 	PatientRepository patientRepository;
+	
+	@Autowired
+	PatientVisitDetailsServices patientVisitDetailsServices;
 	
 	/*
 	 * @PostMapping("/patient/")
@@ -79,6 +83,29 @@ public class PataintController {
 	public List<PatientDetails>  getAllPatientDetails() {
 		List<PatientDetails> allPatient = patientServices.getAllPatient();
 		return allPatient;
+	}
+	
+	/*
+	 * Patient VisiteDetails
+	 */	
+	@ResponseBody
+	@GetMapping("/visitdetails")
+	public List<PatientVisitDetails> getAllVisitDetails() {
+		List<PatientVisitDetails> allVisitDetails = patientVisitDetailsServices.getAllVisitDetails();
+		return allVisitDetails;
+	}
+	
+	@GetMapping("/visitdetails/{patientId}")
+	@ResponseBody
+	public List<PatientVisitDetails> getVisitDetailsByPatientId(@PathVariable("patientId") int id) {
+		List<PatientVisitDetails> patientVisitDetailsByID = patientVisitDetailsServices.getPatientVisitDetailsByID(id);
+		return patientVisitDetailsByID;
+	}
+	@GetMapping("/visitdetails/{patientvisitId}")
+	@ResponseBody
+	public PatientVisitDetails getVisitDetailsByPatientVisitId(@PathVariable("patientvisitId") int visitid) {
+		 PatientVisitDetails patientVisitDetailsByVisitID = patientVisitDetailsServices.getPatientVisitDetailsByVisitID(visitid);
+		return patientVisitDetailsByVisitID;
 	}
 	
 	

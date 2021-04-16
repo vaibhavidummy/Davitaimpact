@@ -1,7 +1,8 @@
-package in.davita.impact.erp.patientdetails.model;
+package in.davita.impact.erp.patient.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,10 +30,13 @@ public class LanguageKnown {
 	private int id;
 	private String name;
 
-	  @ManyToMany(targetEntity = PatientDetails.class, mappedBy ="languageKnown",fetch = FetchType.LAZY)
+	
+	@ManyToMany(targetEntity = PatientDetails.class, mappedBy ="languageKnown",fetch = FetchType.LAZY)
 	  @JsonIgnore 
 	List<PatientDetails> patientdetails;
-
+	 
+	
+	
 	  public LanguageKnown() {
 
 		}
