@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -22,21 +23,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-@Component
 @Entity
+@Component
 @EntityListeners(AuditingEntityListener.class)
 @EnableJpaAuditing
 public class ProcedureMain implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3661065571206334359L;
 
 	@Id
-	@Column
-	@GeneratedValue
-	private long id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(updatable = false, nullable = false)
+	private Long seq_id;
+
 
 	@Column
 	private String procedure_id;

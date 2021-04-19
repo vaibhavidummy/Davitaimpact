@@ -25,8 +25,9 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Autowired
 	private ProcedureMasterRepo procedureMasterRepo;
 	
-	@Autowired(required = false)
-	private ProcedureMain procedureMain;
+//	  @Autowired
+//	  private ProcedureMain procedureMain;
+	 
 
 	@Override
 	@Transactional(rollbackFor = Exception.class , noRollbackFor = IllegalArgumentException.class)
@@ -50,7 +51,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	public ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail)
 	{
 		ProcedureMain procedureGetById = prodecureDetailRepository.save(procedureDetail);
-	        if (Objects.isNull(procedureGetById.getId()))
+	        if (Objects.isNull(procedureGetById.getProcedure_id()))
 	            throw new IllegalArgumentException();
 	        else if(Objects.isNull(procedureGetById.getName()))
 	            throw new IllegalArgumentException();
@@ -59,22 +60,22 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 
 	@Override
 	@Transactional
-	public ProcedureMain getProcedureDescription(ProcedureDetail procedureDetailDesc) {
+	public void getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
 		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc);
 		
 		for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
 		{
+			ProcedureMain procedureMain = new ProcedureMain();
+			
 			procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
 			procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
-			procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getId());
+			procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
 			procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
 			
 			prodecureDetailRepository.save(procedureMain);
 			
 			LOGGER.info("procedure value : "+procedureMain + "\n procedure save() : "+prodecureDetailRepository.save(procedureMain));
 		}
-		return procedureMain;
 	}
-	
 }
