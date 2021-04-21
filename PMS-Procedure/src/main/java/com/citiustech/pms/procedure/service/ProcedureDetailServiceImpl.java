@@ -82,6 +82,9 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 				
 				LOGGER.info("procedure value in For Loop : "+ procedureMain);
 			}
+			
+			//prodecureDetailRepository.saveAll(procedureMainList);
+			
 			for(int i =0; i < procedureMainList.size(); i++)
 			{
 				procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
