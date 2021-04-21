@@ -1,9 +1,0 @@
-encrypted.property={cipher}c789b2ee5bdfd2ab95b7b13d115596485408a82bfb3ba599199b356673a0b949
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-spring.datasource.url=jdbc:mysql://localhost:3306/patient_schema
-spring.datasource.username=root
-spring.datasource.password={cipher}bbed8254e3853d1be0b85701fccb491b509948ee082b699c06d1ea1ad3eebea1
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=false
-spring.jpa.properties.hibernate.format_sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
