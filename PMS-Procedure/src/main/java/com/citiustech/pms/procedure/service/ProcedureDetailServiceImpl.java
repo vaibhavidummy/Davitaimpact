@@ -1,5 +1,6 @@
 package com.citiustech.pms.procedure.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -27,7 +28,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	
 //	  @Autowired
 //	  private ProcedureMain procedureMain;
-	 
+	  
 
 	@Override
 	@Transactional(rollbackFor = Exception.class , noRollbackFor = IllegalArgumentException.class)
@@ -41,13 +42,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	}
 
 	@Override
-    public List<ProcedureMaster> getAllProcedure()
-    {
-        return procedureMasterRepo.findAll();
-    }
-		
-	@Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
 	public ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail)
 	{
 		ProcedureMain procedureGetById = prodecureDetailRepository.save(procedureDetail);
@@ -57,25 +52,43 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	            throw new IllegalArgumentException();
 	        return procedureGetById;
 	}
+	
+	@Override
+    public List<ProcedureMaster> getAllProcedure()
+    {
+        return procedureMasterRepo.findAll();
+    }
 
 	@Override
-	@Transactional
-	public void getProcedureDescription(ProcedureDetail procedureDetailDesc) {
+	@Transactional(rollbackFor = Exception.class)
+	public String getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
-		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc);
+		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + "size: "+procedureDetailDesc.getProcedure_details().size());
 		
-		for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
-		{
-			ProcedureMain procedureMain = new ProcedureMain();
+		List<ProcedureMain> procedureMainList = new ArrayList<>();
+		
+			LOGGER.info("procedureMainList value : "+procedureMainList);
 			
-			procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
-			procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
-			procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
-			procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
+			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
+			{
+				ProcedureMain procedureMain = new ProcedureMain();
+				
+				procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
+				procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
+				procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
+				procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
+				
+				procedureMainList.add(procedureMain);
+				
+				LOGGER.info("procedure value in For Loop : "+ procedureMain);
+			}
 			
-			prodecureDetailRepository.save(procedureMain);
+			//prodecureDetailRepository.saveAll(procedureMainList);
 			
-			LOGGER.info("procedure value : "+procedureMain + "\n procedure save() : "+prodecureDetailRepository.save(procedureMain));
-		}
+			for(int i =0; i < procedureMainList.size(); i++)
+			{
+				procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
+			}
+			return "Added Successfully";
 	}
 }

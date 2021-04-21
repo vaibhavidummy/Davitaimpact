@@ -17,6 +17,6 @@ public interface ProcedureDetailService {
 	  
 	  ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail);
 	  
-	  void getProcedureDescription(ProcedureDetail procedureDetailDesc);
+	  String getProcedureDescription(ProcedureDetail procedureDetailDesc);
 
 }
