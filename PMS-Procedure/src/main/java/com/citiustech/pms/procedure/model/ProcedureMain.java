@@ -36,7 +36,6 @@ public class ProcedureMain implements Serializable{
 	@Column(updatable = false, nullable = false)
 	private Long seq_id;
 
-
 	@Column
 	private String procedure_id;
 	
@@ -71,5 +70,9 @@ public class ProcedureMain implements Serializable{
     
     @Column(nullable = false)
     private String patient_visit_id;
+    
+ // ManyToOne
+ 	// @JoinColumn(name="patient_visit_id", nullable=false)  check and remove the join col if not needed
+ 	// private Patient_Visit_Id patient_visit_id;
     
 }

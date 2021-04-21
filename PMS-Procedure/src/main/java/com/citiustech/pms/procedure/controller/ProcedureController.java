@@ -52,11 +52,11 @@ public class ProcedureController {
     }
 	
 	@PostMapping("/procedureDetailDesc")
-	public ResponseEntity<ProcedureMain> getProcedureDetailDesc(@RequestBody ProcedureDetail procedureDetail) 
+	public ResponseEntity<String> getProcedureDetailDesc(@RequestBody ProcedureDetail procedureDetail) 
     { 
 		LOGGER.info("inside getProcedureDetailDesc: "+procedureDetail);
 		
-		procedureDetailService.getProcedureDescription(procedureDetail);
-		return new ResponseEntity<ProcedureMain>(HttpStatus.CREATED);
+		String ProcedureDetailDesc =  procedureDetailService.getProcedureDescription(procedureDetail);
+		return new ResponseEntity<String>(ProcedureDetailDesc, HttpStatus.CREATED);
     }	
 }

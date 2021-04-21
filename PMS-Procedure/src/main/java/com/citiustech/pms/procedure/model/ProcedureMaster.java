@@ -15,9 +15,9 @@ import lombok.Data;
 public class ProcedureMaster  {
 
 	@Id
-    @Column(name="id")
+    @Column(name="Procedure_Code")
     private String procedureId;
     
-    @Column(name="name")
+    @Column(name="Procedure_Description")
     private String procedureName;
 }
