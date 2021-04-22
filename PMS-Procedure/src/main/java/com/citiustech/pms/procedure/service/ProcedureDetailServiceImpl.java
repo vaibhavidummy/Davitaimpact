@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.citiustech.pms.procedure.exception.ProcedureException;
 import com.citiustech.pms.procedure.model.ProcedureDetail;
 import com.citiustech.pms.procedure.model.ProcedureMain;
 import com.citiustech.pms.procedure.model.ProcedureMaster;
@@ -31,12 +32,12 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	  
 
 	@Override
-	@Transactional(rollbackFor = Exception.class , noRollbackFor = IllegalArgumentException.class)
+	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
 		
 		 prodecureDetailRepository.save(procedureDetail);
 		 if(procedureDetail.getName().equals("A")) {
-			 throw new IllegalArgumentException();
+			 throw new ProcedureException("---");
 		 }
 		 return procedureDetail;
 	}
@@ -56,22 +57,34 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Override
     public List<ProcedureMaster> getAllProcedure()
     {
-        return procedureMasterRepo.findAll();
+		List<ProcedureMaster> procedureMaster = procedureMasterRepo.findAll();
+				
+		if(procedureMaster.size() == 0)
+		{
+			throw new ProcedureException("Procedure Master data is less than one");
+		}
+        return procedureMaster;
     }
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public String getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
-		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + "size: "+procedureDetailDesc.getProcedure_details().size());
+		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + " ProcedureDetail size: "+procedureDetailDesc.getProcedure_details().size());
 		
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
 		
-			LOGGER.info("procedureMainList value : "+procedureMainList);
-			
+		LOGGER.info("procedureMainList value : "+procedureMainList);
+		
+		if(procedureDetailDesc.getProcedure_details().size() == 0)
+		{
+			throw new ProcedureException("Procedure size is less than one");
+		}
 			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
 			{
 				ProcedureMain procedureMain = new ProcedureMain();
+
+				LOGGER.info("procedure value in For Loop : "+ procedureMain);
 				
 				procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
 				procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
@@ -79,12 +92,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 				procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
 				
 				procedureMainList.add(procedureMain);
-				
-				LOGGER.info("procedure value in For Loop : "+ procedureMain);
 			}
-			
-			//prodecureDetailRepository.saveAll(procedureMainList);
-			
 			for(int i =0; i < procedureMainList.size(); i++)
 			{
 				procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
