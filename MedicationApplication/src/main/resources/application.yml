@@ -1,4 +1,6 @@
 spring:
+ jpa:
+  show-sql: true
  data:
   cassandra: 
    contact-points: 127.0.0.1
@@ -9,6 +11,10 @@ spring:
    schema-action: create-if-not-exists
    local-datacenter: datacenter1
              
+             
+logging:
+ level:
+  root:      
         
         
             

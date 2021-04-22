@@ -3,6 +3,7 @@ package com.medication.model;
 import java.util.List;
 
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.Frozen;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class MedicationOnVisit {
 
+	
 	@PrimaryKeyColumn(name = "patient_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
 	private String patientId;
 	
@@ -22,5 +24,9 @@ public class MedicationOnVisit {
 	private String visitId;
 	
 	@Frozen
-	private List<Medication> medication;
+	private List<MedicineUDT> medication;
+	
+	@Column(value = "audit_info")
+	@Frozen
+	private AuditUDT auditInfo;
 }

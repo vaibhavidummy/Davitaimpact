@@ -46,4 +46,13 @@ public class MedicationController {
 
 		return medicationServiceImpl.saveMedicationForPatientOnVisit(medicationOnVisit);
 	}
+	
+	
+	
+	@GetMapping(path = "/getAllMedications/{patientId}")
+	public List<MedicationOnVisit>  getAllMedicationForPatient(@PathVariable String patientId) {
+		
+		return medicationServiceImpl.getAllMedicationForPatient(patientId);
+	}
+	
 }
