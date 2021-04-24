@@ -13,6 +13,7 @@ import com.citiustech.pms.procedure.exception.ProcedureException;
 import com.citiustech.pms.procedure.model.ProcedureDetail;
 import com.citiustech.pms.procedure.model.ProcedureMain;
 import com.citiustech.pms.procedure.model.ProcedureMaster;
+import com.citiustech.pms.procedure.model.ProcedureSuccess;
 import com.citiustech.pms.procedure.repository.ProcedureMasterRepo;
 import com.citiustech.pms.procedure.repository.ProdecureDetailRepository;
 
@@ -27,10 +28,6 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Autowired
 	private ProcedureMasterRepo procedureMasterRepo;
 	
-//	  @Autowired
-//	  private ProcedureMain procedureMain;
-	  
-
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
@@ -48,27 +45,30 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	{
 		ProcedureMain procedureGetById = prodecureDetailRepository.save(procedureDetail);
 	        if (Objects.isNull(procedureGetById.getProcedure_id()))
-	            throw new IllegalArgumentException();
+	            throw new ProcedureException("Procedure Id id Not Null");
 	        else if(Objects.isNull(procedureGetById.getName()))
-	            throw new IllegalArgumentException();
+	            throw new ProcedureException("Procedure Name cannot be Not Null");
 	        return procedureGetById;
 	}
 	
 	@Override
-    public List<ProcedureMaster> getAllProcedure()
+    public ProcedureSuccess getAllProcedure()
     {
 		List<ProcedureMaster> procedureMaster = procedureMasterRepo.findAll();
 				
-		if(procedureMaster.size() == 0)
+		if(procedureMaster.isEmpty())
 		{
 			throw new ProcedureException("Procedure Master data is less than one");
 		}
-        return procedureMaster;
+		ProcedureSuccess procedureSuccess = new ProcedureSuccess();
+		 procedureSuccess.setSuccessFlag(Boolean.TRUE);
+		 procedureSuccess.setProcedureMaster(procedureMaster);
+        return procedureSuccess;
     }
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public String getProcedureDescription(ProcedureDetail procedureDetailDesc) {
+	public ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
 		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + " ProcedureDetail size: "+procedureDetailDesc.getProcedure_details().size());
 		
@@ -76,9 +76,13 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		
 		LOGGER.info("procedureMainList value : "+procedureMainList);
 		
-		if(procedureDetailDesc.getProcedure_details().size() == 0)
+		if(procedureDetailDesc.getProcedure_details().isEmpty())
 		{
-			throw new ProcedureException("Procedure size is less than one");
+			throw new ProcedureException("Procedure Description cannot be empty");
+		}
+		else if(procedureDetailDesc.getPatient_visit_id().isEmpty())
+		{
+			throw new ProcedureException("Patient Visit Id cannot be empty");
 		}
 			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
 			{
@@ -97,6 +101,11 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 			{
 				procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
 			}
-			return "Added Successfully";
+			
+			 ProcedureSuccess procedureSuccess = new ProcedureSuccess();
+			 procedureSuccess.setMsg("Added Successfully");
+			 procedureSuccess.setSuccessFlag(Boolean.TRUE);
+			 
+			 return procedureSuccess;
 	}
 }

@@ -1,22 +1,21 @@
 package com.citiustech.pms.procedure.service;
 
-import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import com.citiustech.pms.procedure.model.ProcedureDetail;
 import com.citiustech.pms.procedure.model.ProcedureMain;
-import com.citiustech.pms.procedure.model.ProcedureMaster;
+import com.citiustech.pms.procedure.model.ProcedureSuccess;
 
 @Service
 public interface ProcedureDetailService {
 
 	 ProcedureMain addProcedure(ProcedureMain procedureDetail);
 	 
-	  List<ProcedureMaster> getAllProcedure();
+	 	ProcedureSuccess getAllProcedure();
 	  
 	  ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail);
 	  
-	  String getProcedureDescription(ProcedureDetail procedureDetailDesc);
+	  ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc);
 
 }
