@@ -38,8 +38,8 @@ public class Diagnosis implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private Long seq_id;
 
-	@Column(name = "id")
-	private String id;
+	@Column(name = "diagonosisId") // diagonosisId
+	private String diagonosisId;
 
 	@Column(name = "name")
 	private String name;
@@ -48,8 +48,9 @@ public class Diagnosis implements Serializable {
 	private String description;
 
 	// ManyToOne
-	// @JoinColumn(name="patient_visit_id", nullable=false)
+	// @JoinColumn(name="patient_visit_id", nullable=false)  check and remove the join col if not needed
 	// private Patient_Visit_Id patient_visit_id;
+	
 	@Column(name = "patient_visit_id")
 	private String patient_visit_id;
 
@@ -65,7 +66,6 @@ public class Diagnosis implements Serializable {
 
 	@LastModifiedBy
 	@Column(nullable = false)
-
 	private String last_modified_by = "sweeta";
 
 	@LastModifiedDate
