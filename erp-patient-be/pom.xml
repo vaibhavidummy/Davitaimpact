@@ -12,7 +12,32 @@
 	<packaging>jar</packaging>
 	<groupId>in.davita.impact.erp</groupId>
 	<artifactId>erp-patient-be</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>erp-admin-be</name>
 	<description>ERP admin be</description>
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>2020.0.2</spring-cloud.version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
