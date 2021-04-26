@@ -17,4 +17,5 @@ public class ProcedureSuccess {
 	private String msg;
 	private boolean successFlag;
 	private List<ProcedureMaster> procedureMaster;
+	private List<ProcedureMain> procedureMain ;
 }

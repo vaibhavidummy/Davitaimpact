@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.citiustech.pms.procedure.model.ProcedureDetail;
@@ -35,18 +35,21 @@ public class ProcedureController {
 		return new ResponseEntity<ProcedureMain>(addProcedureDetail, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/getProcedureByVisitId")
-    public ResponseEntity<ProcedureMain> getProcedureByVisitId(@RequestBody ProcedureMain procedureDetail) 
+	@GetMapping("/{patientVisitId}")
+    public ResponseEntity<ProcedureSuccess> getProcedureByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
-		ProcedureMain procedureByVisitId =null;
-		procedureByVisitId = procedureDetailService.getProcedureByVisitId(procedureDetail);
-         return new ResponseEntity<ProcedureMain>(procedureByVisitId , HttpStatus.OK);
+		ProcedureSuccess procedureByVisitId =null;
+		procedureByVisitId = procedureDetailService.getProcedureByVisitId(patientVisitId);
+         return new ResponseEntity<ProcedureSuccess>(procedureByVisitId , HttpStatus.OK);
     }
 	
 	@GetMapping("/getallProcedure")
-	@ResponseStatus(value = HttpStatus.OK)
-    public ProcedureSuccess getAllProcedure() {
-         return procedureDetailService.getAllProcedure();
+    public ResponseEntity<ProcedureSuccess> getAllProcedure() {
+		
+		LOGGER.info("inside getAllProcedure: ");
+		
+		ProcedureSuccess procedureSuccess =  procedureDetailService.getAllProcedure();
+		return new ResponseEntity<ProcedureSuccess>(procedureSuccess, HttpStatus.OK);
     }
 	
 	@PostMapping("/procedureDetailDesc")

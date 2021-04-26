@@ -12,7 +12,7 @@ public interface ProcedureDetailService {
 
 	 ProcedureMain addProcedure(ProcedureMain procedureDetail);
 	 
-	  ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail);
+	 ProcedureSuccess getProcedureByVisitId(String patientVisitId);
 	  
 	  ProcedureSuccess getAllProcedure();
 	  
