@@ -1,26 +1,27 @@
 package com.citiustech.pms.procedure.model;
 
-import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Component
 @Data
 @Entity 
-@Table(name="procedure_master", schema = "davita")
-public class ProcedureMaster implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProcedureMaster  {
 
 	@Id
-    @Column(name="id")
+    @Column(name="Procedure_Code")
     private String procedureId;
     
-    @Column(name="name")
+    @Column(name="Procedure_Description")
     private String procedureName;
 }
