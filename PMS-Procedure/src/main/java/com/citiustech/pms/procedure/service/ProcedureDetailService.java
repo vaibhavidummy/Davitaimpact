@@ -12,9 +12,9 @@ public interface ProcedureDetailService {
 
 	 ProcedureMain addProcedure(ProcedureMain procedureDetail);
 	 
-	 	ProcedureSuccess getAllProcedure();
-	  
 	  ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail);
+	  
+	  ProcedureSuccess getAllProcedure();
 	  
 	  ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc);
 

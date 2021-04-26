@@ -17,8 +17,6 @@ import com.citiustech.pms.procedure.model.ProcedureSuccess;
 import com.citiustech.pms.procedure.service.ProcedureDetailService;
 
 
-
-
 @RestController
 @RequestMapping("/healthcare/procedure")
 public class ProcedureController {
