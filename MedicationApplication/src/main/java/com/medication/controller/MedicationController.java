@@ -1,7 +1,6 @@
 package com.medication.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,24 +29,22 @@ public class MedicationController {
 	}
 
 	@PostMapping(path = "/saveMedication")
-	public void saveMedication(@RequestBody Medication medication) {
-		medicationServiceImpl.saveMedication(medication);
+	public Medication saveMedication(@RequestBody Medication medication) {
+		return medicationServiceImpl.saveMedication(medication);
 	}
 
 	@GetMapping(path = "/getList/{visitId}/{patientId}")
-	public Optional<MedicationOnVisit> getMedicationForPatientOnVisit(@PathVariable String visitId,@PathVariable String patientId) {
+	public MedicationOnVisit getMedicationForPatientOnVisit(@PathVariable String visitId,@PathVariable String patientId) {
 		
 		return medicationServiceImpl.getMedicationFromPatientandVisit(visitId,patientId);
 	}
 	
 	
 	@PostMapping(path = "/saveList")
-	public String saveMedicationForPatientOnVisit(@RequestBody MedicationOnVisit medicationOnVisit) {
+	public MedicationOnVisit saveMedicationForPatientOnVisit(@RequestBody MedicationOnVisit medicationOnVisit) {
 
 		return medicationServiceImpl.saveMedicationForPatientOnVisit(medicationOnVisit);
 	}
-	
-	
 	
 	@GetMapping(path = "/getAllMedications/{patientId}")
 	public List<MedicationOnVisit>  getAllMedicationForPatient(@PathVariable String patientId) {
