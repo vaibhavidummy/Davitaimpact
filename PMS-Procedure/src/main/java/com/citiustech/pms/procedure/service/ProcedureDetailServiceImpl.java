@@ -45,9 +45,9 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	{
 		ProcedureMain procedureGetById = prodecureDetailRepository.save(procedureDetail);
 	        if (Objects.isNull(procedureGetById.getProcedure_id()))
-	            throw new ProcedureException("Procedure Id id Not Null");
-	        else if(Objects.isNull(procedureGetById.getName()))
-	            throw new ProcedureException("Procedure Name cannot be Not Null");
+	            throw new ProcedureException("Procedure Id id is Null");
+	        else if(Objects.isNull(procedureGetById.getName()) || Objects.isNull(procedureGetById.getDescription()))
+	            throw new ProcedureException("Procedure Name or Description is Null");
 	        return procedureGetById;
 	}
 	
@@ -70,20 +70,22 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
-		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + " ProcedureDetail size: "+procedureDetailDesc.getProcedure_details().size());
+		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc);
+		
+		LOGGER.info("Size : "+procedureDetailDesc.getProcedure_details().size());
 		
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
 		
 		LOGGER.info("procedureMainList value : "+procedureMainList);
 		
-		if(procedureDetailDesc.getProcedure_details().isEmpty())
-		{
-			throw new ProcedureException("Procedure Description cannot be empty");
-		}
-		else if(procedureDetailDesc.getPatient_visit_id().isEmpty())
+		if(procedureDetailDesc.getPatient_visit_id().isEmpty())
 		{
 			throw new ProcedureException("Patient Visit Id cannot be empty");
 		}
+		else if(procedureDetailDesc.getProcedure_details().isEmpty())
+		{
+			throw new ProcedureException("Procedure Description cannot be empty");
+		} 
 			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
 			{
 				ProcedureMain procedureMain = new ProcedureMain();

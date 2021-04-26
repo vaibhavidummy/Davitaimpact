@@ -16,11 +16,12 @@ import lombok.Data;
 @Entity
 @Table(name = "diagnosis_master", schema = "davita")
 public class DiagnosisMaster implements Serializable {
+	
 	@Id
-	@Column(name = "id")
+	@Column(name = "DiagnosisId")
 	private String diagnosisId;
 
-	@Column(name = "name")
+	@Column(name = "DiagnosisName")
 	private String diagnosisName;
 
 }
