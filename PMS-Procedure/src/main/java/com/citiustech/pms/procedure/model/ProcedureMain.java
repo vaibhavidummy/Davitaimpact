@@ -9,6 +9,8 @@ import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -49,10 +51,10 @@ public class ProcedureMain implements Serializable{
     @Column(nullable = true , updatable = false)
     private String created_by="admin";
 
-    @CreatedDate
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-   // @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="creation_on" , updatable = false)
+	@CreatedDate
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
     private Date creation_on;
 
     @LastModifiedBy
@@ -60,9 +62,9 @@ public class ProcedureMain implements Serializable{
     private String last_modified_by="admin";
 
     @LastModifiedDate
-   @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-   // @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false)
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
     private Date last_modified_on;
     
     @Column(nullable = false, length = 1)
