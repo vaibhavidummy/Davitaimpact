@@ -17,6 +17,7 @@ import com.citiustech.pms.procedure.model.ProcedureSuccess;
 import com.citiustech.pms.procedure.repository.ProcedureMasterRepo;
 import com.citiustech.pms.procedure.repository.ProdecureDetailRepository;
 
+
 @Service
 public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	
@@ -28,27 +29,49 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Autowired
 	private ProcedureMasterRepo procedureMasterRepo;
 	
+	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
 		
-		 prodecureDetailRepository.save(procedureDetail);
-		 if(procedureDetail.getName().equals("A")) {
-			 throw new ProcedureException("---");
+		 if(Objects.isNull(procedureDetail.getProcedure_id())) {
+			 
+			 throw new ProcedureException("Procedure Id cannot be Null");
 		 }
-		 return procedureDetail;
+		 else if(Objects.isNull(procedureDetail.getName()))
+		 {
+			 throw new ProcedureException(" Procedure Name cannot be Null");
+		 }
+		 else if(Objects.isNull(procedureDetail.getDescription()))
+		 {
+			 throw new ProcedureException("Procedure Description cannot be Null ");
+		 }  
+		 
+		 ProcedureMain procedureMain = null;
+		 
+		 procedureMain = prodecureDetailRepository.save(procedureDetail);
+		 
+		 return procedureMain;
 	}
 
 	@Override
-    @Transactional(rollbackFor = Exception.class)
-	public ProcedureMain getProcedureByVisitId(ProcedureMain procedureDetail)
+	public ProcedureSuccess getProcedureByVisitId(String patientVisitId )
 	{
-		ProcedureMain procedureGetById = prodecureDetailRepository.save(procedureDetail);
-	        if (Objects.isNull(procedureGetById.getProcedure_id()))
-	            throw new ProcedureException("Procedure Id id Not Null");
-	        else if(Objects.isNull(procedureGetById.getName()))
-	            throw new ProcedureException("Procedure Name cannot be Not Null");
-	        return procedureGetById;
+		List<ProcedureMain> getPatientVisitId = new ArrayList<>();
+		
+		if(!patientVisitId.isEmpty())
+		{
+			 getPatientVisitId = prodecureDetailRepository.checkForExistingPatientVisitId(patientVisitId);
+			 
+			if (getPatientVisitId.isEmpty()) {
+				throw new ProcedureException("Patient Visit Id cannot be blank");
+			}
+		}
+		
+		 ProcedureSuccess procedureSuccess = new ProcedureSuccess();
+		 procedureSuccess.setSuccessFlag(Boolean.TRUE);
+		 procedureSuccess.setProcedureMain(getPatientVisitId);
+		 return procedureSuccess;
 	}
 	
 	@Override
@@ -70,26 +93,27 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc) {
 		
-		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc + " ProcedureDetail size: "+procedureDetailDesc.getProcedure_details().size());
-		
+		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc);
+
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
 		
 		LOGGER.info("procedureMainList value : "+procedureMainList);
 		
-		if(procedureDetailDesc.getProcedure_details().isEmpty())
-		{
-			throw new ProcedureException("Procedure Description cannot be empty");
-		}
-		else if(procedureDetailDesc.getPatient_visit_id().isEmpty())
+		if(procedureDetailDesc.getPatient_visit_id().isEmpty())
 		{
 			throw new ProcedureException("Patient Visit Id cannot be empty");
 		}
+		else if(procedureDetailDesc.getProcedure_details().isEmpty())
+		{
+			throw new ProcedureException("Procedure Description cannot be empty");
+		}
+
+		LOGGER.info("Size : "+procedureDetailDesc.getProcedure_details().size());
+		
 			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
 			{
 				ProcedureMain procedureMain = new ProcedureMain();
 
-				LOGGER.info("procedure value in For Loop : "+ procedureMain);
-				
 				procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
 				procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
 				procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());

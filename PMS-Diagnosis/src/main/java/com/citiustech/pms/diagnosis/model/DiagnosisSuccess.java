@@ -1,4 +1,4 @@
-package com.citiustech.pms.procedure.model;
+package com.citiustech.pms.diagnosis.model;
 
 import java.util.List;
 
@@ -12,10 +12,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ProcedureSuccess {
+public class DiagnosisSuccess {
 
 	private String msg;
 	private boolean successFlag;
-	private List<ProcedureMaster> procedureMaster;
-	private List<ProcedureMain> procedureMain ;
+	private List<DiagnosisMaster> diagnosisMaster;
 }
