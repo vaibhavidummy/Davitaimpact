@@ -24,7 +24,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
 	public List<AppointmentStatistics> findAllByUserIdBetweenDate(String userId, LocalDate startDate, LocalDate endDate);
 	
 	@Query("FROM Appointment a WHERE a.physicianId= :physicianId and a.date= :date and a.startTime=:startTime and a.endTime=:endTime and a.status IN ('ACCEPTED','PENDING') " )
-	public Appointment checkForExistingAppointment(String physicianId, LocalDate date, Date startTime, Date endTime );
+	public Appointment checkForExistingAppointment(String physicianId, LocalDate date, LocalTime startTime, LocalTime endTime );
 	
 
 	/*

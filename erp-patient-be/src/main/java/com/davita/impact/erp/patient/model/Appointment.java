@@ -1,5 +1,7 @@
 package com.davita.impact.erp.patient.model;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
@@ -27,6 +29,12 @@ import org.springframework.stereotype.Component;
 
 import com.davita.impact.erp.patient.utilities.Auditable;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,8 +48,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Appointment extends Auditable<String> {
+public class Appointment extends Auditable<String> implements Serializable {
 	
+    private static final long serialVersionUID = 1L;
+    
 	@Id
 	@GenericGenerator(name = "appointment_sequence_id", strategy = "com.davita.impact.erp.patient.utilities.AppointmentIdGenerator")
 	@GeneratedValue(generator = "appointment_sequence_id")
@@ -63,18 +73,23 @@ public class Appointment extends Auditable<String> {
 	@FutureOrPresent(message="Appointment date must be future or present date") 
     @Column(nullable = false)
 	@JsonFormat(pattern="yyyy-MM-dd")
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
 	private LocalDate date;
 	
 
 	@NotNull(message="Appointment Start time is required")
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
-	@Temporal(TemporalType.TIME)
-	private Date startTime;
+	@JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
+	private LocalTime startTime;
+	
 	
 	@NotNull(message="Appointment end time is required")
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
-	@Temporal(TemporalType.TIME)
-	private Date endTime;
+	@JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
+	private LocalTime endTime;
 	
 	@NotBlank(message="Meeting Title is Required")
 	@Size(max = 50, message = "Meeting tile length should be 50")
@@ -91,4 +106,6 @@ public class Appointment extends Auditable<String> {
 	private String patientVisitDetailId;
 	
 	
+	
+
 }
