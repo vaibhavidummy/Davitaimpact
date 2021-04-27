@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import in.davita.impact.erp.patient.model.Allergies;
 import in.davita.impact.erp.patient.model.PatientDetails;
 
 @Service
@@ -13,4 +14,5 @@ public interface PatientServices {
 	public PatientDetails updatePatient(PatientDetails patient);
 	public PatientDetails getPatientById(String id);
 	public List<PatientDetails> getAllPatient();
+	public PatientDetails addNewAllergy(Allergies allergies,String id);
 }

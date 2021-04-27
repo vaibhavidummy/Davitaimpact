@@ -20,6 +20,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -35,6 +36,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import in.davita.impact.erp.patient.utilities.Auditable;
 import lombok.AllArgsConstructor;
@@ -48,130 +51,103 @@ import lombok.Setter;
 @Entity
 public class PatientDetails extends Auditable<String> {
 
+	
 	@Id
 	@GenericGenerator(name = "patient_sequence_id", strategy = "in.davita.impact.erp.patient.utilities.PatientDetailsIdGenerator")
 	@GeneratedValue(generator = "patient_sequence_id")
 	private String id;
 
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "FirstName field must contain characters only")
-	@NotBlank(message = "FirstName field is required")
-	@Length(max = 15, message = "FirstName field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String firstName;
+	@NotBlank(message = "user id should not be blank")
+	private String user_id_fk;
+	
+	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
+	@JoinColumn(name = "basic_details_id")
+	private BasicDetails basicDetails;
 
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "FirstName field must contain characters only")
-	@NotBlank(message = "FirstName field is required")
-	@Length(max = 15, message = "LastName field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String lastName;
+	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
+	@JoinColumn(name = "emergency_details_id")
+	private EmergencyDetails emergencyDetails;
 
-	@NotBlank(message = "Email field is required")
-	@Email
-	@Column(nullable = false, unique = true)
-	private String emailId;
-
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message = "Dob field is required")
-	@Column(nullable = false)
-	@PastOrPresent(message = "Dob must be past or present date")
-	private Date dateOfBirth;
-
-	@NotNull(message = "ContactNumber field is required")
-	@Digits(integer = 10, fraction = 0, message = "provide proper ContactNumber")
-	@Positive(message = "Please provide proper ContactNumber")
-	@Column(nullable = false, length = 10)
-	private long contactNo;
-
-	@NotNull(message = "Age field is required")
-	@Digits(integer = 3, fraction = 2, message = "Age is not Proper")
-	@Positive(message = "Please provide proper Age")
-	@Column(nullable = false, length = 13)
-	private float age;
-
-	@NotNull(message = "Gender field is required")
-	@Enumerated(EnumType.STRING)
-	private Gender gender;
-
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Race field must contain characters only")
-	@NotBlank(message = "Race field is required")
-	@Length(max = 15, message = "Race field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String race;
-
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Ethnicity field must contain characters only")
-	@NotBlank(message = "Ethnicity field is required")
-	@Length(max = 15, message = "Ethnicity field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String ethnicity;
-
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private List<Integer> languageKnown;
+	
+	@Transient
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	private List<Integer> allergies;
+	
 	/*
-	 * @NotBlank(message = "HomeAddress field is required")
+	 * @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	 * 
-	 * @Length(max = 200, message = "Race field allow only max 200 characters")
+	 * @JoinColumn(name = "patient_details_address_id")
 	 * 
-	 * @Column(nullable = false, length = 200) private String home_address;
+	 * @JsonAlias("emergencyAddress") private List<Address> address;
 	 */
+	
 
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Emergency Contact Personfield must contain characters only")
-	@NotBlank(message = "Emergency Contact Person FristName field is required")
-	@Length(max = 15, message = "Emergency Contact Person FirstName field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String emergency_first_name;
-
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Emergency Contact Persone Last Name field must contain characters only")
-	@NotBlank(message = "Emergency Contact Person LastName field is required")
-	@Length(max = 15, message = "FirstName field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String emergency_last_name;
-
-	@Pattern(regexp = "^[a-zA-Z]+$", message = "Relationship With Patient field must contain characters only")
-	@NotBlank(message = "Relationship With Patient field is required")
-	@Length(max = 15, message = "Relationship With Patient field allow only max 15 characters")
-	@Column(nullable = false, length = 15)
-	private String emergency_relation_ship;
-
-	@NotNull(message = "Emergency ContactNumber field is required")
-	@Digits(integer = 10, fraction = 0, message = "provide proper Emergency ContactNumber")
-	@Positive(message = " Please provide proper Emergency ContactNumber")
-	@Column(nullable = false, length = 10)
-	private long emergency_contact_number;
-
-	/*
-	 * @Pattern(regexp = "^true$|^false$", message = "Allowed input: true or false")
-	 */
-	@NotNull
-	private boolean is_access_approved;
-
-	@NotBlank(message = "Email field is required")
-	@Email
-	@Column(nullable = false, unique = true)
-	private String emergencyContactEmailId;
-
-	/* mappedBy="patientDetailsAddress" */
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "patient_details_address_id")
-	@JsonAlias("emergencyAddress")
-	private List<Address> address;
 	
 	
-			@ManyToMany(targetEntity =LanguageKnown.class ,fetch = FetchType.LAZY,
-			  cascade = { CascadeType.MERGE})
-			  @JoinTable(name = "patientdetails_languageknown", joinColumns
-			  = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns
-			  = @JoinColumn(name = "languageknown_id")) 
-			  Set<LanguageKnown> languageKnown;
-			  
-			  
-			  @ManyToMany(fetch = FetchType.LAZY,  cascade = {  CascadeType.MERGE })  
-			  @JoinTable(name = "patientdetails_allergies", joinColumns = @JoinColumn(name
-			  = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name =
-			  "allergies_id")) 
-			  Set<Allergies> allergies;
-			 
-			
+	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
+	  
+	  @JoinColumn(name = "address_id") private Address address;
+	 	
+	
+
+		@ManyToMany(targetEntity = LanguageKnown.class, fetch = FetchType.LAZY/* , cascade = { CascadeType.MERGE } */)
+	@JoinTable(name = "patientdetails_languageknown", joinColumns = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name = "languageknown_id"))
+	Set<LanguageKnown> languageKnownObject;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) // { CascadeType.PERSIST, CascadeType.MERGE }
+	@JoinTable(name = "patientdetails_allergies", joinColumns = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name = "allergies_id"))
+	Set<Allergies> allergiesObject;
 
 	public PatientDetails() {
 
 	}
 
+	public PatientDetails(String id, @NotBlank(message = "user id should not be blank") String user_id_fk,
+			BasicDetails basicDetails, EmergencyDetails emergencyDetails, Address address,
+			Set<LanguageKnown> languageKnown, Set<Allergies> allergies) {
+		super();
+		this.id = id;
+		this.user_id_fk = user_id_fk;
+		this.basicDetails = basicDetails;
+		this.emergencyDetails = emergencyDetails;
+		this.address = address;
+		this.languageKnownObject = languageKnown;
+		this.allergiesObject = allergies;
+	}
+
+	public PatientDetails(@NotBlank(message = "user id should not be blank") String user_id_fk,
+			BasicDetails basicDetails, EmergencyDetails emergencyDetails, List<Integer> languageKnown,
+			List<Integer> allergies, Address address) {
+		super();
+		this.user_id_fk = user_id_fk;
+		this.basicDetails = basicDetails;
+		this.emergencyDetails = emergencyDetails;
+		this.languageKnown = languageKnown;
+		this.allergies = allergies;
+		this.address = address;
+	}
+
+	public PatientDetails(String id, @NotBlank(message = "user id should not be blank") String user_id_fk,
+			BasicDetails basicDetails, EmergencyDetails emergencyDetails, List<Integer> languageKnown,
+			List<Integer> allergies, Address address) {
+		super();
+		this.id = id;
+		this.user_id_fk = user_id_fk;
+		this.basicDetails = basicDetails;
+		this.emergencyDetails = emergencyDetails;
+		this.languageKnown = languageKnown;
+		this.allergies = allergies;
+		this.address = address;
+	}
+
+	
+
+		
+
+	
+	
 }

@@ -28,10 +28,11 @@ public class LanguageKnown {
 	  @Id  
 	  @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
+	  
 	private String name;
 
 	
-	@ManyToMany(targetEntity = PatientDetails.class, mappedBy ="languageKnown",fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy ="languageKnownObject",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
 	  @JsonIgnore 
 	List<PatientDetails> patientdetails;
 	 
@@ -40,6 +41,14 @@ public class LanguageKnown {
 	  public LanguageKnown() {
 
 		}
+
+
+
+	public LanguageKnown(int id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 
 		
 		

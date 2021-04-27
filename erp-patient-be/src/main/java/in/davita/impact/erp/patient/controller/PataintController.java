@@ -2,9 +2,13 @@ package in.davita.impact.erp.patient.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -23,12 +27,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+
+import in.davita.impact.erp.patient.model.Allergies;
 import in.davita.impact.erp.patient.model.LanguageKnown;
 import in.davita.impact.erp.patient.model.PatientDetails;
 import in.davita.impact.erp.patient.model.PatientVisitDetails;
 import in.davita.impact.erp.patient.repository.PatientRepository;
+import in.davita.impact.erp.patient.service.LanguageServices;
 import in.davita.impact.erp.patient.service.PatientServices;
 import in.davita.impact.erp.patient.service.PatientVisitDetailsServices;
+import in.davita.impact.erp.patient.service.allergiesServices;
+import io.swagger.annotations.ApiResponse;
 
 @RestController()
 @RequestMapping(value ="/healthcare")
@@ -44,6 +53,12 @@ public class PataintController {
 	@Autowired
 	PatientVisitDetailsServices patientVisitDetailsServices;
 	
+	@Autowired
+	allergiesServices allergiesServices;
+	
+	@Autowired
+	LanguageServices languageServices;
+	
 	/*
 	 * @PostMapping("/patient/")
 	 * 
@@ -57,26 +72,61 @@ public class PataintController {
 	
 	@PostMapping("/patient/")
 	@ResponseBody
-	public String createUser(@RequestBody PatientDetails patient){
-		
+	//@ApiResponse(code = 201, message = "Patient Details Added Successfully", response = PatientDetails.class)
+	//@Transactional
+	public ResponseEntity<Map> createUser(@RequestBody PatientDetails patient){
 		 PatientDetails addNewPatients = patientServices.addNewPatient(patient);
-	     return addNewPatients.getId();
+			
+			  Map map = new HashMap(); map.put("status",201);
+			  map.put("message","Patient Details Added Successfully");
+			  map.put("id",addNewPatients.getId()); 
+			  Map result = new HashMap();;
+			  result.put("result",map);
+			 
+			//return new ResponseEntity<String>("Patient Details Added Successfully "+addNewPatients.getId(),HttpStatus.CREATED);
+	        return new ResponseEntity<Map>(result,HttpStatus.CREATED);
+	    // return addNewPatients.getId();
 	}
 	
-	@PutMapping("/patient/{userid}")
-	public ResponseEntity<PatientDetails> updatePatientDetails(@Valid @RequestBody PatientDetails patient , @PathVariable("userid") String id, BindingResult result) {
+	/*
+	 * @PutMapping("/patient/{userid}") //@Transactional public ResponseEntity<Map>
+	 * updatePatientDetails(@Valid @RequestBody PatientDetails patient
+	 * , @PathVariable("userid") String id, BindingResult result) {
+	 * Optional<PatientDetails> findById =
+	 * patientRepository.findById(patient.getId()); if(!findById.isPresent()) return
+	 * ResponseEntity.notFound().build(); PatientDetails updatePatient =
+	 * patientServices.updatePatient(patient); Map map = new HashMap();
+	 * map.put("status",200);
+	 * map.put("message","Patient Details Update Successfully");
+	 * map.put("id",updatePatient.getId()); Map result1 = new HashMap();
+	 * result1.put("result",map); return new ResponseEntity<Map>(result1,
+	 * HttpStatus.OK);
+	 * 
+	 * }
+	 */
+	
+	@PutMapping("/patient/")
+	//@Transactional
+	public ResponseEntity<Map> updatePatientDetails(@Valid @RequestBody PatientDetails patient) {
 		Optional<PatientDetails> findById = patientRepository.findById(patient.getId());
 		if(!findById.isPresent()) 
 			return ResponseEntity.notFound().build();
 		PatientDetails updatePatient = patientServices.updatePatient(patient);	
-		return new ResponseEntity<PatientDetails>(updatePatient, HttpStatus.OK);
+		 Map map = new HashMap(); map.put("status",200);
+		  map.put("message","Patient Details Update Successfully");
+		  map.put("id",updatePatient.getId()); 
+		  Map result1 = new HashMap();
+		  result1.put("result",map);
+		return new ResponseEntity<Map>(result1, HttpStatus.OK);
 		
 	}
+
+	
 	@GetMapping("/patient/{userid}")
-	public PatientDetails getPatientDetailsByID(@PathVariable("userid") String id) {
+	public ResponseEntity<PatientDetails> getPatientDetailsByID(@PathVariable("userid") String id) {
 	//	LOGGER.info("getPatientDetailsByID...");
 		PatientDetails patientById = patientServices.getPatientById(id);
-		return patientById;
+		return new ResponseEntity<PatientDetails>(patientById, HttpStatus.OK);
 		
 	}
 	@GetMapping("/patient/")
@@ -85,28 +135,51 @@ public class PataintController {
 		return allPatient;
 	}
 	
+	/* Find All Allergy  */
+	
+	@GetMapping("/allergies")
+	public List<Allergies>  getAllAllergiesDetails() {
+		List<Allergies> allAllergies = allergiesServices.getAllAllergies();
+		return allAllergies;
+	}
+
+	/* Find All Languages  */
+	
+	@GetMapping("/languages")
+	public List<LanguageKnown>  getAllLangugeDetails() {
+		List<LanguageKnown> allLanguageKnown = languageServices.getAllLangwages();
+		return allLanguageKnown;
+	}
+
+	
+	
+	
 	/*
 	 * Patient VisiteDetails
 	 */	
-	@ResponseBody
-	@GetMapping("/visitdetails")
-	public List<PatientVisitDetails> getAllVisitDetails() {
-		List<PatientVisitDetails> allVisitDetails = patientVisitDetailsServices.getAllVisitDetails();
-		return allVisitDetails;
-	}
-	
-	@GetMapping("/visitdetails/{patientId}")
-	@ResponseBody
-	public List<PatientVisitDetails> getVisitDetailsByPatientId(@PathVariable("patientId") int id) {
-		List<PatientVisitDetails> patientVisitDetailsByID = patientVisitDetailsServices.getPatientVisitDetailsByID(id);
-		return patientVisitDetailsByID;
-	}
-	@GetMapping("/visitdetails/{patientvisitId}")
-	@ResponseBody
-	public PatientVisitDetails getVisitDetailsByPatientVisitId(@PathVariable("patientvisitId") int visitid) {
-		 PatientVisitDetails patientVisitDetailsByVisitID = patientVisitDetailsServices.getPatientVisitDetailsByVisitID(visitid);
-		return patientVisitDetailsByVisitID;
-	}
-	
+
+	/*
+	 * @ResponseBody
+	 * 
+	 * @GetMapping("/visitdetails") public List<PatientVisitDetails>
+	 * getAllVisitDetails() { List<PatientVisitDetails> allVisitDetails =
+	 * patientVisitDetailsServices.getAllVisitDetails(); return allVisitDetails; }
+	 * 
+	 * @GetMapping("/visitdetails/{patientId}")
+	 * 
+	 * @ResponseBody public List<PatientVisitDetails>
+	 * getVisitDetailsByPatientId(@PathVariable("patientId") int id) {
+	 * List<PatientVisitDetails> patientVisitDetailsByID =
+	 * patientVisitDetailsServices.getPatientVisitDetailsByID(id); return
+	 * patientVisitDetailsByID; }
+	 * 
+	 * @GetMapping("/visitdetails/{patientvisitId}")
+	 * 
+	 * @ResponseBody public PatientVisitDetails
+	 * getVisitDetailsByPatientVisitId(@PathVariable("patientvisitId") int visitid)
+	 * { PatientVisitDetails patientVisitDetailsByVisitID =
+	 * patientVisitDetailsServices.getPatientVisitDetailsByVisitID(visitid); return
+	 * patientVisitDetailsByVisitID; }
+	 */	
 	
 }

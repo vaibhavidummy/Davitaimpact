@@ -13,6 +13,6 @@
 	<groupId>in.davita.impact.erp</groupId>
 	<artifactId>erp-patient-be</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>erp-admin-be</name>
-	<description>ERP admin be</description>
+	<name>erp-patient-be</name>
+	<description>ERP Patient be</description>
 </project>
