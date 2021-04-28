@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcedureSuccess {
 
-	private String msg;
+	private String message;
 	private boolean successFlag;
 	private List<ProcedureMaster> procedureMaster;
 	private List<ProcedureMain> procedureMain ;

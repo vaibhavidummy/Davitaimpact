@@ -26,7 +26,7 @@ public class ProcedureController {
 	@Autowired
 	private ProcedureDetailService procedureDetailService;
 	
-	@PostMapping
+	@PostMapping("/addProcedure")
 	public ResponseEntity<ProcedureMain> addProcedure(@RequestBody ProcedureMain procedureMain) {
 		
 		LOGGER.info("inside addProcedure");
