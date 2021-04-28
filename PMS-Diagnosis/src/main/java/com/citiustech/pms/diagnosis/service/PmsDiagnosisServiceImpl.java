@@ -30,17 +30,21 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Autowired
 	private DiagnosisMasterRepo diagnosisMasterRepo;
 	
+	@Autowired
+	private Diagnosis diagnosis;
+	
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Diagnosis addDiagnosis(Diagnosis diagnosis) 
-	{
-		Diagnosis diagnosisAdd = diagnosisRepo.save(diagnosis);
-		if (Objects.isNull(diagnosis.getDiagonosisId()))
+	public Diagnosis addDiagnosis(Diagnosis diagnosisAdd) {
+		if (Objects.isNull(diagnosisAdd.getDiagonosisId()))
 			throw new DiagnosisException("Diagonsis Id is Null");
-		else if (Objects.isNull(diagnosis.getName()) || Objects.isNull(diagnosis.getDescription()))
+		else if (Objects.isNull(diagnosisAdd.getName()) || Objects.isNull(diagnosisAdd.getDescription()))
 			throw new DiagnosisException("Diagnosis Name or Description is Null");
-		return diagnosisAdd;
+
+		diagnosis = diagnosisRepo.save(diagnosisAdd);
+
+		return diagnosis;
 	}
 	
 
