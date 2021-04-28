@@ -21,7 +21,7 @@ public class DiagnosisMaster implements Serializable {
 	@Column(name = "DiagnosisId")
 	private String diagnosisId;
 
-	@Column(name = "DiagnosisName")
+	@Column(name = "DiagnosisDescription")
 	private String diagnosisName;
 
 }

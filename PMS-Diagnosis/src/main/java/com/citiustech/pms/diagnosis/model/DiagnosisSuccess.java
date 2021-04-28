@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DiagnosisSuccess {
 
-	private String msg;
+	private String message;
 	private boolean successFlag;
 	private List<DiagnosisMaster> diagnosisMaster;
+	private List<Diagnosis> diagnosis ;
 }
