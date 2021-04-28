@@ -33,7 +33,7 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public Diagnosis addDiagnosis(Diagnosis diagnosis) // throws Exception //defered
+	public Diagnosis addDiagnosis(Diagnosis diagnosis) 
 	{
 		Diagnosis diagnosisAdd = diagnosisRepo.save(diagnosis);
 		if (Objects.isNull(diagnosis.getDiagonosisId()))
@@ -86,7 +86,7 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		
 		if(diagnosisMaster.isEmpty())
 		{
-			throw new DiagnosisException("Diagnosis Master data is less than one");
+			throw new DiagnosisException("Diagnosis Master data is not present");
 		}
 		DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
 		 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
@@ -98,26 +98,27 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Transactional(rollbackFor =  Exception.class)
 	public DiagnosisSuccess getDiagnosisDescription(DiagnosisModel diagnosisModel) {
 		
-	LOGGER.info("DiagnosisDetailDesc : "+diagnosisModel + " ProcedureDetail size: "+diagnosisModel.getDiagnosis_details().size());
+	LOGGER.info("diagnosisModel : "+diagnosisModel);
 		
 		List<Diagnosis> diagnosisList = new ArrayList<>();
 		
 		LOGGER.info("diagnosisList value : "+diagnosisList);
 		
-		if(diagnosisModel.getDiagnosis_details().isEmpty())
-		{
-			throw new DiagnosisException("Diagnosis Description cannot be empty");
-		}
-		else if(diagnosisModel.getPatient_visit_id().isEmpty())
+		if(diagnosisModel.getPatient_visit_id().isEmpty())
 		{
 			throw new DiagnosisException("Patient Visit Id cannot be empty");
 		}
+		else if(diagnosisModel.getDiagnosis_details().isEmpty())
+		{
+			throw new DiagnosisException("Diagnosis Description cannot be empty");
+		}
+		
+		LOGGER.info(" DiagnosisDetail size: "+diagnosisModel.getDiagnosis_details().size());
+		
 			for(int i =0; i < diagnosisModel.getDiagnosis_details().size(); i++)
 			{
 				Diagnosis diagnosis = new Diagnosis();
 
-				LOGGER.info("procedure value in For Loop : "+ diagnosis);
-				
 				diagnosis.setPatient_visit_id(diagnosisModel.getPatient_visit_id());
 				diagnosis.setDiagonosisId(diagnosisModel.getDiagnosis_details().get(i).getId());
 				diagnosis.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
@@ -128,10 +129,31 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 			
 			diagnosisRepo.saveAll(diagnosisList);
 			
-			 DiagnosisSuccess procedureSuccess = new DiagnosisSuccess();
-			 procedureSuccess.setMsg("Added Successfully");
-			 procedureSuccess.setSuccessFlag(Boolean.TRUE);
+			 DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
+			 diagnosisSuccess.setMessage("Added Successfully");
+			 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
 			 
-			 return procedureSuccess;
+			 return diagnosisSuccess;
+	}
+
+
+	@Override
+	public DiagnosisSuccess getProcedureByVisitId(String patientVisitId) {
+		
+		List<Diagnosis> getPatientVisitId = new ArrayList<>();
+		
+		if(!patientVisitId.isEmpty())
+		{
+			 getPatientVisitId = diagnosisRepo.checkForExistingPatientVisitId(patientVisitId);
+			 
+			if (getPatientVisitId.isEmpty()) {
+				throw new DiagnosisException("Patient Visit Id cannot be blank");
+			}
+		}
+		
+		 DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
+		 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
+		 diagnosisSuccess.setDiagnosis(getPatientVisitId);
+		 return diagnosisSuccess;
 	}
 }
