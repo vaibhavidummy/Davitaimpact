@@ -52,7 +52,7 @@ public class ProcedureMain implements Serializable{
     private String created_by="admin";
 
 	@CreatedDate
-	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
     private Date creation_on;
@@ -62,13 +62,10 @@ public class ProcedureMain implements Serializable{
     private String last_modified_by="admin";
 
     @LastModifiedDate
-	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
     private Date last_modified_on;
-    
-    @Column(nullable = false, length = 1)
-	String status = "I";
     
     @Column(nullable = false)
     private String patient_visit_id;
