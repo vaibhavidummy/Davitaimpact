@@ -9,11 +9,15 @@ import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Component
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "diagnosis_master", schema = "davita")
 public class DiagnosisMaster implements Serializable {
 	
@@ -21,7 +25,7 @@ public class DiagnosisMaster implements Serializable {
 	@Column(name = "DiagnosisId")
 	private String diagnosisId;
 
-	@Column(name = "DiagnosisName")
+	@Column(name = "DiagnosisDescription")
 	private String diagnosisName;
 
 }

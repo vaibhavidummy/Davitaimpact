@@ -29,6 +29,8 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Autowired
 	private ProcedureMasterRepo procedureMasterRepo;
 	
+	@Autowired
+	private ProcedureMain procedureMain;
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -46,8 +48,6 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		 {
 			 throw new ProcedureException("Procedure Description cannot be Null ");
 		 }  
-		 
-		 ProcedureMain procedureMain = null;
 		 
 		 procedureMain = prodecureDetailRepository.save(procedureDetail);
 		 
@@ -81,7 +81,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 				
 		if(procedureMaster.isEmpty())
 		{
-			throw new ProcedureException("Procedure Master data is less than one");
+			throw new ProcedureException("Procedure Master data is not present");
 		}
 		ProcedureSuccess procedureSuccess = new ProcedureSuccess();
 		 procedureSuccess.setSuccessFlag(Boolean.TRUE);
@@ -127,7 +127,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 			}
 			
 			 ProcedureSuccess procedureSuccess = new ProcedureSuccess();
-			 procedureSuccess.setMsg("Added Successfully");
+			 procedureSuccess.setMessage("Added Successfully");
 			 procedureSuccess.setSuccessFlag(Boolean.TRUE);
 			 
 			 return procedureSuccess;
