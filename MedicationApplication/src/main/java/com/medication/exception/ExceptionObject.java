@@ -11,4 +11,5 @@ public class ExceptionObject {
 	private  String message;
 	private  String error;
 	private  StackTraceElement stacktrace;
+	private Boolean successFlag;
 }

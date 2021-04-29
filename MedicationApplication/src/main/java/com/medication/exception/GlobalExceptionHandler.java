@@ -15,24 +15,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler({ MedicationException.class })
 	public ExceptionObject catchMedicationException(MedicationException ex) {
 		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.ADMIN_CONTACT,
-				ex.getStacktrace());
+				ex.getStacktrace(),Boolean.FALSE);
 	}
 
 	@ExceptionHandler({ NoNodeAvailableException.class })
 	public ExceptionObject catchCassandraUnavailableException(NoNodeAvailableException ex) {
 		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.CASSANDRA_DOWN,
-				ex.getStackTrace()[0]);
+				ex.getStackTrace()[0],Boolean.FALSE);
 	}
 
 	@ExceptionHandler({ Exception.class })
 	public ExceptionObject catchAllException(Exception ex) {
 		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.ADMIN_CONTACT,
-				ex.getStackTrace()[0]);
+				ex.getStackTrace()[0],Boolean.FALSE);
 	}
 
 	@ExceptionHandler({ RuntimeException.class })
 	public ExceptionObject catchAllRuntimeException(RuntimeException ex) {
 		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.ADMIN_CONTACT,
-				ex.getStackTrace()[0]);
+				ex.getStackTrace()[0],Boolean.FALSE);
 	}
 }

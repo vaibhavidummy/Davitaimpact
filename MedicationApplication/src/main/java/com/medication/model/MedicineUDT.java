@@ -15,8 +15,6 @@ public class MedicineUDT {
 
 	@Column(value = "medicine_name")
 	private String medicineName;
-	@Column(value = "status")
-	private String status;
 	private String dosage;
 	private String description;
 

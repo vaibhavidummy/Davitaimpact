@@ -12,10 +12,9 @@ import com.medication.model.MedicationOnVisit;
 public interface MedicationVisitRepository extends CassandraRepository<MedicationOnVisit, String> {
 
 	@Query("select * from medication_visit where patient_id=:patientId and visit_id=:visitId")
-	public Optional<MedicationOnVisit> getMedicationFromPatientandVisit(@Param("visitId") String visitId, @Param("patientId") String patientId);
-	
+	public Optional<MedicationOnVisit> getMedicationFromPatientandVisit(@Param("visitId") String visitId,
+			@Param("patientId") String patientId);
+
 	@Query("select * from medication_visit where patient_id=:patientId")
 	public List<MedicationOnVisit> getAllMedicationForPatient(@Param("patientId") String patientId);
-
-
 }
