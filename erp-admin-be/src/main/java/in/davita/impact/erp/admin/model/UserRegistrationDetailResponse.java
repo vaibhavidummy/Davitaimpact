@@ -1,6 +1,6 @@
 package in.davita.impact.erp.admin.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString
 public class UserRegistrationDetailResponse {
 	
-	private String user_Id;
+	private String userId;
 
 	private Title title;
 
@@ -23,7 +23,7 @@ public class UserRegistrationDetailResponse {
 
 	private String lastName;
 
-	private Date dob;
+	private LocalDate dob;
 
 	private long contactNumber;
 

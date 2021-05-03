@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.davita.impact.erp.admin.model.UserRegistrationDetail;
+import in.davita.impact.erp.admin.model.UserRegistrationDetailResponse;
 import in.davita.impact.erp.admin.service.UserRegistrationDetailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -42,72 +44,73 @@ public class UserRegistrationDetailsController {
 	private UserRegistrationDetailService userRegistrationService;
 
 	@ApiOperation(value = "Method for User registartion")
-	@ApiResponse(code = 201, message = "Response is ResponseEntity<UserRegistrationDetail>", response = UserRegistrationDetail.class)
+	@ApiResponse(code = 201, message = "Response is ResponseEntity<String>", response = String.class)
 	@PostMapping()
-	public ResponseEntity<UserRegistrationDetail> addUser(
+	public ResponseEntity<String> addUser(
 			@ApiParam(value = "UserRegistration class model") @RequestBody @Valid UserRegistrationDetail userRegistrationDtls) {
-		LOGGER.info("Inside add user method of UserRegistrationDeatilController");
-		UserRegistrationDetail userRegistrationStatus = null;
+		LOGGER.info("Inside add user method of UserRegistrationDetailController");
+		String userRegistrationStatus = null;
 		userRegistrationStatus = userRegistrationService.addUser(userRegistrationDtls);
-		if(null!=userRegistrationStatus) {
-			LOGGER.info("Saved Data::{}",userRegistrationStatus);
-			
+		if (null != userRegistrationStatus) {
+			LOGGER.info("Saved data with Id::{}", userRegistrationStatus);
 		}
-		return new ResponseEntity<UserRegistrationDetail>(userRegistrationStatus, HttpStatus.CREATED);
+		return new ResponseEntity<String>(userRegistrationStatus, HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "Method for updating UserRegistration detail")
-	@ApiResponse(code = 200, message = "Response is UserRegistrationDetail model", response = UserRegistrationDetail.class)
-	@PutMapping()
-	public ResponseEntity<UserRegistrationDetail> updateUser(
-			@ApiParam(value = "UserRegistration class model") @RequestBody @Valid UserRegistrationDetail userRegistrationDtls) {
-		LOGGER.info("Inside update user method of UserRegistrationDeatilController");
-		UserRegistrationDetail userRegistrationStatus = null;
+	@ApiResponse(code = 200, message = "Response is ResponseEntity<String>", response = String.class)
+	@PutMapping("/{userId}")
+	public ResponseEntity<String> updateUser(
+			@ApiParam(value = "UserRegistration class model") @RequestBody @Valid UserRegistrationDetail userRegistrationDtls,
+			@PathVariable("userId")String userId) {
+		LOGGER.info("Inside update user method of UserRegistrationDetailController");
+		String userRegistrationStatus = null;
+		userRegistrationDtls.setUserId(userId);
 		userRegistrationStatus = userRegistrationService.updateUser(userRegistrationDtls);
-		if(null!=userRegistrationStatus) {
-			LOGGER.info("Updated Data::{}",userRegistrationStatus);
+		if (null != userRegistrationStatus) {
+			LOGGER.info("Updated data with Id::{}", userRegistrationStatus);
 		}
-		return new ResponseEntity<UserRegistrationDetail>(userRegistrationStatus, HttpStatus.OK);
+		return new ResponseEntity<String>(userRegistrationStatus, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Method to get existing UserRegistration deatil by userId")
-	@ApiResponse(code = 200, message = "Response is UserRegistrationDetail model", response = UserRegistrationDetail.class)
+	@ApiOperation(value = "Method to get existing UserRegistration detail by userId")
+	@ApiResponse(code = 200, message = "Response is Optional<UserRegistrationDetail> model", response = UserRegistrationDetail.class)
 	@GetMapping(value = "/{userId}")
 	public ResponseEntity<Optional<UserRegistrationDetail>> getUser(
 			@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
-		LOGGER.info("Inside get user method of UserRegistrationDeatilController");
+		LOGGER.info("Inside get user method of UserRegistrationDetailController");
 		Optional<UserRegistrationDetail> userRegistrationStatus = null;
 		userRegistrationStatus = userRegistrationService.getUser(userId);
-		if(!userRegistrationStatus.isEmpty()) {
+		if(null != userRegistrationStatus) {
 			LOGGER.info("Get user Data::{}",userRegistrationStatus);
 		}
 		return new ResponseEntity<Optional<UserRegistrationDetail>>(userRegistrationStatus, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Method to disable existing UserRegistration deatil by userId")
-	@ApiResponse(code = 200, message = "Response is Integer", response = Integer.class)
+	@ApiOperation(value = "Method to disable existing UserRegistration detail by userId")
+	@ApiResponse(code = 200, message = "Response is ResponseEntity<Boolean>", response = Boolean.class)
 	@DeleteMapping(value = "/{userId}")
-	public ResponseEntity<Integer> disableUser(@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
-		LOGGER.info("Inside disable user method of UserRegistrationDeatilController");
-		int userRegistrationStatus = 0;
+	public ResponseEntity<Boolean> disableUser(@ApiParam(value = "UserId") @PathVariable("userId") String userId) {
+		LOGGER.info("Inside disable user method of UserRegistrationDetailController");
+		Boolean userRegistrationStatus = false;
 		userRegistrationStatus = userRegistrationService.disableUser(userId);
-		if(userRegistrationStatus>0) {
+		if(userRegistrationStatus) {
 			LOGGER.info("Disabled User Data::{}",userRegistrationStatus);
 		}
-		return new ResponseEntity<Integer>(userRegistrationStatus, HttpStatus.OK);
+		return new ResponseEntity<Boolean>(userRegistrationStatus, HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "Method to get list of All existing UserRegistration deatils")
-	@ApiResponse(code = 200, message = "Response is List of UserRegistrationDetail", response = List.class)
+	@ApiOperation(value = "Method to get list of all existing UserRegistration details")
+	@ApiResponse(code = 200, message = "Response is List of ResponseEntity<List<UserRegistrationDetailResponse>>", response = List.class)
 	@GetMapping()
-	public ResponseEntity<List<UserRegistrationDetail>> getAllUsers() {
-		LOGGER.info("Inside get all user method of UserRegistrationDeatilController");
-		List<UserRegistrationDetail> userRegistrationStatus = null;
+	public ResponseEntity<List<UserRegistrationDetailResponse>> getAllUsers() {
+		LOGGER.info("Inside get all user method of UserRegistrationDetailController");
+		List<UserRegistrationDetailResponse> userRegistrationStatus = null;
 		userRegistrationStatus = userRegistrationService.getAllUsers();
 		if(null!=userRegistrationStatus) {
-			LOGGER.info("List Of User Data::{}",userRegistrationStatus);
+			LOGGER.info("List Of User Data::{}",true);
 		}
-		return new ResponseEntity<List<UserRegistrationDetail>>(userRegistrationStatus, HttpStatus.OK);
+		return new ResponseEntity<List<UserRegistrationDetailResponse>>(userRegistrationStatus, HttpStatus.OK);
 	}
 
 	/* 
@@ -116,19 +119,46 @@ public class UserRegistrationDetailsController {
 	 *  get user as per email id while ResetPassword operation
 	 */
 	@ApiOperation(value = "Method to check existing email by email")
-	@ApiResponse(code = 200, message = "Response is String", response = String.class)
-	@PutMapping(value = "/{email}")
+	@ApiResponse(code = 200, message = "Response is ResponseEntity<Boolean>", response = Boolean.class)
+	@PutMapping(value = "/existingemail/{email}")
 	public ResponseEntity<UserRegistrationDetail> checkForExistingEmail(
 			@ApiParam(value = "email") @PathVariable("email") String email) {
-		LOGGER.info("Inside check for existing email by email method of UserRegistrationDeatilController");
-		UserRegistrationDetail userRegistrationStatus = null;
-		userRegistrationStatus = userRegistrationService.checkForExistingEmail(email.trim());
+		LOGGER.info("Inside check for existing email by email method of UserRegistrationDetaiilController");
+		//Boolean emailStatus=false;
+		UserRegistrationDetail userRegistrationStatus = userRegistrationService.checkForExistingEmail(email.trim());
 		if(null != userRegistrationStatus) {
-			LOGGER.info("Email checked successfully Data::{}",userRegistrationStatus);
+			//emailStatus=true;
+			LOGGER.info("Email checked successfully Data::{}",true);
 		}
 		return new ResponseEntity<UserRegistrationDetail>(userRegistrationStatus, HttpStatus.OK);
 	}
 	
+	@ApiOperation(value = "Method to update data after first auth")
+	@ApiResponse(code = 200, message = "Response is ResponseEntity<Boolean>", response = Boolean.class)
+	@PutMapping(value = "/afterfirstauth")
+	public ResponseEntity<Boolean> afterFirstAuthParamterChange(
+			@ApiParam(value = "isPasswordChangeReq") @RequestParam("isPasswordChangeReq") boolean isPasswordChangeReq,
+			@ApiParam(value = "isPersonalDeatilRequired")@RequestParam("isPersonalDeatilRequired") boolean isPersonalDeatilRequired,
+			@ApiParam(value = "userId") @RequestParam("userId") String userId) {
+		Boolean changeStatus = false;
+		changeStatus = userRegistrationService.afterFirstAuthParamterChange(isPasswordChangeReq,
+				isPersonalDeatilRequired, userId);
+		if (changeStatus) {
+			LOGGER.info("after auth data upadted::{}", changeStatus);
+		}
+		return new ResponseEntity<Boolean>(changeStatus, HttpStatus.OK);
+	}
 	
-
+	@ApiOperation(value = "Method to get list of all existing UserRegistration details by Role")
+	@ApiResponse(code = 200, message = "Response is List of ResponseEntity<List<UserRegistrationDetailResponse>>", response = List.class)
+	@GetMapping(value="/role/{role}")
+	public ResponseEntity<List<UserRegistrationDetailResponse>> getAllUsersByRole(@PathVariable("role")String role) {
+		LOGGER.info("Inside get all user by role method of UserRegistrationDetailController");
+		List<UserRegistrationDetailResponse> userRegistrationStatus = null;
+		userRegistrationStatus = userRegistrationService.getAllUsersByRole(role);
+		if(null!=userRegistrationStatus) {
+			LOGGER.info("List Of User Data by role::{}",true);
+		}
+		return new ResponseEntity<List<UserRegistrationDetailResponse>>(userRegistrationStatus, HttpStatus.OK);
+	}
 }

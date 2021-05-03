@@ -61,11 +61,11 @@ public final ErrorResponse handleAllExceptions(HttpServerErrorException ex, WebR
 }
 /**************************************************************************************************/
 @ExceptionHandler(SQLException.class)
-public final ErrorResponse handleSQLExceptions(SQLException ex, WebRequest request) {
+public final ResponseEntity<Object> handleSQLExceptions(SQLException ex, WebRequest request) {
 	ErrorResponse error = new ErrorResponse(HttpStatus.NO_CONTENT.toString(), getTimestamp(), ex.getMessage(), "",
 			ex.getMessage());
 	LOGGER.error(ex.getMessage());
-	return error;
+	return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
 }
 /***********************************************************************************************************/
 @Override
@@ -111,5 +111,15 @@ public final ResponseEntity<ErrorResponse> handleEmailException(MessagingExcepti
 			ex.getMessage(), "Exception occure while sending mail", ex.getMessage());
 	return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.REQUEST_TIMEOUT);
 }
-	
+/**************************************************************************************************/
+
+@ExceptionHandler(EntityDetailsAlreadyExistException.class)
+public final ResponseEntity<ErrorResponse> handleCustomException(EntityDetailsAlreadyExistException ex,
+		WebRequest request) throws Exception {
+	String errorCode = env.getProperty(ExceptionConstantsMap.ENTITY_DETAILS_ALREADY_EXIST);
+	String errorMessage = messageSource.getMessage(errorCode, ex.getArgs(), LocaleContextHolder.getLocale());
+	ErrorResponse errorResponse = new ErrorResponse(errorCode, getTimestamp(), "", errorMessage, ex.getMessage());
+	LOGGER.error(errorResponse.getMessage());
+	return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+}
 }

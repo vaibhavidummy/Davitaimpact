@@ -42,11 +42,9 @@ public class UserCredentials extends Auditable<String> {
 	private String email;
 	
 	@NotBlank(message = "Password field is required")
-	@Length(min = 8, max = 20, message = "password must contain atleast 8 characters")
-	@Column(nullable = false, length = 20)
+	@Length(min = 8, max = 200, message = "password must contain atleast 8 characters")
+	@Column(nullable = false, length = 200)
 	private String password;
-
-	private int wrongPasswordCount;
 	
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userCredentials")
 	private UserRegistrationDetail userRegistrationDetail;

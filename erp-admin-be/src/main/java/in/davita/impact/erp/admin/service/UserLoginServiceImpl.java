@@ -14,31 +14,58 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import in.davita.impact.erp.admin.exception.EntityDetailsNotFoundException;
+import in.davita.impact.erp.admin.model.UpdatePassword;
 import in.davita.impact.erp.admin.model.UserRegistrationDetail;
+import in.davita.impact.erp.admin.model.UserRegistrationDetailResponse;
 import in.davita.impact.erp.admin.repository.UserLoginRepository;
+import in.davita.impact.erp.admin.util.Utility;
 /**
  * 'User login service interface implementation' 
  * @version 1.0 08-04-2021
  * @author PrashantW3
  * */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class UserLoginServiceImpl implements UserLoginService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserLoginServiceImpl.class);
-
+	
+	@Autowired
+	UserRegistrationDetailService userRegistrationDetailService;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private UserLoginRepository userLoginRepository;
 	
 	@Override
-	public UserRegistrationDetail userLogin(String email, String pass) {
-		return userLoginRepository.userLogin(email, pass);
+	public UserRegistrationDetailResponse userLogin(String email, String pass) {
+		LOGGER.info("inside userLogin method of UserLoginServiceImpl");
+		UserRegistrationDetailResponse responseToUi=null;
+		if(!(email.isEmpty() && pass.isEmpty())) {
+			UserRegistrationDetail result=null;
+			result= userRegistrationDetailService.checkForExistingEmail(email);
+			if(null != result) {
+				if(passwordEncoder.matches(pass, result.getUserCredentials().getPassword()))
+				{
+				 responseToUi = new Utility().bindDataToResponse(result);
+				}else {
+					throw new EntityDetailsNotFoundException("Sorry bad credentials", 
+							new Object[] {email});
+				}
+			}
+		}
+		return responseToUi;
 	}
 
 	@Override
 	public String generateCommonLangPassword() {
+		LOGGER.info("inside generateCommonLangPassword method of UserLoginServiceImpl");
 		String upperCaseLetters = RandomStringUtils.random(2, 65, 90, true, true);
 		String lowerCaseLetters = RandomStringUtils.random(2, 97, 122, true, true);
 		String numbers = RandomStringUtils.randomNumeric(2);
@@ -55,6 +82,7 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 	@Override
 	public boolean sendEmail(String recipientEmail, String genPassword) {
+		LOGGER.info("inside sendEmail method of UserLoginServiceImpl");
 		boolean mailSendFlag = false;
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost("smtp.gmail.com");
@@ -96,9 +124,28 @@ public class UserLoginServiceImpl implements UserLoginService {
 			return mailSendFlag = true;
 		} catch (MessagingException e) {
 			
-			
+			LOGGER.error(e.getMessage());
 		}
 		return mailSendFlag;
+	}
+
+	@Override
+	public Boolean updatePassword(UpdatePassword updatePassword) {
+		LOGGER.info("inside updatePassword method of UserLoginServiceImpl");
+		int result = 0;
+		UserRegistrationDetail userRegistrationDetail=userRegistrationDetailService.checkForExistingEmail(updatePassword.getEmail());
+		if (passwordEncoder.matches(updatePassword.getOldPassword(),userRegistrationDetail.getUserCredentials().getPassword()))
+		{
+			result=userLoginRepository.updatePassword(updatePassword.getEmail(),
+					passwordEncoder.encode(updatePassword.getNewPassword()));
+			if(result > 0) {
+				return true;
+			}
+		}else {
+			throw new EntityDetailsNotFoundException("Sorry password not updated", 
+					new Object[] {updatePassword.getEmail()});
+		}
+		return false;
 	}
 
 	
