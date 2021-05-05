@@ -36,10 +36,10 @@ public class ProcedureMain implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(updatable = false, nullable = false)
-	private Long seq_id;
+	private Long seqId;
 
 	@Column
-	private String procedure_id;
+	private String procedureId;
 	
 	@Column
 	private String name;
@@ -49,33 +49,30 @@ public class ProcedureMain implements Serializable{
 	
 	@CreatedBy
     @Column(nullable = true , updatable = false)
-    private String created_by="admin";
+    private String createdBy="admin";
 
 	@CreatedDate
-	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
-    private Date creation_on;
+    private Date creationOn;
 
     @LastModifiedBy
     @Column(nullable = false)
-    private String last_modified_by="admin";
+    private String lastModifiedBy="admin";
 
     @LastModifiedDate
-	@JsonFormat(pattern = "yyyy-mm-dd HH:mm")
+	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-    private Date last_modified_on;
-    
-    @Column(nullable = false, length = 1)
-	String status = "I";
+    private Date lastModifiedOn;
     
     @Column(nullable = false)
-    private String patient_visit_id;
+    private String patientVisitId;
     
     
  // ManyToOne
  	// @JoinColumn(name="patient_visit_id", nullable=false)  check and remove the join col if not needed
- 	// private Patient_Visit_Id patient_visit_id;
+ 	// private Patient_Visit_Id patientVisitId;
     
 }
