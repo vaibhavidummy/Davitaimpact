@@ -35,23 +35,18 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
-		
-		 if(Objects.isNull(procedureDetail.getProcedure_id())) {
-			 
-			 throw new ProcedureException("Procedure Id cannot be Null");
-		 }
-		 else if(Objects.isNull(procedureDetail.getName()))
-		 {
-			 throw new ProcedureException(" Procedure Name cannot be Null");
-		 }
-		 else if(Objects.isNull(procedureDetail.getDescription()))
-		 {
-			 throw new ProcedureException("Procedure Description cannot be Null ");
-		 }  
-		 
-		 procedureMain = prodecureDetailRepository.save(procedureDetail);
-		 
-		 return procedureMain;
+
+		if (Objects.isNull(procedureDetail.getProcedureId())) {
+			throw new ProcedureException("Procedure Id cannot be Null");
+		} else if (Objects.isNull(procedureDetail.getName())) {
+			throw new ProcedureException(" Procedure Name cannot be Null");
+		} else if (Objects.isNull(procedureDetail.getDescription())) {
+			throw new ProcedureException("Procedure Description cannot be Null ");
+		}
+
+		procedureMain = prodecureDetailRepository.save(procedureDetail);
+
+		return procedureMain;
 	}
 
 	@Override
@@ -114,8 +109,8 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 			{
 				ProcedureMain procedureMain = new ProcedureMain();
 
-				procedureMain.setPatient_visit_id(procedureDetailDesc.getPatient_visit_id());
-				procedureMain.setProcedure_id(procedureDetailDesc.getProcedure_details().get(i).getId());
+				procedureMain.setPatientVisitId(procedureDetailDesc.getPatient_visit_id());
+				procedureMain.setProcedureId(procedureDetailDesc.getProcedure_details().get(i).getId());
 				procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
 				procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
 				
