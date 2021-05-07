@@ -51,7 +51,6 @@ import lombok.Setter;
 @Entity
 public class PatientDetails extends Auditable<String> {
 
-	
 	@Id
 	@GenericGenerator(name = "patient_sequence_id", strategy = "in.davita.impact.erp.patient.utilities.PatientDetailsIdGenerator")
 	@GeneratedValue(generator = "patient_sequence_id")
@@ -59,24 +58,23 @@ public class PatientDetails extends Auditable<String> {
 
 	@NotBlank(message = "user id should not be blank")
 	private String user_id_fk;
-	
-	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
+
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "basic_details_id")
 	private BasicDetails basicDetails;
 
-	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "emergency_details_id")
 	private EmergencyDetails emergencyDetails;
 
-	
 	@Transient
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<Integer> languageKnown;
-	
+
 	@Transient
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private List<Integer> allergies;
-	
+
 	/*
 	 * @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	 * 
@@ -84,23 +82,22 @@ public class PatientDetails extends Auditable<String> {
 	 * 
 	 * @JsonAlias("emergencyAddress") private List<Address> address;
 	 */
-	
 
-	
-	
-	@OneToOne(fetch = FetchType.LAZY , cascade = CascadeType.ALL )
-	  
-	  @JoinColumn(name = "address_id") private Address address;
-	 	
-	
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
+	private Address address;
 
-		@ManyToMany(targetEntity = LanguageKnown.class, fetch = FetchType.LAZY/* , cascade = { CascadeType.MERGE } */)
+	@ManyToMany(targetEntity = LanguageKnown.class, fetch = FetchType.LAZY/* , cascade = { CascadeType.MERGE } */)
 	@JoinTable(name = "patientdetails_languageknown", joinColumns = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name = "languageknown_id"))
 	Set<LanguageKnown> languageKnownObject;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE) // { CascadeType.PERSIST, CascadeType.MERGE }
 	@JoinTable(name = "patientdetails_allergies", joinColumns = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name = "allergies_id"))
 	Set<Allergies> allergiesObject;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "patientDetailsForVisit")
+	// @JoinColumn(name = "visit_id")
+	private List<PatientVisit> patientVisit;
 
 	public PatientDetails() {
 
@@ -144,10 +141,4 @@ public class PatientDetails extends Auditable<String> {
 		this.address = address;
 	}
 
-	
-
-		
-
-	
-	
 }

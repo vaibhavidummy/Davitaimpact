@@ -47,7 +47,7 @@ public class PatientServiceImpl implements PatientServices {
 
 		});
 		patient.setLanguageKnownObject(langknown);
-		
+
 		allergyid.forEach(id -> {
 
 			Optional<Allergies> findById = allergiesRepo.findById(id);
@@ -67,7 +67,17 @@ public class PatientServiceImpl implements PatientServices {
 
 	@Override
 	@Transactional
-	public PatientDetails updatePatient(PatientDetails patient) {
+	public PatientDetails updatePatient(PatientDetails patient) throws Exception {
+
+		Optional<PatientDetails> findById2 = patientRepository.findById(patient.getId());
+
+		// Optional<PatientDetails> findById =
+		// patientRepository.findById(patient.getId());
+
+		if (!findById2.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new Exception("No Id Found in DB");
+		}
 
 		List<Integer> lagid = patient.getLanguageKnown();
 		List<Integer> allergyid = patient.getAllergies();
@@ -80,7 +90,7 @@ public class PatientServiceImpl implements PatientServices {
 
 		});
 		patient.setLanguageKnownObject(langknown);
-		
+
 		allergyid.forEach(id -> {
 
 			Optional<Allergies> findById = allergiesRepo.findById(id);
@@ -112,6 +122,13 @@ public class PatientServiceImpl implements PatientServices {
 	public PatientDetails addNewAllergy(Allergies allergies, String patientDetailsid) {
 
 		return null;
+	}
+
+	@Override
+	public PatientDetails findPatientbyId(String id) {
+		Optional<PatientDetails> findById = patientRepository.findById(id);
+		PatientDetails patientDetails = findById.get();
+		return patientDetails;
 	}
 
 }

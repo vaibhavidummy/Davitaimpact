@@ -7,12 +7,18 @@ import org.springframework.stereotype.Service;
 import in.davita.impact.erp.patient.model.Allergies;
 import in.davita.impact.erp.patient.model.PatientDetails;
 
-@Service
+//@Service
 public interface PatientServices {
 
 	public PatientDetails addNewPatient(PatientDetails patient);
-	public PatientDetails updatePatient(PatientDetails patient);
+
+	public PatientDetails updatePatient(PatientDetails patient) throws Exception;
+
 	public PatientDetails getPatientById(String id);
+
 	public List<PatientDetails> getAllPatient();
-	public PatientDetails addNewAllergy(Allergies allergies,String id);
+
+	public PatientDetails addNewAllergy(Allergies allergies, String id);
+
+	public PatientDetails findPatientbyId(String id);
 }

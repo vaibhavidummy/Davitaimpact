@@ -7,12 +7,35 @@
 		<groupId>com.citiustech.pms</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath >..</relativePath> <!-- lookup parent from repository -->
+		<relativePath>..</relativePath> <!-- lookup parent from repository -->
 	</parent>
-	<packaging>jar</packaging>
 	<groupId>in.davita.impact.erp</groupId>
 	<artifactId>erp-patient-be</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>erp-patient-be</name>
 	<description>ERP Patient be</description>
+
+	<properties>
+		<spspring-cloud-version>2020.0.2</spspring-cloud-version>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>
+				spring-cloud-starter-netflix-eureka-client
+			</artifactId>
+		</dependency>
+	</dependencies>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spspring-cloud-version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
