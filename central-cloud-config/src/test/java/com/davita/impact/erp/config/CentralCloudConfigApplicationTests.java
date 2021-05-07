@@ -1,10 +1,10 @@
-package in.davita.impact.erp.patient;
+package com.davita.impact.erp.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ErpPatientBeApplicationTests {
+class CentralCloudConfigApplicationTests {
 
 	@Test
 	void contextLoads() {
