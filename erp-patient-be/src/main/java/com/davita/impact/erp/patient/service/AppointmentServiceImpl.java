@@ -12,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.davita.impact.erp.patient.exception.EntityDetailsFoundException;
 import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
+import com.davita.impact.erp.patient.feign.client.InboxServiceClient;
 import com.davita.impact.erp.patient.model.Appointment;
 import com.davita.impact.erp.patient.model.AppointmentStatistics;
+import com.davita.impact.erp.patient.model.Inbox;
 import com.davita.impact.erp.patient.model.Status;
 import com.davita.impact.erp.patient.repository.AppointmentRepository;
 
@@ -23,6 +25,9 @@ public class AppointmentServiceImpl implements AppointmentService{
 	
 	@Autowired
 	AppointmentRepository appointmentRepository;
+	
+	//@Autowired
+	//InboxServiceClient inboxServiceClient;
 
 	@Override
 	public Appointment addAppointment(Appointment appointment){
@@ -30,8 +35,14 @@ public class AppointmentServiceImpl implements AppointmentService{
 		if(checkForExistingAppointment(appointment) == false)
 		{	
 		appointmentStatus = appointmentRepository.save(appointment);
-		// Then call the inbox module to create message either to doctor(If created doctor then send scheduled request 
-		//	or else send as approved message, pass the appointmentId and date with it)
+		/*
+		 * Inbox inbox = new Inbox(null, appointmentStatus.getPhysicianName(),
+		 * "appointment/others", "upcoming appointment", appointmentStatus.getStatus(),
+		 * appointmentStatus.getStartTime(), appointmentStatus.getDate(),
+		 * appointmentStatus.getAppointmentId()); String inboxId=
+		 * inboxServiceClient.createInbox(inbox); System.out.println("inboxId  : "+
+		 * inboxId);
+		 */
 		}
 		return appointmentStatus;
 	}
