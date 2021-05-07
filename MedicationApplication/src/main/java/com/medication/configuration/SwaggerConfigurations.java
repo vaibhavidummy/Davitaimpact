@@ -19,7 +19,7 @@ public class SwaggerConfigurations {
 	public Docket getDocketForSwagger() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("com.medication"))
-				.paths(PathSelectors.ant("/medication/*")).build().apiInfo(getApiInfo());
+				.paths(PathSelectors.ant("/medication/**")).build().apiInfo(getApiInfo());
 	}
 
 	private ApiInfo getApiInfo() {

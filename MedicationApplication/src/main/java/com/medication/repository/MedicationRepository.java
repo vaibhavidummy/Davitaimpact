@@ -6,5 +6,4 @@ import com.medication.model.Medication;
 
 public interface MedicationRepository extends CassandraRepository<Medication, String> {
 
-
 }
