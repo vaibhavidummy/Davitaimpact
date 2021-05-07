@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.controller;
+package com.davita.impact.erp.patient.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,16 +28,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import in.davita.impact.erp.patient.comman.ResponseOnOk;
-import in.davita.impact.erp.patient.model.Allergies;
-import in.davita.impact.erp.patient.model.LanguageKnown;
-import in.davita.impact.erp.patient.model.PatientDetails;
-import in.davita.impact.erp.patient.model.PatientVisit;
-import in.davita.impact.erp.patient.repository.PatientRepository;
-import in.davita.impact.erp.patient.service.LanguageServices;
-import in.davita.impact.erp.patient.service.PatientServices;
-import in.davita.impact.erp.patient.service.PatientVisitServices;
-import in.davita.impact.erp.patient.service.allergiesServices;
+import com.davita.impact.erp.patient.comman.ResponseOnOk;
+import com.davita.impact.erp.patient.model.Allergies;
+import com.davita.impact.erp.patient.model.LanguageKnown;
+import com.davita.impact.erp.patient.model.PatientDetails;
+import com.davita.impact.erp.patient.model.PatientVisit;
+import com.davita.impact.erp.patient.repository.PatientRepository;
+import com.davita.impact.erp.patient.service.LanguageServices;
+import com.davita.impact.erp.patient.service.PatientServices;
+import com.davita.impact.erp.patient.service.PatientVisitServices;
+import com.davita.impact.erp.patient.service.allergiesServices;
+
 import io.swagger.annotations.ApiResponse;
 
 @RestController

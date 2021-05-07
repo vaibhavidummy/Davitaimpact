@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.model;
+package com.davita.impact.erp.patient.model;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,12 +34,12 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.davita.impact.erp.patient.utilities.Auditable;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import in.davita.impact.erp.patient.utilities.Auditable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

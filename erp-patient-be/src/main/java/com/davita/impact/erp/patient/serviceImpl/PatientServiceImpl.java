@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.serviceImpl;
+package com.davita.impact.erp.patient.serviceImpl;
 
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import in.davita.impact.erp.patient.model.Allergies;
-import in.davita.impact.erp.patient.model.LanguageKnown;
-import in.davita.impact.erp.patient.model.PatientDetails;
-import in.davita.impact.erp.patient.repository.AllergiesRepo;
-import in.davita.impact.erp.patient.repository.LanguageKnownRepository;
-import in.davita.impact.erp.patient.repository.PatientRepository;
-import in.davita.impact.erp.patient.service.PatientServices;
+import com.davita.impact.erp.patient.model.Allergies;
+import com.davita.impact.erp.patient.model.LanguageKnown;
+import com.davita.impact.erp.patient.model.PatientDetails;
+import com.davita.impact.erp.patient.repository.AllergiesRepo;
+import com.davita.impact.erp.patient.repository.LanguageKnownRepository;
+import com.davita.impact.erp.patient.repository.PatientRepository;
+import com.davita.impact.erp.patient.service.PatientServices;
 
 @Service
 //@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)

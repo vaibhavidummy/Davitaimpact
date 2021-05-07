@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.repository;
+package com.davita.impact.erp.patient.repository;
 
 import javax.transaction.Transactional;
 
@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import in.davita.impact.erp.patient.model.PatientDetails;
+import com.davita.impact.erp.patient.model.PatientDetails;
 @Repository
 public interface PatientRepository extends JpaRepository<PatientDetails, String>{
 

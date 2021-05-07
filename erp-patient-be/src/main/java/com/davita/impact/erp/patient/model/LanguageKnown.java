@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.model;
+package com.davita.impact.erp.patient.model;
 
 import java.util.List;
 

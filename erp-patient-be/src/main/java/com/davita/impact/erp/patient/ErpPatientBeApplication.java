@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient;
+package com.davita.impact.erp.patient;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 
-import in.davita.impact.erp.patient.utilities.Auditor;
+import com.davita.impact.erp.patient.utilities.Auditor;
 
 @SpringBootApplication
 @EnableTransactionManagement

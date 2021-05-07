@@ -1,4 +1,4 @@
-package in.davita.impact.erp.patient.utilities;
+package com.davita.impact.erp.patient.utilities;
 
 import java.io.Serializable;
 import java.util.UUID;
