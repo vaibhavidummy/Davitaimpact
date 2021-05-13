@@ -1,0 +1,72 @@
+version: '3'
+services:
+    database:
+        image: mysql:8
+        container_name: mysql_container
+        ports:
+            - 3306:3306
+        networks:
+            - spring-cloud-network
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=inbox_schema
+
+    inbox-server:
+        image: inbox-server:latest
+        container_name: mysql_container
+        ports:
+            - 8081:8081
+        networks:
+            - spring-cloud-network
+        environment:
+            - RDS_HOSTNAME=database
+            - RDS_PORT=3306
+            - RDS_DB_NAME=inbox_schema
+            - SERVICEREGISTRY_HOSTNAME=service_registry_container
+            - SERVICEREGISTRY_PORT=8761
+            - CONFIG_HOSTNAME=config_server_container
+            - CONFIG_PORT=8888
+        depends_on:
+            - database
+            - config-server
+            - service-registry-server
+
+
+    config-server:
+        image: config-server:latest
+        container_name: config_server_container
+        ports:
+            - 8888:8888
+        networks:
+            - spring-cloud-network
+
+
+    service-registry-server:
+        image: service-registry:latest
+        container_name: service_registry_container
+        ports:
+            - 8761:8761
+        networks:
+            - spring-cloud-network
+
+
+    auth-server:
+        image: auth-service:latest
+        container_name: auth_server_container
+        ports:
+            - 8080:8080
+        networks:
+            - spring-cloud-network
+        environment:
+            - RDS_HOSTNAME=database
+            - RDS_PORT=3306
+            - RDS_DB_NAME=inbox_schema
+            - SERVICEREGISTRY_HOSTNAME=service_registry_container
+            - SERVICEREGISTRY_PORT=8761
+        depends_on:
+            - database
+            - service-registry-server
+
+networks:
+    spring-cloud-network:
+        driver: bridge
