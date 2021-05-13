@@ -19,6 +19,7 @@ import com.davita.impact.erp.patient.comman.ResponseOnOk;
 import com.davita.impact.erp.patient.comman.VisitDetailsRespons;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.model.PatientVisit;
+import com.davita.impact.erp.patient.repository.PatientVisitRepository;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
 
 import io.swagger.annotations.ApiResponse;
@@ -37,7 +38,7 @@ public class VisitController {
 	@ApiResponse(code = 201, message = "Visit Id Created Successfully", response = ResponseOnOk.class)
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> createVisit(@RequestBody PatientVisit patientVisit) throws Exception {
-		PatientDetails creteVisitId = patientVisitServices.creteVisitId(patientVisit);
+		  PatientVisit creteVisitId = patientVisitServices.creteVisitId(patientVisit);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(creteVisitId.getId());
 		responseOnOk.setMessage("Patient Visit Id Created Successfully");
@@ -49,6 +50,20 @@ public class VisitController {
 		// return addNewPatients.getId();
 	}
 
+	//------------- search all VisitId ---------------
+	
+	@GetMapping("/myvisit/{patientdetailsId}")
+	@ResponseBody
+	@ApiResponse(code = 200, message = "Patient Visit Id Details Shown")
+	public List<PatientVisit> showPatientVisit(@PathVariable("patientdetailsId") String id) throws Exception {
+		
+		List<PatientVisit> allVisitofPatient = patientVisitServices.getAllVistofPatient(id);
+		return allVisitofPatient;
+		
+	}
+	
+	
+	
 	@GetMapping("/visitDetails/{visitid}")
 	public ResponseEntity<VisitDetailsRespons> visitDetails(@PathVariable("visitid") String id) throws Exception
 	{

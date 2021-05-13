@@ -10,11 +10,14 @@ import com.davita.impact.erp.patient.model.PatientVisit;
 @Service
 public interface PatientVisitServices {
 
-	public PatientDetails creteVisitId(PatientVisit patientVisit)throws Exception;
+	public PatientVisit creteVisitId(PatientVisit patientVisit)throws Exception;
 	
 	public List<Diagnosis> visitDetails(String id);
 	
 	public PatientVisit getVistDetails(String visitId)throws Exception;
+	
+	
+	public List<PatientVisit> getAllVistofPatient(String patientDetailsId) throws Exception;
 	
 	/*
 	 * public List<PatientVisit> getAllVisitDetails();

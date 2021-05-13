@@ -43,9 +43,9 @@ import io.swagger.annotations.ApiResponse;
 
 @RestController
 @RequestMapping(value = "/healthcare")
-public class PataintController {
+public class PatientController {
 
-	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PataintController.class);
+	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PatientController.class);
 	@Autowired
 	PatientServices patientServices;
 

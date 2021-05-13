@@ -95,9 +95,11 @@ public class PatientDetails extends Auditable<String> {
 	@JoinTable(name = "patientdetails_allergies", joinColumns = @JoinColumn(name = "patientdetails_id"), inverseJoinColumns = @JoinColumn(name = "allergies_id"))
 	Set<Allergies> allergiesObject;
 
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "patientDetailsForVisit")
-	// @JoinColumn(name = "visit_id")
-	private List<PatientVisit> patientVisit;
+	/*
+	 * @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy =
+	 * "patientDetailsForVisit") // @JoinColumn(name = "visit_id") private
+	 * List<PatientVisit> patientVisit;
+	 */
 
 	public PatientDetails() {
 

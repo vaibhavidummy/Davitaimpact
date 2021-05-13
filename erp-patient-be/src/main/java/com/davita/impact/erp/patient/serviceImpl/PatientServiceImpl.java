@@ -17,6 +17,7 @@ import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.repository.AllergiesRepo;
 import com.davita.impact.erp.patient.repository.LanguageKnownRepository;
+import com.davita.impact.erp.patient.repository.LanguageRepo;
 import com.davita.impact.erp.patient.repository.PatientRepository;
 import com.davita.impact.erp.patient.service.PatientServices;
 
@@ -27,7 +28,7 @@ public class PatientServiceImpl implements PatientServices {
 	@Autowired
 	PatientRepository patientRepository;
 	@Autowired
-	LanguageKnownRepository languageKnownRepository;
+	LanguageRepo languageKnownRepository;
 
 	@Autowired
 	AllergiesRepo allergiesRepo;
