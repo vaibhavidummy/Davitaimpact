@@ -1,5 +1,6 @@
 package in.davita.impact.erp.admin.service;
 
+import java.nio.file.spi.FileSystemProvider;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -9,9 +10,11 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import in.davita.impact.erp.admin.exception.EntityDetailsNotFoundException;
+import in.davita.impact.erp.admin.model.KafkaMailSender;
 import in.davita.impact.erp.admin.model.UpdatePassword;
 import in.davita.impact.erp.admin.model.UserRegistrationDetail;
 import in.davita.impact.erp.admin.model.UserRegistrationDetailResponse;
@@ -42,6 +46,9 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 	@Autowired
 	private UserLoginRepository userLoginRepository;
+	
+	@Autowired
+	KafkaTemplate<String, KafkaMailSender> producer;
 	
 	@Override
 	public UserRegistrationDetailResponse userLogin(String email, String pass) {
@@ -82,51 +89,15 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 	@Override
 	public boolean sendEmail(String recipientEmail, String genPassword) {
-		LOGGER.info("inside sendEmail method of UserLoginServiceImpl");
-		boolean mailSendFlag = false;
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(587);
-		mailSender.setUsername("davitamailsender@gmail.com");
-		mailSender.setPassword("jbpxcayokvksnysu");
-		Properties javaMailProperties = new Properties();
-		javaMailProperties.setProperty("mail.debug", "false");
-		javaMailProperties.setProperty("mail.smtp.auth", "true");
-		javaMailProperties.setProperty("mail.smtp.starttls.enable", "true");
-		mailSender.setJavaMailProperties(javaMailProperties);
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-		try {
-			 helper.setFrom("davitamailsender@gmail.com", "davita");
-			 helper.setTo(recipientEmail);
-		} catch (Exception e) {
-			LOGGER.error(e.getMessage());
+		System.out.println("insideimpl");
+		if(!recipientEmail.isEmpty())
+		{
+		KafkaMailSender mailsendproducer= new KafkaMailSender(recipientEmail, genPassword);
+		
+		producer.send("mail-send", recipientEmail + "created",mailsendproducer );
 		}
-		String subject = "Here's your default password";
-	     
-	    String content =
-	    		"<html>\n" +
-                "<body>\n" +
-                "<p>Hello,</p>"+
-                "<p>You have requested to forgot/reset your password.</p>\n"+
-	            "<p>use the below password to login:</p>"+
-                "\n" +
-                "<p>"+genPassword+"</p>\n"+
-                "\n" +
-                "<p>Ignore this email if you do remember your password,\n"+
-	             "or you have not made the request.</p>\n"+
-                "</body>\n" +
-                "</html>";
-		try {
-			helper.setSubject(subject);
-			helper.setText(content, true);
-			mailSender.send(message);
-			return mailSendFlag = true;
-		} catch (MessagingException e) {
-			
-			LOGGER.error(e.getMessage());
-		}
-		return mailSendFlag;
+		return true;
+		
 	}
 
 	@Override

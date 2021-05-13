@@ -33,6 +33,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,"/registration/").permitAll()
+                .antMatchers(HttpMethod.POST,"/authentication/forgotpassword").permitAll()
                 .antMatchers("/eureka/**")
                 .permitAll()
                 .anyRequest()
