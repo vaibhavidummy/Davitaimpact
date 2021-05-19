@@ -83,7 +83,7 @@ public class UserRegistrationDetailServiceImpl implements UserRegistrationDetail
 		Optional<UserRegistrationDetail> result = null;
 		if (!userId.isEmpty()) {
 			result = userRegistrationDetailRepository.findById(userId);
-			if (result.isEmpty()) {
+			if (!result.isPresent()) {
 				throw new EntityDetailsNotFoundException("User registration detail not found",
 						new Object[] { userId });
 			}

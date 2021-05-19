@@ -88,7 +88,7 @@ public class UserRegistrationDetail extends Auditable<String> {
 	private UserCredentials userCredentials;
 	
 	@Column(nullable = false, length = 1)
-	private String Metastatus = "A";
+	private String metastatus = "A";
 	
 	@Column(nullable = false, length = 1)
 	private Boolean isPersonalDetailsRequired;
