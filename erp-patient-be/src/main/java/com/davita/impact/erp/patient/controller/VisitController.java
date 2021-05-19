@@ -61,10 +61,10 @@ public class VisitController {
 
 	//------------- search all VisitId ---------------
 	
-	@GetMapping("/myvisit/{patientdetailsId}")
+	@GetMapping("/myvisit/{userId}")
 	@ResponseBody
 	@ApiResponse(code = 200, message = "Patient Visit Id Details Shown")
-	public List<PatientVisit> showPatientVisit(@PathVariable("patientdetailsId") String id) throws Exception {
+	public List<PatientVisit> showPatientVisit(@PathVariable("userId") String id) throws Exception {
 		LOGGER.info("Inside showPatientVisit method of VisitController");
 		List<PatientVisit> allVisitofPatient = patientVisitServices.getAllVistofPatient(id);
 		return allVisitofPatient;

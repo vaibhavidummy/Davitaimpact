@@ -50,7 +50,7 @@ class PatientVisitServicesImplTest {
 	void creteVisitId() throws Exception {
 		// givan
 
-		patientVisit.setPataintDetailIdfk("CT9875");
+		patientVisit.setUserIdfk("CT9875");
 
 		// patientVisit.setAppointmentIdfk("CT1234");
 
@@ -60,10 +60,10 @@ class PatientVisitServicesImplTest {
 
 		// when
 
-		when(patientRepository.findById(patientVisit.getPataintDetailIdfk())).thenReturn(Optional.of(patientDetails));
+		when(patientRepository.findById(patientVisit.getUserIdfk())).thenReturn(Optional.of(patientDetails));
 
-		when(patientVisitRepository.findByPataintDetailIdfkAndAppointmentIdfkAndAppointmentStatus(
-				patientVisit.getPataintDetailIdfk(), patientVisit.getAppointmentIdfk(),
+		when(patientVisitRepository.findByUserIdfkAndAppointmentIdfkAndAppointmentStatus(
+				patientVisit.getUserIdfk(), patientVisit.getAppointmentIdfk(),
 				patientVisit.isAppointmentStatus())).thenReturn(set);
 		when(patientVisitRepository.save(patientVisit)).thenReturn(patientVisit);
 		// then
@@ -78,14 +78,14 @@ class PatientVisitServicesImplTest {
 	
 	@Test
 	public void getAllVistofPatient() throws Exception {
-		patientVisit.setPataintDetailIdfk("AK1234");
+		patientVisit.setUserIdfk("AK1234");
 
 		List<PatientVisit> Expected = new ArrayList<>();
 		Expected.add(patientVisit);
 
-		when(patientVisitRepository.getAllVistofPatient(patientVisit.getPataintDetailIdfk())).thenReturn(Expected);
+		when(patientVisitRepository.getAllVistofPatient(patientVisit.getUserIdfk())).thenReturn(Expected);
 		List<PatientVisit> allVistofPatientActual = patientVisitServicesImpl
-				.getAllVistofPatient(patientVisit.getPataintDetailIdfk());
+				.getAllVistofPatient(patientVisit.getUserIdfk());
 		assertEquals(Expected, allVistofPatientActual);
 	}
 	
@@ -108,7 +108,7 @@ class PatientVisitServicesImplTest {
 		patient.setId("zzz");
 		
 		Optional<PatientDetails> mockVisitDetails = Optional.empty();
-		when(patientRepository.findById(patientVisit.getPataintDetailIdfk())).thenReturn(mockVisitDetails);
+		when(patientRepository.findById(patientVisit.getUserIdfk())).thenReturn(mockVisitDetails);
 
 		try {
 			patientVisitServicesImpl.creteVisitId(patientVisit);
