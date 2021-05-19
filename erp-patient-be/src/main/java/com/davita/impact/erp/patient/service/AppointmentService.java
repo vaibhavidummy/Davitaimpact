@@ -16,7 +16,7 @@ public interface AppointmentService {
 	
 	Appointment addAppointment(Appointment appointment);
 	
-	Appointment updateAppointment(Appointment appointmentDtls);
+	Appointment updateAppointment(Appointment appointmentDtls, String appointmentId);
 	
 	Optional<Appointment> getAppointment(String appointmentId);
 

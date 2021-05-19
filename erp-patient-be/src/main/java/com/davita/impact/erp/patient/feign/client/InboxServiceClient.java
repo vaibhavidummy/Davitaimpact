@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.davita.impact.erp.patient.model.Inbox;
 
-//@FeignClient("inbox-service")
+@FeignClient(name="inbox-service", fallbackFactory = InboxServiceClientFallbackFactory.class)
 public interface InboxServiceClient {
 	
-	//@RequestMapping(method = RequestMethod.POST, value = "/inbox")
+	@RequestMapping(method = RequestMethod.POST, value = "/inbox")
     public String createInbox(@RequestBody Inbox inbox);
 
 }

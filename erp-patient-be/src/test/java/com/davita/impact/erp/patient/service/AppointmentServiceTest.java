@@ -21,9 +21,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.davita.impact.erp.patient.exception.EntityDetailsFoundException;
 import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
+import com.davita.impact.erp.patient.feign.client.InboxServiceClient;
 import com.davita.impact.erp.patient.model.Appointment;
 import com.davita.impact.erp.patient.model.AppointmentStatistics;
 import com.davita.impact.erp.patient.model.Status;
@@ -38,6 +40,9 @@ class AppointmentServiceTest {
 	
 	@Mock
 	private AppointmentRepository appointmentRepository;
+	
+	@Mock
+	InboxServiceClient inboxServiceClient;
 
 	@Test
 	void addAppointment() throws ParseException
@@ -49,6 +54,7 @@ class AppointmentServiceTest {
 		Mockito.when(appointmentRepository.save(mockAppointmentInput)).thenReturn(mockAppointmentOutput);
 		Mockito.when(appointmentRepository.checkForExistingAppointment("10", LocalDate.of(2021, 12, 12),  LocalTime.parse("09:00"), LocalTime.parse("09:30")))
 												.thenReturn(null);
+		Mockito.when(inboxServiceClient.createInbox(Mockito.any())).thenReturn("INBOX1");
 		Appointment result=appointmentService.addAppointment(mockAppointmentInput);
 		Appointment expected=mockAppointmentOutput;
 		assertEquals(expected, result);

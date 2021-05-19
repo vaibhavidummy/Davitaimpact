@@ -1,5 +1,6 @@
 package com.davita.impact.erp.inbox.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,11 @@ public class InboxServiceImpl implements InboxService {
 	@Override
 	public Optional<Inbox> getInbox(String id) {
 		return inboxRepository.findById(id);
+	}
+
+	@Override
+	public List<Inbox> getallInbox() {
+		return inboxRepository.findAll();
 	}
 
 }

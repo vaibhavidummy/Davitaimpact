@@ -7,6 +7,7 @@ public class ExceptionConstantsMap {
 			+ "_Not_Found_Exception";
 	public static final String ENTITY_DETAILS_FOUND = "davita.Entity_Details"
 			+ "_Found_Exception";
+	public static final String SERVICE_NOT_FOUND = "davita.Service_Not_Found_Exception";
 	
 	
 
