@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
 import com.davita.impact.erp.patient.model.Allergies;
 import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.repository.AllergiesRepo;
 import com.davita.impact.erp.patient.repository.LanguageKnownRepository;
+import com.davita.impact.erp.patient.repository.LanguageRepo;
 import com.davita.impact.erp.patient.repository.PatientRepository;
 import com.davita.impact.erp.patient.service.PatientServices;
 
@@ -27,7 +29,7 @@ public class PatientServiceImpl implements PatientServices {
 	@Autowired
 	PatientRepository patientRepository;
 	@Autowired
-	LanguageKnownRepository languageKnownRepository;
+	LanguageRepo languageKnownRepository;
 
 	@Autowired
 	AllergiesRepo allergiesRepo;
@@ -74,9 +76,12 @@ public class PatientServiceImpl implements PatientServices {
 		// Optional<PatientDetails> findById =
 		// patientRepository.findById(patient.getId());
 
+		
+		
 		if (!findById2.isPresent()) {
 			// return ResponseEntity.notFound().build();
-			throw new Exception("No Id Found in DB");
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ patient.getId() });
 		}
 
 		List<Integer> lagid = patient.getLanguageKnown();
@@ -107,6 +112,13 @@ public class PatientServiceImpl implements PatientServices {
 	@Transactional
 	public PatientDetails getPatientById(String id) {
 		Optional<PatientDetails> findById = patientRepository.findById(id);
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ id });
+		}
+		
+		
 		PatientDetails patient = findById.get();
 		return patient;
 	}
@@ -127,6 +139,11 @@ public class PatientServiceImpl implements PatientServices {
 	@Override
 	public PatientDetails findPatientbyId(String id) {
 		Optional<PatientDetails> findById = patientRepository.findById(id);
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ id });
+		}
 		PatientDetails patientDetails = findById.get();
 		return patientDetails;
 	}

@@ -1,4 +1,12 @@
+/**
+ * 'PatientDetails service controller' Bounded Context
+ * REST Controller Service
+ * @version 1.0 23-04-2021
+ * @author Chetan Phalke
+ * */
 package com.davita.impact.erp.patient.controller;
+
+
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -39,13 +48,16 @@ import com.davita.impact.erp.patient.service.PatientServices;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
 import com.davita.impact.erp.patient.service.allergiesServices;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
+@Api(value = "Patient Details service controller")
 @RequestMapping(value = "/healthcare")
-public class PataintController {
+@CrossOrigin(origins="*", allowedHeaders="*")
+public class PatientController {
 
-	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PataintController.class);
+	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PatientController.class);
 	@Autowired
 	PatientServices patientServices;
 
@@ -76,6 +88,7 @@ public class PataintController {
 	@ApiResponse(code = 201, message = "Patient Details Added Successfully", response = ResponseOnOk.class)
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> createUser(@RequestBody PatientDetails patient) {
+		LOGGER.info("Inside createUser method of PatientController");
 		PatientDetails addNewPatients = patientServices.addNewPatient(patient);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(addNewPatients.getId());
@@ -111,7 +124,7 @@ public class PataintController {
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> updatePatientDetails(@Valid @RequestBody PatientDetails patient)
 			throws Exception {
-
+		LOGGER.info("Inside updatePatientDetails method of PatientController");
 		PatientDetails updatePatient = patientServices.updatePatient(patient);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(updatePatient.getId());
@@ -123,6 +136,7 @@ public class PataintController {
 
 	@GetMapping("/patient/{userid}")
 	public ResponseEntity<PatientDetails> getPatientDetailsByID(@PathVariable("userid") String id) {
+		LOGGER.info("Inside getPatientDetailsByID method of PatientController");
 		// LOGGER.info("getPatientDetailsByID...");
 		PatientDetails patientById = patientServices.getPatientById(id);
 		return new ResponseEntity<PatientDetails>(patientById, HttpStatus.OK);
@@ -131,6 +145,7 @@ public class PataintController {
 
 	@GetMapping("/patient/")
 	public List<PatientDetails> getAllPatientDetails() {
+		LOGGER.info("Inside getAllPatientDetails method of PatientController");
 		List<PatientDetails> allPatient = patientServices.getAllPatient();
 		return allPatient;
 	}
@@ -139,6 +154,7 @@ public class PataintController {
 
 	@GetMapping("/allergies")
 	public List<Allergies> getAllAllergiesDetails() {
+		LOGGER.info("Inside getAllAllergiesDetails method of PatientController");
 		List<Allergies> allAllergies = allergiesServices.getAllAllergies();
 		return allAllergies;
 	}
@@ -147,6 +163,7 @@ public class PataintController {
 
 	@GetMapping("/languages")
 	public List<LanguageKnown> getAllLangugeDetails() {
+		LOGGER.info("Inside getAllLangugeDetails method of PatientController");
 		List<LanguageKnown> allLanguageKnown = languageServices.getAllLangwages();
 		return allLanguageKnown;
 	}
@@ -209,10 +226,12 @@ public class PataintController {
 	 * Any instance of RuntimeException within the endpoint functions and return a
 	 * 500 response.
 	 */
-	@ExceptionHandler(RuntimeException.class)
-	public final ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
-		return new ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	/*
+	 * @ExceptionHandler(RuntimeException.class) public final
+	 * ResponseEntity<Exception> handleAllExceptions(RuntimeException ex) {
+	 * LOGGER.info("Inside createUser method of PatientController"); return new
+	 * ResponseEntity<Exception>(ex, HttpStatus.INTERNAL_SERVER_ERROR); }
+	 */
 
 	
 	
