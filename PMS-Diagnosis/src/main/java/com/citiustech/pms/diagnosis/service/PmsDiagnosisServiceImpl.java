@@ -19,7 +19,6 @@ import com.citiustech.pms.diagnosis.repository.DiagnosisRepo;
 
 
 @Service
-//@Transactional //it'll catch the Exception it wont insert into the table
 public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PmsDiagnosisServiceImpl.class);
@@ -37,16 +36,19 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Diagnosis addDiagnosis(Diagnosis diagnosisAdd) {
-		if (Objects.isNull(diagnosisAdd.getDiagonosisId()))
-			throw new DiagnosisException("Diagonsis Id is Null");
-		else if (Objects.isNull(diagnosisAdd.getName()) || Objects.isNull(diagnosisAdd.getDescription()))
-			throw new DiagnosisException("Diagnosis Name or Description is Null");
+		if (Objects.isNull(diagnosisAdd.getDiagonosisId()) ||  diagnosisAdd.getDiagonosisId().isEmpty()) {
+			throw new DiagnosisException("Diagnosis Id cannot be Empty or Null");
+		} else if (Objects.isNull(diagnosisAdd.getName()) || diagnosisAdd.getName().isEmpty()) {
+			throw new DiagnosisException(" Diagnosis Name cannot be Empty or Null");
+		} else if (Objects.isNull(diagnosisAdd.getDescription()) || diagnosisAdd.getDescription().isEmpty()) {
+			throw new DiagnosisException("Diagnosis Description cannot be Empty or Null");
+		}
 
 		diagnosis = diagnosisRepo.save(diagnosisAdd);
 
 		return diagnosis;
-	}
-	
+
+	}	
 
 //	@Override
 //	@Transactional
@@ -160,4 +162,5 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		 diagnosisSuccess.setDiagnosis(getPatientVisitId);
 		 return diagnosisSuccess;
 	}
+
 }

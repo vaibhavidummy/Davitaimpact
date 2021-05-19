@@ -31,15 +31,16 @@ public class PatientVisit  extends Auditable<String>{
 	@GeneratedValue(generator = "patient_visit_id")
 	private String id;
 	
-	private String pataintIdfk;
+	private String pataintDetailIdfk;
 	
 	private String appointmentIdfk;
 	
 	private boolean appointmentStatus;
 	
 	
-	@ManyToOne
-	private PatientDetails patientDetailsForVisit;
+	/*
+	 * @ManyToOne private PatientDetails patientDetailsForVisit;
+	 */
 	
 	public PatientVisit(){
 		
