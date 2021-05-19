@@ -15,6 +15,7 @@ import com.citiustech.pms.diagnosis.model.DiagnosisModel;
 import com.citiustech.pms.diagnosis.model.DiagnosisSuccess;
 import com.citiustech.pms.diagnosis.service.PmsDiagnosisServiceImpl;
 
+
 @ExtendWith(MockitoExtension.class)
 public class PmsDiagnosisControllerTest {
 
@@ -58,7 +59,23 @@ public class PmsDiagnosisControllerTest {
 		DiagnosisSuccess DiagnosisSuccessExp = new DiagnosisSuccess();
 		
 		when(pmsDiagnosisServiceImpl.getProcedureByVisitId(str)).thenReturn(DiagnosisSuccessExp);
-		DiagnosisSuccess diagnosisSuccessActual =  pmsDiagnosisController.getProcedureByVisitId(str).getBody();
+		DiagnosisSuccess diagnosisSuccessActual =  pmsDiagnosisController.getDiagnosisByVisitId(str).getBody();
 		assertEquals(DiagnosisSuccessExp, diagnosisSuccessActual);
+	 }
+	
+	@Test
+	public void addDiagnosis()
+	 {
+		Diagnosis diagnosisExp = new Diagnosis();
+		diagnosisExp.setName("A");
+		diagnosisExp.setDiagonosisId("101");
+		diagnosisExp.setDescription("A");
+		diagnosisExp.setSeq_id(101L);
+		
+		when(pmsDiagnosisServiceImpl.addDiagnosis(diagnosis)).thenReturn(diagnosisExp);
+		
+		Diagnosis diagnosisActual = pmsDiagnosisController.addDiagnosis(diagnosis).getBody();
+		
+		assertEquals(diagnosisExp, diagnosisActual);
 	 }
 }

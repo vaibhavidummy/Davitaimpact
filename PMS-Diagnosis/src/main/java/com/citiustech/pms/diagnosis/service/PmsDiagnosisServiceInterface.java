@@ -6,10 +6,11 @@ import com.citiustech.pms.diagnosis.model.Diagnosis;
 import com.citiustech.pms.diagnosis.model.DiagnosisModel;
 import com.citiustech.pms.diagnosis.model.DiagnosisSuccess;
 
+
 @Service
 public interface PmsDiagnosisServiceInterface {
-
-	Diagnosis addDiagnosis(Diagnosis diagnosis) ;
+	
+	Diagnosis addDiagnosis(Diagnosis diagnosis);
 	
 	DiagnosisSuccess getAllDiagnosis();
 	

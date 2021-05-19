@@ -36,12 +36,12 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
 
-		if (Objects.isNull(procedureDetail.getProcedureId())) {
-			throw new ProcedureException("Procedure Id cannot be Null");
-		} else if (Objects.isNull(procedureDetail.getName())) {
-			throw new ProcedureException(" Procedure Name cannot be Null");
-		} else if (Objects.isNull(procedureDetail.getDescription())) {
-			throw new ProcedureException("Procedure Description cannot be Null ");
+		if (Objects.isNull(procedureDetail.getProcedureId()) || procedureDetail.getProcedureId().isEmpty() ) {
+			throw new ProcedureException("Procedure Id cannot be Empty or Null");
+		} else if (Objects.isNull(procedureDetail.getName()) || procedureDetail.getName().isEmpty()) {
+			throw new ProcedureException(" Procedure Name cannot be Empty or Null");
+		} else if (Objects.isNull(procedureDetail.getDescription()) || procedureDetail.getDescription().isEmpty()) {
+			throw new ProcedureException("Procedure Description cannot be Empty or Null ");
 		}
 
 		procedureMain = prodecureDetailRepository.save(procedureDetail);
@@ -59,7 +59,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 			 getPatientVisitId = prodecureDetailRepository.checkForExistingPatientVisitId(patientVisitId);
 			 
 			if (getPatientVisitId.isEmpty()) {
-				throw new ProcedureException("Patient Visit Id cannot be blank");
+				throw new ProcedureException("Patient Visit Id is not present ");
 			}
 		}
 		
