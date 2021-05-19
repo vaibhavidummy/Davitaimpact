@@ -1,6 +1,7 @@
 package com.davita.impact.erp.patient.serviceImpl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
 import com.davita.impact.erp.patient.model.Allergies;
 import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
@@ -100,4 +102,69 @@ class PatientVisitServicesImplTest {
 	}
 	
 	
+	@Test
+	void creteVisitIdInvalidPataientId() {
+		PatientDetails patient = new PatientDetails();
+		patient.setId("zzz");
+		
+		Optional<PatientDetails> mockVisitDetails = Optional.empty();
+		when(patientRepository.findById(patientVisit.getPataintDetailIdfk())).thenReturn(mockVisitDetails);
+
+		try {
+			patientVisitServicesImpl.creteVisitId(patientVisit);
+		} catch (EntityDetailsNotFoundException e) {
+
+			assertNotNull(e);
+		} 
+	}
+	
+	@Test
+	void getVistDetailsInvalidVisitId()
+	{
+		PatientDetails patient = new PatientDetails();
+		
+		
+		Optional<PatientVisit> mockVisitDetails = Optional.empty();
+		when(patientVisitRepository.findById(patientVisit.getId())).thenReturn(mockVisitDetails);
+
+		try {
+			patientVisitServicesImpl.getVistDetails(patientVisit.getId());
+		} catch (EntityDetailsNotFoundException e) {
+
+			assertNotNull(e);
+		} 
+	}
+	
+	/*
+	 * @Test void getAllVistofPatientInvaidPatientDetailsId() {
+	 * 
+	 * Optional<PatientVisit> mockVisitDetails = Optional.empty();
+	 * doReturn(mockVisitDetails).when(patientVisitRepository.getAllVistofPatient(
+	 * patientVisit.getPataintDetailIdfk()));
+	 * 
+	 * try { patientVisitServicesImpl.getAllVistofPatient(patientVisit.
+	 * getPataintDetailIdfk()); } catch (EntityDetailsNotFoundException e) {
+	 * 
+	 * assertNotNull(e); }
+	 * 
+	 * 
+	 * }
+	 * 
+	 * //@Test void creteVisitIdAllredayUseSameVisitIdPataientId() { PatientDetails
+	 * patient = new PatientDetails(); Set<PatientVisit> value =new HashSet<>();
+	 * value.add(patientVisit); patient.setId("zzz");
+	 * 
+	 * Optional<PatientDetails> mockVisitDetails = Optional.empty();
+	 * when(patientVisitRepository.
+	 * findByPataintDetailIdfkAndAppointmentIdfkAndAppointmentStatus(
+	 * patientVisit.getPataintDetailIdfk(), patientVisit.getAppointmentIdfk(),
+	 * patientVisit.isAppointmentStatus())).thenReturn(value);
+	 * 
+	 * try { patientVisitServicesImpl.creteVisitId(patientVisit); } catch
+	 * (EntityDetailsNotFoundException e) {
+	 * 
+	 * assertNotNull(e); }
+	 * 
+	 * }
+	 */	
 }

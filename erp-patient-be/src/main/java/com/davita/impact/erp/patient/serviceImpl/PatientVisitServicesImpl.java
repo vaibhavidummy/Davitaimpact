@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import com.davita.impact.erp.patient.comman.Diagnosis;
+import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.model.PatientVisit;
 import com.davita.impact.erp.patient.repository.PatientRepository;
@@ -34,36 +35,57 @@ public class PatientVisitServicesImpl implements PatientVisitServices {
 
 	@Override
 	@Transactional
-	public PatientVisit creteVisitId(PatientVisit patientVisit) throws Exception {
+	public PatientVisit creteVisitId(PatientVisit patientVisit) /* throws Exception */ {
 
 		Optional<PatientDetails> findById = patientRepository.findById(patientVisit.getPataintDetailIdfk());
-		if (!findById.isPresent())
-			throw new Exception("Pataient Details Id  not Matching");
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Pataient Details Id not found",
+					new Object[]{ patientVisit.getPataintDetailIdfk() });
+		}
+		
 		Set<PatientVisit> find = patientVisitRepository.findByPataintDetailIdfkAndAppointmentIdfkAndAppointmentStatus(
 				patientVisit.getPataintDetailIdfk(), patientVisit.getAppointmentIdfk(),
 				patientVisit.isAppointmentStatus());
-		if (!find.isEmpty())
-			throw new Exception("Pataient Has allrady done visit with this Appointment Id");
+		if (!find.isEmpty()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Pataient Has allrady done visit with this Appointment Id",
+					new Object[]{ patientVisit.getAppointmentIdfk() });
+		}
+		
 		return patientVisitRepository.save(patientVisit);
 	}
 
 	@Override
 	@Transactional
-	public PatientVisit getVistDetails(String visitId) throws Exception {
+	public PatientVisit getVistDetails(String visitId)/* throws Exception */ {
 		Optional<PatientVisit> findById = patientVisitRepository.findById(visitId);
-		if (!findById.isPresent())
-			throw new Exception("Invalid VisitId Please check it ..........");
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Invalid VisitId Please check it ..........",
+					new Object[]{ visitId });
+		}
 		PatientVisit patientVisit = findById.get();
 
 		return patientVisit;
 	}
 
 	@Transactional
-	public List<PatientVisit> getAllVistofPatient(String patientDetailsId) throws Exception {
+	public List<PatientVisit> getAllVistofPatient(String patientDetailsId) /* throws Exception */ {
 
 		List<PatientVisit> allVistofPatient = patientVisitRepository.getAllVistofPatient(patientDetailsId);
 		if(allVistofPatient.isEmpty())
-			throw new Exception("PaitentDetails Id is Invalid Please check it ..........");
+		{
+			throw new EntityDetailsNotFoundException("PaitentDetails Id is Invalid Please check it ..........",
+					new Object[]{ patientDetailsId });
+		}
+			
+		
+		if (allVistofPatient.isEmpty()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("PaitentDetails Id has no Privious Visit ",
+					new Object[]{ patientDetailsId });
+		}
 		
 		return allVistofPatient;
 	}
