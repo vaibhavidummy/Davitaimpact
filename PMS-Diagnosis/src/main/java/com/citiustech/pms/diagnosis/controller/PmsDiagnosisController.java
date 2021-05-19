@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.citiustech.pms.diagnosis.model.Diagnosis;
 import com.citiustech.pms.diagnosis.model.DiagnosisModel;
 import com.citiustech.pms.diagnosis.model.DiagnosisSuccess;
 import com.citiustech.pms.diagnosis.service.PmsDiagnosisServiceInterface;
 
+@CrossOrigin(origins="*",  allowedHeaders="*")
 @RestController
 @RequestMapping(value = "/healthcare/diagnosis")
 public class PmsDiagnosisController {
@@ -24,15 +27,15 @@ public class PmsDiagnosisController {
 	@Autowired
 	private PmsDiagnosisServiceInterface pmsDiagnosisService;
 	
-	/*
-	 * @PostMapping("/diagnosis") public Diagnosis createDiagnosis(@RequestBody
-	 * Diagnosis diagnosis, BindingResult result) {
-	 * LOGGER.info("ADD DIAGNOSIS METHOD"); return
-	 * pmsDiagnosisService.addDiagnosis(diagnosis);
-	 * 
-	 * }
-	 */
-
+	@PostMapping("/addDiagnosis")
+	public ResponseEntity<Diagnosis> addDiagnosis(@RequestBody Diagnosis diagnosisDetail) {
+		
+		LOGGER.info("inside addDiagnosis");
+		Diagnosis addDiagnosisDetail = null;
+		addDiagnosisDetail = pmsDiagnosisService.addDiagnosis(diagnosisDetail);
+		return new ResponseEntity<Diagnosis>(addDiagnosisDetail, HttpStatus.CREATED);
+	}
+	
 	@GetMapping("/getalldiagnosis")
     public ResponseEntity<DiagnosisSuccess> getAllDiagnosis() {
 		
@@ -43,7 +46,7 @@ public class PmsDiagnosisController {
     }
 	
 	@GetMapping("/{patientVisitId}")
-    public ResponseEntity<DiagnosisSuccess> getProcedureByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
+    public ResponseEntity<DiagnosisSuccess> getDiagnosisByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
 		DiagnosisSuccess procedureByVisitId =null;
 		procedureByVisitId = pmsDiagnosisService.getProcedureByVisitId(patientVisitId);
