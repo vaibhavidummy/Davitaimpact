@@ -33,7 +33,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .headers().frameOptions().disable()
-                .and().cors()
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
@@ -45,31 +44,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .authenticated();
     }
 
-    @Bean
-    public FilterRegistrationBean platformCorsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        CorsConfiguration configAutenticacao = new CorsConfiguration();
-        configAutenticacao.setAllowCredentials(true);
-        configAutenticacao.addAllowedOrigin("*");
-        configAutenticacao.addAllowedHeader("X-Frame-Options");
-        configAutenticacao.addAllowedHeader("Authorization");
-        configAutenticacao.addAllowedHeader("Content-Type");
-        configAutenticacao.addAllowedHeader("Accept");
-        configAutenticacao.addAllowedMethod("POST");
-        configAutenticacao.addAllowedMethod("GET");
-        configAutenticacao.addAllowedMethod("DELETE");
-        configAutenticacao.addAllowedMethod("PUT");
-        configAutenticacao.addAllowedMethod("OPTIONS");
-        configAutenticacao.setMaxAge(3600L);
-        source.registerCorsConfiguration("/**", configAutenticacao);
-
-        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-        bean.setOrder(-110);
-        return bean;
-    }
-
-    
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         resources.resourceId(resourceId);
