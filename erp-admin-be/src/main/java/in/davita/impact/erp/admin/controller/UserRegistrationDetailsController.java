@@ -38,7 +38,7 @@ import io.swagger.annotations.ApiResponse;
 @RestController
 @RequestMapping(value = "registration")
 @Api(value = "User registration service controller")
-@CrossOrigin(origins="*", allowedHeaders="*")
+//@CrossOrigin(origins="*", allowedHeaders="*")
 public class UserRegistrationDetailsController {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserRegistrationDetailsController.class);
