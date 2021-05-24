@@ -31,7 +31,8 @@ public class ProcedureController {
 	@PostMapping("/addProcedure")
 	public ResponseEntity<ProcedureMain> addProcedure(@RequestBody ProcedureMain procedureMain) {
 		
-		LOGGER.info("inside addProcedure");
+		LOGGER.info("Reached addProcedure");
+		
 		ProcedureMain addProcedureDetail = null;
 		addProcedureDetail = procedureDetailService.addProcedure(procedureMain);
 		return new ResponseEntity<ProcedureMain>(addProcedureDetail, HttpStatus.CREATED);
@@ -40,6 +41,8 @@ public class ProcedureController {
 	@GetMapping("/{patientVisitId}")
     public ResponseEntity<ProcedureSuccess> getProcedureByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
+		LOGGER.info("Reached getProcedureByVisitId: ");
+		
 		ProcedureSuccess procedureByVisitId =null;
 		procedureByVisitId = procedureDetailService.getProcedureByVisitId(patientVisitId);
          return new ResponseEntity<ProcedureSuccess>(procedureByVisitId , HttpStatus.OK);
@@ -48,7 +51,7 @@ public class ProcedureController {
 	@GetMapping("/getallProcedure")
     public ResponseEntity<ProcedureSuccess> getAllProcedure() {
 		
-		LOGGER.info("inside getAllProcedure: ");
+		LOGGER.info("Reached getAllProcedure: ");
 		
 		ProcedureSuccess procedureSuccess =  procedureDetailService.getAllProcedure();
 		return new ResponseEntity<ProcedureSuccess>(procedureSuccess, HttpStatus.OK);
@@ -57,7 +60,7 @@ public class ProcedureController {
 	@PostMapping("/procedureDetailDesc")
 	public ResponseEntity<ProcedureSuccess> getProcedureDetailDesc(@RequestBody ProcedureDetail procedureDetail) 
     { 
-		LOGGER.info("inside getProcedureDetailDesc: "+procedureDetail);
+		LOGGER.info("Reached getProcedureDetailDesc: {}",procedureDetail);
 		
 		ProcedureSuccess procedureSuccess =  procedureDetailService.getProcedureDescription(procedureDetail);
 		return new ResponseEntity<ProcedureSuccess>(procedureSuccess, HttpStatus.CREATED);
