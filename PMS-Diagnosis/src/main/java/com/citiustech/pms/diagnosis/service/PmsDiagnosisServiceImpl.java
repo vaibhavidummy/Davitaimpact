@@ -36,6 +36,8 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public Diagnosis addDiagnosis(Diagnosis diagnosisAdd) {
+		LOGGER.info("Get in addDiagnosis ");
+		
 		if (Objects.isNull(diagnosisAdd.getDiagonosisId()) ||  diagnosisAdd.getDiagonosisId().isEmpty()) {
 			throw new DiagnosisException("Diagnosis Id cannot be Empty or Null");
 		} else if (Objects.isNull(diagnosisAdd.getName()) || diagnosisAdd.getName().isEmpty()) {
@@ -45,122 +47,69 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		}
 
 		diagnosis = diagnosisRepo.save(diagnosisAdd);
+		LOGGER.info("Diagnosis Added Successfully ");
 
 		return diagnosis;
 
 	}	
 
-//	@Override
-//	@Transactional
-//	public List<DiagnosisMaster> getAllDiagnosis() {
-//
-//		List<DiagnosisMaster> diagnosisMaster = diagnosisMasterRepo.findAll();
-//		return diagnosisMaster;
-//
-//	}
-//
-//	@Override
-//	public List<Diagnosis> getDiagnosisByVisitId(DiagnosisModel diagnosisModel) {
-//
-//		System.out.println("inside the service impll class");
-//
-//		for (int i = 0; i < diagnosisModel.getDiagnosis_details().size(); i++) {
-//			Diagnosis diagnosis1 = new Diagnosis();
-//			diagnosis1.setPatient_visit_id(diagnosisModel.getPatient_visit_id());
-//			diagnosis1.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
-//			diagnosis1.setId(diagnosisModel.getDiagnosis_details().get(i).getId());
-//			diagnosis1.setDescription(diagnosisModel.getDiagnosis_details().get(i).getDescription());
-//			System.out.println("the diagnosis" + diagnosis1.getId());
-//			diagnosisRepo.save(diagnosis1);
-//
-//		}
-//
-//		return diagnosisRepo.findAll();
-//		
-//		  Diagnosis diagnosisGetById = diagnosisRepo.save(diagnosis); if
-//		  (Objects.isNull(diagnosis.getId())) throw new IllegalArgumentException();
-//		  else if(Objects.isNull(diagnosis.getName())) throw new
-//		  IllegalArgumentException(); return diagnosisGetById;
-//		 
-//
-//	}
-
 	@Override
 	public DiagnosisSuccess getAllDiagnosis() {
-		
+
 		List<DiagnosisMaster> diagnosisMaster = diagnosisMasterRepo.findAll();
-		
-		if(diagnosisMaster.isEmpty())
-		{
-			throw new DiagnosisException("Diagnosis Master data is not present");
+		LOGGER.info("Get Master Data: {} ",diagnosisMaster);
+
+		if (diagnosisMaster.isEmpty()) {
+			throw new DiagnosisException("No Data available");
 		}
-		DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
-		 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
-		 diagnosisSuccess.setDiagnosisMaster(diagnosisMaster);
-        return diagnosisSuccess;
+		return new DiagnosisSuccess.DiagnosisDto().setDiagnosisMaster(diagnosisMaster).setSuccessFlag(Boolean.TRUE).build();
 	}
 
 	@Override
 	@Transactional(rollbackFor =  Exception.class)
 	public DiagnosisSuccess getDiagnosisDescription(DiagnosisModel diagnosisModel) {
-		
-	LOGGER.info("diagnosisModel : "+diagnosisModel);
-		
-		List<Diagnosis> diagnosisList = new ArrayList<>();
-		
-		LOGGER.info("diagnosisList value : "+diagnosisList);
-		
-		if(diagnosisModel.getPatient_visit_id().isEmpty())
-		{
-			throw new DiagnosisException("Patient Visit Id cannot be empty");
-		}
-		else if(diagnosisModel.getDiagnosis_details().isEmpty())
-		{
-			throw new DiagnosisException("Diagnosis Description cannot be empty");
-		}
-		
-		LOGGER.info(" DiagnosisDetail size: "+diagnosisModel.getDiagnosis_details().size());
-		
-			for(int i =0; i < diagnosisModel.getDiagnosis_details().size(); i++)
-			{
-				Diagnosis diagnosis = new Diagnosis();
+		LOGGER.info("procedureDetailDesc : {} ",diagnosisModel);
 
-				diagnosis.setPatient_visit_id(diagnosisModel.getPatient_visit_id());
-				diagnosis.setDiagonosisId(diagnosisModel.getDiagnosis_details().get(i).getId());
-				diagnosis.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
-				diagnosis.setDescription(diagnosisModel.getDiagnosis_details().get(i).getDescription());
-				
-				diagnosisList.add(diagnosis);
-			}
-			
-			diagnosisRepo.saveAll(diagnosisList);
-			
-			 DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
-			 diagnosisSuccess.setMessage("Added Successfully");
-			 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
-			 
-			 return diagnosisSuccess;
+		List<Diagnosis> diagnosisList = new ArrayList<>();
+
+		if (diagnosisModel.getPatient_visit_id().isEmpty()) {
+			throw new DiagnosisException("Patient Visit Id cannot be Empty");
+		} else if (diagnosisModel.getDiagnosis_details().isEmpty()) {
+			throw new DiagnosisException("Diagnosis Description cannot be Empty");
+		}
+		LOGGER.info("Size : {} ",diagnosisModel.getDiagnosis_details().size());
+
+		for (int i = 0; i < diagnosisModel.getDiagnosis_details().size(); i++) {
+			Diagnosis diagnosisDesc = new Diagnosis();
+
+			diagnosisDesc.setPatient_visit_id(diagnosisModel.getPatient_visit_id());
+			diagnosisDesc.setDiagonosisId(diagnosisModel.getDiagnosis_details().get(i).getId());
+			diagnosisDesc.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
+			diagnosisDesc.setDescription(diagnosisModel.getDiagnosis_details().get(i).getDescription());
+
+			diagnosisList.add(diagnosisDesc);
+		}
+
+		diagnosisRepo.saveAll(diagnosisList);
+
+		return new DiagnosisSuccess.DiagnosisDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE).build();
 	}
 
 
 	@Override
 	public DiagnosisSuccess getProcedureByVisitId(String patientVisitId) {
-		
+
 		List<Diagnosis> getPatientVisitId = new ArrayList<>();
-		
-		if(!patientVisitId.isEmpty())
-		{
-			 getPatientVisitId = diagnosisRepo.checkForExistingPatientVisitId(patientVisitId);
-			 
+
+		if (!patientVisitId.isEmpty()) {
+			getPatientVisitId = diagnosisRepo.checkForExistingPatientVisitId(patientVisitId);
+			LOGGER.info("List of Patient Visit Id : {} ",getPatientVisitId);
+
 			if (getPatientVisitId.isEmpty()) {
-				throw new DiagnosisException("Patient Visit Id cannot be blank");
+				throw new DiagnosisException("Patient Visit Id Not Found");
 			}
 		}
-		
-		 DiagnosisSuccess diagnosisSuccess = new DiagnosisSuccess();
-		 diagnosisSuccess.setSuccessFlag(Boolean.TRUE);
-		 diagnosisSuccess.setDiagnosis(getPatientVisitId);
-		 return diagnosisSuccess;
+		return new DiagnosisSuccess.DiagnosisDto().setDiagnosis(getPatientVisitId).setSuccessFlag(Boolean.TRUE).build();
 	}
 
 }

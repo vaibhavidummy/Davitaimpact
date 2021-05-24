@@ -1,5 +1,6 @@
 package com.citiustech.pms.procedure.exception;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -16,6 +17,12 @@ public class ProcedureGlobalExceptionHandler {
 		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.ADMIN_CONTACT ,ex.getStackTrace()[0], false);
 	}
 
+	@ExceptionHandler(SQLException.class)
+	public ExceptionObject procedureExceptionHandler(SQLException  ex)
+	{
+		return new ExceptionObject(LocalDateTime.now(), ex.getMessage(), ErrorConstant.MYSQL_DOWN ,ex.getStackTrace()[0], false);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ExceptionObject procedureExceptionHandler(Exception  ex)
 	{
