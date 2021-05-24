@@ -33,7 +33,6 @@ import io.swagger.annotations.ApiResponse;
 
 @RestController
 @RequestMapping(value = "/healthcare/visit")
-@CrossOrigin(origins="*", allowedHeaders="*")
 public class VisitController {
 
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(VisitController.class);
@@ -46,7 +45,7 @@ public class VisitController {
 	@ApiResponse(code = 201, message = "Visit Id Created Successfully", response = ResponseOnOk.class)
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> createVisit(@RequestBody PatientVisit patientVisit) throws Exception {
-		LOGGER.info("Inside createVisit method of VisitController");
+		LOGGER.info("Inside createVisit method of VisitController for User Id >>> "+patientVisit.getUserIdfk());
 		  PatientVisit creteVisitId = patientVisitServices.creteVisitId(patientVisit);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(creteVisitId.getId());
@@ -61,39 +60,15 @@ public class VisitController {
 
 	//------------- search all VisitId ---------------
 	
-	@GetMapping("/myvisit/{patientdetailsId}")
+	@GetMapping("/myvisit/{userId}")
 	@ResponseBody
 	@ApiResponse(code = 200, message = "Patient Visit Id Details Shown")
-	public List<PatientVisit> showPatientVisit(@PathVariable("patientdetailsId") String id) throws Exception {
-		LOGGER.info("Inside showPatientVisit method of VisitController");
+	public List<PatientVisit> showPatientVisit(@PathVariable("userId") String id) throws Exception {
+		LOGGER.info("Inside showPatientVisit method of VisitController for User Id >>> "+id);
 		List<PatientVisit> allVisitofPatient = patientVisitServices.getAllVistofPatient(id);
 		return allVisitofPatient;
 		
 	}
 	
-	/*
-	 * 
-	 * @GetMapping("/visitDetails/{visitid}") public
-	 * ResponseEntity<VisitDetailsRespons> visitDetails(@PathVariable("visitid")
-	 * String id) throws Exception {
-	 * LOGGER.info("Inside visitDetails method of VisitController"); //
-	 * LOGGER.info("getPatientDetailsByID..."); VisitDetailsRespons
-	 * visitDetailsRespons =new VisitDetailsRespons();
-	 * 
-	 * List<Diagnosis> diagnosisDetails = patientVisitServices.visitDetails(id);
-	 * visitDetailsRespons.setDiagnosis(diagnosisDetails);
-	 * 
-	 * 
-	 * PatientVisit vistDetails = patientVisitServices.getVistDetails(id);
-	 * visitDetailsRespons.setPatientvisit(vistDetails);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * return new ResponseEntity<VisitDetailsRespons>(visitDetailsRespons,
-	 * HttpStatus.OK);
-	 * 
-	 * 
-	 * }
-	 */	
+	
 }
