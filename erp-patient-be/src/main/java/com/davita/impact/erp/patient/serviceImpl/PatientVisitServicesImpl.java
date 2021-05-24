@@ -1,5 +1,6 @@
 package com.davita.impact.erp.patient.serviceImpl;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.davita.impact.erp.patient.repository.PatientVisitRepository;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
 
 @Service
+@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
 public class PatientVisitServicesImpl implements PatientVisitServices {
 
 	@Autowired
@@ -37,15 +39,15 @@ public class PatientVisitServicesImpl implements PatientVisitServices {
 	@Transactional
 	public PatientVisit creteVisitId(PatientVisit patientVisit) /* throws Exception */ {
 
-		Optional<PatientDetails> findById = patientRepository.findById(patientVisit.getPataintDetailIdfk());
-		if (!findById.isPresent()) {
+		 int checkUserID = patientRepository.checkUserID(patientVisit.getUserIdfk());
+		if (checkUserID==0) {
 			// return ResponseEntity.notFound().build();
 			throw new EntityDetailsNotFoundException("Pataient Details Id not found",
-					new Object[]{ patientVisit.getPataintDetailIdfk() });
+					new Object[]{ patientVisit.getUserIdfk() });
 		}
 		
-		Set<PatientVisit> find = patientVisitRepository.findByPataintDetailIdfkAndAppointmentIdfkAndAppointmentStatus(
-				patientVisit.getPataintDetailIdfk(), patientVisit.getAppointmentIdfk(),
+		Set<PatientVisit> find = patientVisitRepository.findByUserIdfkAndAppointmentIdfkAndAppointmentStatus(
+				patientVisit.getUserIdfk(), patientVisit.getAppointmentIdfk(),
 				patientVisit.isAppointmentStatus());
 		if (!find.isEmpty()) {
 			// return ResponseEntity.notFound().build();
@@ -71,20 +73,20 @@ public class PatientVisitServicesImpl implements PatientVisitServices {
 	}
 
 	@Transactional
-	public List<PatientVisit> getAllVistofPatient(String patientDetailsId) /* throws Exception */ {
+	public List<PatientVisit> getAllVistofPatient(String UserId) /* throws Exception */ {
 
-		List<PatientVisit> allVistofPatient = patientVisitRepository.getAllVistofPatient(patientDetailsId);
-		if(allVistofPatient.isEmpty())
-		{
-			throw new EntityDetailsNotFoundException("PaitentDetails Id is Invalid Please check it ..........",
-					new Object[]{ patientDetailsId });
-		}
+		List<PatientVisit> allVistofPatient = patientVisitRepository.getAllVistofPatient(UserId);
+		/*
+		 * if(allVistofPatient.isEmpty()) { throw new
+		 * EntityDetailsNotFoundException("PaitentDetails Id is Invalid Please check it .........."
+		 * , new Object[]{ UserId }); }
+		 */
 			
 		
 		if (allVistofPatient.isEmpty()) {
 			// return ResponseEntity.notFound().build();
 			throw new EntityDetailsNotFoundException("PaitentDetails Id has no Privious Visit ",
-					new Object[]{ patientDetailsId });
+					new Object[]{ UserId });
 		}
 		
 		return allVistofPatient;
