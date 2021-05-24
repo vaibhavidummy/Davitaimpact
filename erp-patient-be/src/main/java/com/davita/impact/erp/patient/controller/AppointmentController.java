@@ -41,7 +41,6 @@ import io.swagger.annotations.ApiResponse;
  * */
 @RestController
 @RequestMapping(value="appointment")
-@CrossOrigin(origins="*", allowedHeaders="*")
 @Api(value = "Appointment service controller")
 public class AppointmentController {
 	
@@ -128,23 +127,5 @@ public class AppointmentController {
 		return new ResponseEntity<String>(appointmentIdStatus, HttpStatus.OK);
 	}
 	
-	/*
-	 * @ApiOperation(value =
-	 * "Retrieves the physician Scheduled Appointment for date", response =
-	 * Appointment.class)
-	 * 
-	 * @ApiResponse(code = 200, message = "Successfully retrieved appointment")
-	 * 
-	 * @GetMapping(value="/byphysicianidanddate") public ResponseEntity<List<Date>>
-	 * getScheduledAppointmentbyPhysicianIdByDate( @RequestParam String
-	 * physicianId,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	 * LocalDate date) { LOGGER.
-	 * info("Inside get appointment by physcian Id and date method of AppointmentController"
-	 * ); List<Date> appointmentStatus=null; appointmentStatus =
-	 * appointmentService.getPhysicianAppointmentforDate(physicianId, date); return
-	 * new ResponseEntity<List<Date>>(appointmentStatus, HttpStatus.OK);
-	 * 
-	 * }
-	 */
 	
 }

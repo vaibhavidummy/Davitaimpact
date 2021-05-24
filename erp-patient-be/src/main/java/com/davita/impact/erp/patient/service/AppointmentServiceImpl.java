@@ -38,10 +38,10 @@ public class AppointmentServiceImpl implements AppointmentService{
 		{	
 		appointmentStatus = appointmentRepository.save(appointment);
 		
-		  Inbox inbox = new Inbox(null, appointmentStatus.getPhysicianName(),
-		  "appointment/others", "upcoming appointment", appointmentStatus.getStatus(), 
-		  appointmentStatus.getStartTime(), appointmentStatus.getDate(),
-		  appointmentStatus.getAppointmentId()); 
+			  Inbox inbox = new Inbox(null, appointmentStatus.getPhysicianName(),
+			  "appointment/others", "upcoming appointment", appointmentStatus.getStatus(), 
+			  appointmentStatus.getStartTime(), appointmentStatus.getDate(),
+			  appointmentStatus.getAppointmentId()); 
 		  String inboxId= inboxServiceClient.createInbox(inbox); 
 		  System.out.println("inbox  : "+ inbox);
 		}
