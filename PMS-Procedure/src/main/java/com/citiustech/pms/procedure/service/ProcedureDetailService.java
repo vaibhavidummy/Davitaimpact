@@ -9,12 +9,12 @@ import com.citiustech.pms.procedure.model.ProcedureSuccess;
 @Service
 public interface ProcedureDetailService {
 
-	 ProcedureMain addProcedure(ProcedureMain procedureDetail);
-	 
-	 ProcedureSuccess getProcedureByVisitId(String patientVisitId);
-	  
-	  ProcedureSuccess getAllProcedure();
-	  
-	  ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc);
+	ProcedureMain addProcedure(ProcedureMain procedureDetail);
+
+	ProcedureSuccess getProcedureByVisitId(String patientVisitId);
+
+	ProcedureSuccess getAllProcedure();
+
+	ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc);
 
 }

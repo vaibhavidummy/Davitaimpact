@@ -30,7 +30,8 @@ public class PmsDiagnosisController {
 	@PostMapping("/addDiagnosis")
 	public ResponseEntity<Diagnosis> addDiagnosis(@RequestBody Diagnosis diagnosisDetail) {
 		
-		LOGGER.info("inside addDiagnosis");
+		LOGGER.info("Reached addDiagnosis");
+		
 		Diagnosis addDiagnosisDetail = null;
 		addDiagnosisDetail = pmsDiagnosisService.addDiagnosis(diagnosisDetail);
 		return new ResponseEntity<Diagnosis>(addDiagnosisDetail, HttpStatus.CREATED);
@@ -39,7 +40,7 @@ public class PmsDiagnosisController {
 	@GetMapping("/getalldiagnosis")
     public ResponseEntity<DiagnosisSuccess> getAllDiagnosis() {
 		
-		LOGGER.info("inside getAllDiagnosis ");
+		LOGGER.info("Reached getAllDiagnosis ");
 		
 		DiagnosisSuccess diagnosisSuccess =  pmsDiagnosisService.getAllDiagnosis();
 		return new ResponseEntity<DiagnosisSuccess>(diagnosisSuccess, HttpStatus.OK);
@@ -48,6 +49,8 @@ public class PmsDiagnosisController {
 	@GetMapping("/{patientVisitId}")
     public ResponseEntity<DiagnosisSuccess> getDiagnosisByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
+		LOGGER.info("Reached getDiagnosisByVisitId ");
+		
 		DiagnosisSuccess procedureByVisitId =null;
 		procedureByVisitId = pmsDiagnosisService.getProcedureByVisitId(patientVisitId);
          return new ResponseEntity<DiagnosisSuccess>(procedureByVisitId , HttpStatus.OK);
@@ -56,7 +59,7 @@ public class PmsDiagnosisController {
 	@PostMapping("/diagnosisDetailDesc")
 	public ResponseEntity<DiagnosisSuccess> getDiagnosisDetailDesc(@RequestBody DiagnosisModel diagnosisModel) 
     { 
-		LOGGER.info("inside getDiagnosisDetailDesc: "+diagnosisModel);
+		LOGGER.info("Reached getDiagnosisDetailDesc: {} ",diagnosisModel);
 		
 		DiagnosisSuccess diagnosisSuccess =  pmsDiagnosisService.getDiagnosisDescription(diagnosisModel);
 		return new ResponseEntity<DiagnosisSuccess>(diagnosisSuccess, HttpStatus.CREATED);
