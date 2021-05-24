@@ -1,6 +1,7 @@
 package com.davita.impact.erp.patient.exception;
 
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
@@ -10,7 +11,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
 @PropertySource("classpath:/errormap.properties")
@@ -66,6 +65,7 @@ public final ErrorResponse handleSQLExceptions(SQLException ex, WebRequest reque
 	LOGGER.error(ex.getMessage());
 	return error;
 }
+
 /***********************************************************************************************************/
 @Override
 protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
@@ -102,6 +102,7 @@ public final ResponseEntity<ErrorResponse> handleCustomException(EntityDetailsNo
 }
 
 
+
 @ExceptionHandler(EntityDetailsFoundException.class)
 public final ResponseEntity<ErrorResponse> handleCustomException(EntityDetailsFoundException ex,
 		WebRequest request) throws Exception {
@@ -111,4 +112,15 @@ public final ResponseEntity<ErrorResponse> handleCustomException(EntityDetailsFo
 	LOGGER.error(errorResponse.getMessage());
 	return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FOUND);
 }
+
+@ExceptionHandler(ServiceNotFoundException.class)
+public final ResponseEntity<ErrorResponse> handleCustomException(ServiceNotFoundException ex,
+		WebRequest request) throws Exception {
+	String errorCode = env.getProperty(ExceptionConstantsMap.SERVICE_NOT_FOUND);
+	String errorMessage = messageSource.getMessage(errorCode, null, LocaleContextHolder.getLocale());
+	ErrorResponse errorResponse = new ErrorResponse(errorCode, getTimestamp(), "", errorMessage, ex.getMessage());
+	LOGGER.error(errorResponse.getMessage());
+	return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
+}
+
 }
