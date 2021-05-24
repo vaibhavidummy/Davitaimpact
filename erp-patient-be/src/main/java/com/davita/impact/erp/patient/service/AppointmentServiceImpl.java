@@ -37,15 +37,7 @@ public class AppointmentServiceImpl implements AppointmentService{
 		if(checkForExistingAppointment(appointment) == false)
 		{	
 		appointmentStatus = appointmentRepository.save(appointment);
-		
-			  Inbox inbox = new Inbox(null, appointmentStatus.getPhysicianName(),
-			  "appointment/others", "upcoming appointment", appointmentStatus.getStatus(), 
-			  appointmentStatus.getStartTime(), appointmentStatus.getDate(),
-			  appointmentStatus.getAppointmentId()); 
-		  String inboxId= inboxServiceClient.createInbox(inbox); 
-		  System.out.println("inbox  : "+ inbox);
 		}
-		
 		return appointmentStatus;
 	}
 	
@@ -59,7 +51,6 @@ public class AppointmentServiceImpl implements AppointmentService{
         	throw new EntityDetailsNotFoundException("Appointment not present for given appointment Id",
 					new Object[]{appointmentId });
 		}
-        
 		 appointmentStatus=appointmentRepository.save(appointment);
         
 		return appointmentStatus;
@@ -133,15 +124,4 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	
-	
-	/*
-	 * @Override public List<Date> getPhysicianAppointmentforDate(String
-	 * physicianId,LocalDate date){ List<Date> result=null;
-	 * result=appointmentRepository.findAllByPhysicianIdByDate(physicianId,date);
-	 * if(result.isEmpty()) { throw new
-	 * EntityDetailsNotFoundException("Appointment not present for given date", new
-	 * Object[]{ physicianId, date}); }
-	 * 
-	 * return result; }
-	 */
 }
