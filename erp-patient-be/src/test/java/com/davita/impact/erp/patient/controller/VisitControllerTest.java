@@ -56,7 +56,7 @@ class VisitControllerTest {
 	
 	@Test
 	public void getAllVistofPatient() throws Exception {
-		String  patientDetailsId =patientVisit.getPataintDetailIdfk();
+		String  patientDetailsId =patientVisit.getUserIdfk();
 		
 		List<PatientVisit> expectedVisitListPatient = Arrays.asList(patientVisit);
 		when(patientVisitServices.getAllVistofPatient(patientDetailsId)).thenReturn(expectedVisitListPatient);

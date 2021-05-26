@@ -18,15 +18,15 @@ import com.davita.impact.erp.patient.model.PatientVisit;
 public interface PatientVisitRepository extends JpaRepository<PatientVisit,String>{
 
 	
-	public Set<PatientVisit> findByPataintDetailIdfkAndAppointmentIdfkAndAppointmentStatus(String pataintDetailIdfk,
+	public Set<PatientVisit> findByUserIdfkAndAppointmentIdfkAndAppointmentStatus(String pataintDetailIdfk,
 			String appointmentIdfk, boolean appointmentStatus);
 	
 	
 	@Transactional
-	@Query(value="SELECT * FROM patient_schema.patient_visit where pataint_detail_idfk=:pataint_detail_idfk", nativeQuery = true )
-	public List<PatientVisit> getAllVistofPatient(@Param("pataint_detail_idfk") String pataint_detail_idfk);
+	@Query(value="SELECT * FROM patient_visit where user_idfk=:user_idfk", nativeQuery = true )
+	public List<PatientVisit> getAllVistofPatient(@Param("user_idfk") String user_idfk);
 	
-	@Query(value="SELECT * FROM patient_schema.patient_visit where pataint_detail_idfk=:pataint_detail_idfk", nativeQuery = true )
-	public Optional<PatientVisit> checkValidPatientDetailsId(@Param("pataint_detail_idfk") String pataint_detail_idfk);
+	@Query(value="SELECT * FROM patient_visit where user_id_fk=:user_id_fk", nativeQuery = true )
+	public Optional<PatientVisit> checkValidPatientDetailsId(@Param("user_id_fk") String user_id_fk);
 	
 }

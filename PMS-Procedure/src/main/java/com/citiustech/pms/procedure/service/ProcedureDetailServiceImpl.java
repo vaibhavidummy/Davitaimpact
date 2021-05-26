@@ -35,7 +35,8 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
-
+		LOGGER.info("Get in addProcedure ");
+		
 		if (Objects.isNull(procedureDetail.getProcedureId()) || procedureDetail.getProcedureId().isEmpty() ) {
 			throw new ProcedureException("Procedure Id cannot be Empty or Null");
 		} else if (Objects.isNull(procedureDetail.getName()) || procedureDetail.getName().isEmpty()) {
@@ -45,6 +46,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		}
 
 		procedureMain = prodecureDetailRepository.save(procedureDetail);
+		LOGGER.info("Procedure Added Successfully");
 
 		return procedureMain;
 	}
@@ -53,78 +55,59 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	public ProcedureSuccess getProcedureByVisitId(String patientVisitId )
 	{
 		List<ProcedureMain> getPatientVisitId = new ArrayList<>();
-		
-		if(!patientVisitId.isEmpty())
-		{
-			 getPatientVisitId = prodecureDetailRepository.checkForExistingPatientVisitId(patientVisitId);
-			 
+
+		if (!patientVisitId.isEmpty()) {
+			getPatientVisitId = prodecureDetailRepository.checkForExistingPatientVisitId(patientVisitId);
+			LOGGER.info("List of Patient Visit Id : {} ",getPatientVisitId);
+			
 			if (getPatientVisitId.isEmpty()) {
-				throw new ProcedureException("Patient Visit Id is not present ");
+				throw new ProcedureException("Patient Visit Id Not Found");
 			}
 		}
-		
-		 ProcedureSuccess procedureSuccess = new ProcedureSuccess();
-		 procedureSuccess.setSuccessFlag(Boolean.TRUE);
-		 procedureSuccess.setProcedureMain(getPatientVisitId);
-		 return procedureSuccess;
+		return new ProcedureSuccess.ProcedureDto().setProcedureMain(getPatientVisitId).setSuccessFlag(Boolean.TRUE).build();
 	}
 	
 	@Override
     public ProcedureSuccess getAllProcedure()
-    {
+	{
 		List<ProcedureMaster> procedureMaster = procedureMasterRepo.findAll();
-				
-		if(procedureMaster.isEmpty())
-		{
-			throw new ProcedureException("Procedure Master data is not present");
+		LOGGER.info("Get Master Data: {} ",procedureMaster);
+		
+		if (procedureMaster.isEmpty()) {
+			throw new ProcedureException("No Data available");
 		}
-		ProcedureSuccess procedureSuccess = new ProcedureSuccess();
-		 procedureSuccess.setSuccessFlag(Boolean.TRUE);
-		 procedureSuccess.setProcedureMaster(procedureMaster);
-        return procedureSuccess;
-    }
+		return new ProcedureSuccess.ProcedureDto().setProcedureMaster(procedureMaster).setSuccessFlag(Boolean.TRUE).build();
+	}
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc) {
-		
-		LOGGER.info("procedureDetailDesc : "+procedureDetailDesc);
+		LOGGER.info("procedureDetailDesc : {} ",procedureDetailDesc);
 
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
-		
-		LOGGER.info("procedureMainList value : "+procedureMainList);
-		
-		if(procedureDetailDesc.getPatient_visit_id().isEmpty())
-		{
-			throw new ProcedureException("Patient Visit Id cannot be empty");
-		}
-		else if(procedureDetailDesc.getProcedure_details().isEmpty())
-		{
-			throw new ProcedureException("Procedure Description cannot be empty");
-		}
 
-		LOGGER.info("Size : "+procedureDetailDesc.getProcedure_details().size());
+		if (procedureDetailDesc.getPatient_visit_id().isEmpty()) {
+			throw new ProcedureException("Patient Visit Id cannot be Empty");
+		} else if (procedureDetailDesc.getProcedure_details().isEmpty()) {
+			throw new ProcedureException("Procedure Description cannot be Empty");
+		}
+		LOGGER.info("Size : {} ",procedureDetailDesc.getProcedure_details().size());
 		
-			for(int i =0; i < procedureDetailDesc.getProcedure_details().size(); i++)
-			{
-				ProcedureMain procedureMain = new ProcedureMain();
+		for (int i = 0; i < procedureDetailDesc.getProcedure_details().size(); i++) {
+			ProcedureMain procedureDesc = new ProcedureMain();
 
-				procedureMain.setPatientVisitId(procedureDetailDesc.getPatient_visit_id());
-				procedureMain.setProcedureId(procedureDetailDesc.getProcedure_details().get(i).getId());
-				procedureMain.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
-				procedureMain.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
-				
-				procedureMainList.add(procedureMain);
-			}
-			for(int i =0; i < procedureMainList.size(); i++)
-			{
-				procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
-			}
-			
-			 ProcedureSuccess procedureSuccess = new ProcedureSuccess();
-			 procedureSuccess.setMessage("Added Successfully");
-			 procedureSuccess.setSuccessFlag(Boolean.TRUE);
-			 
-			 return procedureSuccess;
+			procedureDesc.setPatientVisitId(procedureDetailDesc.getPatient_visit_id());
+			procedureDesc.setProcedureId(procedureDetailDesc.getProcedure_details().get(i).getId());
+			procedureDesc.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
+			procedureDesc.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
+
+			procedureMainList.add(procedureDesc);
+		}
+		for (int i = 0; i < procedureMainList.size(); i++) {
+			procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
+		}
+		LOGGER.info("Data Save Successfully");
+		
+		return new ProcedureSuccess.ProcedureDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE).build();
 	}
 }

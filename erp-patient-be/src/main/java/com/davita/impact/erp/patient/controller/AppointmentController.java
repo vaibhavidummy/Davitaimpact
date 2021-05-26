@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,7 +70,7 @@ public class AppointmentController {
 		LOGGER.info("Inside update Appointment method of AppointmentController");
 		Appointment appointmentStatus = null;
 		appointment.setAppointmentId(appointmentId);
-		appointmentStatus = appointmentService.updateAppointment(appointment);
+		appointmentStatus = appointmentService.updateAppointment(appointment, appointmentId);
 		if(appointmentStatus!=null) {
 			LOGGER.info("Updated Data::{}",appointmentStatus);
 			
@@ -126,23 +127,5 @@ public class AppointmentController {
 		return new ResponseEntity<String>(appointmentIdStatus, HttpStatus.OK);
 	}
 	
-	/*
-	 * @ApiOperation(value =
-	 * "Retrieves the physician Scheduled Appointment for date", response =
-	 * Appointment.class)
-	 * 
-	 * @ApiResponse(code = 200, message = "Successfully retrieved appointment")
-	 * 
-	 * @GetMapping(value="/byphysicianidanddate") public ResponseEntity<List<Date>>
-	 * getScheduledAppointmentbyPhysicianIdByDate( @RequestParam String
-	 * physicianId,@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-	 * LocalDate date) { LOGGER.
-	 * info("Inside get appointment by physcian Id and date method of AppointmentController"
-	 * ); List<Date> appointmentStatus=null; appointmentStatus =
-	 * appointmentService.getPhysicianAppointmentforDate(physicianId, date); return
-	 * new ResponseEntity<List<Date>>(appointmentStatus, HttpStatus.OK);
-	 * 
-	 * }
-	 */
 	
 }

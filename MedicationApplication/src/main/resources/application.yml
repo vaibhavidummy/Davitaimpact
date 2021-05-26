@@ -1,21 +1,28 @@
+server:  port: 9097
 spring:
+ application:
+  name: medication-service
  jpa:
   show-sql: true
  data:
   cassandra: 
-   contact-points: 127.0.0.1
+   contact-points: cassandra-medication
    port: 9042
    keyspace-name: medicationList
    password: cassandra
    username: cassandra
    schema-action: create-if-not-exists
    local-datacenter: datacenter1
-             
-             
-logging:
- level:
-  root:      
-        
+ 
+eureka.client.serviceUrl.defaultZone: http://${service-registry-container:service-registry-container}:8761/eureka
+#eureka.instance.preferIpAddress: true            
+
+client_id : kidclient
+client_credential : kidsecret
+check_authorization_url : http://${AUTH_HOSTNAME:localhost}:${AUTH_PORT:8080}/oauth/check_token
+resources_id : ehealth
+
+
         
             
     
