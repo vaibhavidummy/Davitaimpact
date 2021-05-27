@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,7 @@ import com.inbox.model.KafkaKey;
 import com.inbox.model.KafkaValue;
 import com.inbox.service.ConsumerService;
 
-@CrossOrigin(origins="*",  allowedHeaders="*")
+
 @RestController
 @RequestMapping("/records")
 public class ConsumerController {
