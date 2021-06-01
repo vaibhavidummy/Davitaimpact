@@ -40,7 +40,7 @@ public class ProcedureDetailServiceImplTest {
 	
 	@Mock
 	private ProcedureMain procedureMain;
-
+	
 	@Test
 	public void retrieveAllItems_basic() {
 		//  Given 
