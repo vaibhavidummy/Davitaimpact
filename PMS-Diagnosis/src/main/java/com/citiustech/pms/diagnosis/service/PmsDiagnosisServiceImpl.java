@@ -91,6 +91,7 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		}
 
 		diagnosisRepo.saveAll(diagnosisList);
+		LOGGER.info("Data Save Successfully");
 
 		return new DiagnosisSuccess.DiagnosisDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE).build();
 	}
