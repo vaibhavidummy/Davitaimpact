@@ -39,7 +39,7 @@ class MedicationServiceImplTest {
 
 	@Mock
 	private List<MedicationOnVisit> medicationOnVisitList;
-	
+
 	@Mock
 	private List<Medication> medicationList;
 
@@ -144,17 +144,17 @@ class MedicationServiceImplTest {
 		// when
 		when(medicationVisitRepository.save(medicationOnVisit)).thenThrow(MedicationException.class);
 		// then
-		assertThrows(MedicationException.class, ()->{
+		assertThrows(MedicationException.class, () -> {
 			medicationServiceImpl.saveMedicationForPatientOnVisit(medicationOnVisit);
 		});
 
 	}
-	
+
 	@Test
 	void testGetAllMedicationForPatient() {
 		String patientId = "1";
-		MedicationDto MedicationDtoExpected = new MedicationDto.MedicationDtoBuilder().setMedicationOnVisitList(medicationOnVisitList)
-				.setSuccessFlag(Boolean.TRUE).build();
+		MedicationDto MedicationDtoExpected = new MedicationDto.MedicationDtoBuilder()
+				.setMedicationOnVisitList(medicationOnVisitList).setSuccessFlag(Boolean.TRUE).build();
 		// when
 		when(medicationVisitRepository.getAllMedicationForPatient(patientId)).thenReturn(medicationOnVisitList);
 		MedicationDto MedicationDtoActual = medicationServiceImpl.getAllMedicationForPatient(patientId);
@@ -162,14 +162,14 @@ class MedicationServiceImplTest {
 		assertEquals(MedicationDtoExpected.getMedicationList(), MedicationDtoActual.getMedicationList());
 
 	}
-	
+
 	@Test
 	void testGetAllMedicationForPatient_ThrowsException() {
 		String patientId = "1";
 		// when
 		when(medicationVisitRepository.getAllMedicationForPatient(patientId)).thenThrow(MedicationException.class);
 		// then
-		assertThrows(MedicationException.class, ()->{
+		assertThrows(MedicationException.class, () -> {
 			medicationServiceImpl.getAllMedicationForPatient(patientId);
 		});
 

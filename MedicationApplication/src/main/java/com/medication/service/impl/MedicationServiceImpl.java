@@ -45,7 +45,7 @@ public class MedicationServiceImpl {
 		Medication savedMedication = null;
 		try {
 			savedMedication = medicationRepository.save(medication);
-			logger.info("Medication Saved successfully");
+			logger.info("Medication Saved successfully {}",medication);
 		} catch (Exception ex) {
 			throw new MedicationException("Medication Data not saved");
 		}
@@ -63,7 +63,7 @@ public class MedicationServiceImpl {
 		MedicationOnVisit savedMedicationOnVisit = null;
 		try {
 			savedMedicationOnVisit = medicationVisitRepository.save(medicationOnVisit);
-			logger.info("MedicationOnVisit Saved successfully");
+			logger.info("MedicationOnVisit Saved successfully {}",medicationOnVisit);
 		} catch (Exception ex) {
 			throw new MedicationException("MedicationOnVisit Data not saved");
 		}
