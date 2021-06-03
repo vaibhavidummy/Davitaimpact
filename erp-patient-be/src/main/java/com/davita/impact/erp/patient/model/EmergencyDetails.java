@@ -1,6 +1,5 @@
 package com.davita.impact.erp.patient.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
