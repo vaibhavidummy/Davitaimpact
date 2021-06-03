@@ -25,37 +25,4 @@ public class AuditUDT {
 	@Column(value = "created_by")
 	private String createdBy;
 
-
-	}
-
-
-
-/*
- * @Getter
- * 
- * @Setter
- * 
- * @Column(value = "last_modified_by") private String lastModifiedBy;
- */
-
-/*
- * @Getter
- * 
- * @Setter
- * 
- * @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
- * 
- * @LastModifiedDate
- * 
- * @Column(value = "last_updated_date") private LocalDateTime lastUpdatedDate;
- */
-
-/*@Transient
-@Getter
-@Setter
-private boolean isNew;
-
-public void setCreatedDate(LocalDateTime createdDate) {
-	if (this.isNew()) {
-		this.createdDate = createdDate;
-	}*/
+}
