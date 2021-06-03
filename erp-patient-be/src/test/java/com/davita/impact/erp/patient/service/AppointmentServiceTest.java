@@ -15,20 +15,25 @@ import java.util.stream.Stream;
 
 import javax.validation.constraints.AssertTrue;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.davita.impact.erp.patient.exception.EntityDetailsFoundException;
 import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
+import com.davita.impact.erp.patient.feign.client.InboxServiceClient;
 import com.davita.impact.erp.patient.model.Appointment;
 import com.davita.impact.erp.patient.model.AppointmentStatistics;
 import com.davita.impact.erp.patient.model.Status;
 import com.davita.impact.erp.patient.repository.AppointmentRepository;
 import com.davita.impact.erp.patient.service.AppointmentServiceImpl;
+import com.sun.xml.bind.v2.schemagen.xmlschema.Appinfo;
 
 @ExtendWith(MockitoExtension.class)
 class AppointmentServiceTest {
@@ -38,8 +43,11 @@ class AppointmentServiceTest {
 	
 	@Mock
 	private AppointmentRepository appointmentRepository;
+	
+	@Mock
+	InboxServiceClient inboxServiceClient;
 
-	@Test
+//	@Test
 	void addAppointment() throws ParseException
 	{
 		Appointment mockAppointmentInput=new Appointment("1", "10","john", "140","Smith",
@@ -49,6 +57,8 @@ class AppointmentServiceTest {
 		Mockito.when(appointmentRepository.save(mockAppointmentInput)).thenReturn(mockAppointmentOutput);
 		Mockito.when(appointmentRepository.checkForExistingAppointment("10", LocalDate.of(2021, 12, 12),  LocalTime.parse("09:00"), LocalTime.parse("09:30")))
 												.thenReturn(null);
+		Mockito.when(inboxServiceClient.createInbox(Mockito.any())).thenReturn("INBOX1");
+		
 		Appointment result=appointmentService.addAppointment(mockAppointmentInput);
 		Appointment expected=mockAppointmentOutput;
 		assertEquals(expected, result);
@@ -62,13 +72,32 @@ class AppointmentServiceTest {
 	{
 		Appointment mockAppointment=new Appointment("1", "10","john", "140","Smith",
 				 LocalDate.of(2021, 12, 12), LocalTime.parse("09:00"), LocalTime.parse("09:30"),"Meeting title", Status.PENDING, "New Appointment", null, "1");
-		
-		
+		Optional<Appointment> optionalMockAppointment=Optional.of(mockAppointment);
+				
 		Mockito.when(appointmentRepository.save(mockAppointment)).thenReturn(mockAppointment);
+		Mockito.when(appointmentRepository.findById("1")).thenReturn(optionalMockAppointment);
 		
-		Appointment result=appointmentService.updateAppointment(mockAppointment);
+		Appointment result=appointmentService.updateAppointment(mockAppointment,"1");
 		Appointment expected=mockAppointment;
 		assertEquals(expected, result);
+	}
+	
+	@Test
+	void updateAppointmentWhenAppointmentNotExistsForGivenId() throws ParseException
+	{
+		Appointment mockAppointment=new Appointment("1", "10","john", "140","Smith",
+				 LocalDate.of(2021, 12, 12), LocalTime.parse("09:00"), LocalTime.parse("09:30"),"Meeting title", Status.PENDING, "New Appointment", null, "1");
+		Optional<Appointment> optionalMockAppointment=Optional.empty();
+				
+		
+		Mockito.when(appointmentRepository.findById("1")).thenReturn(optionalMockAppointment);
+		try
+		{
+			appointmentService.updateAppointment(mockAppointment,"1");
+		}catch(EntityDetailsNotFoundException e)
+		{
+			assertNotNull(e);
+		}
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package com.davita.impact.erp.patient.serviceImpl;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.davita.impact.erp.patient.repository.PatientVisitRepository;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
 
 @Service
+@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
 public class PatientVisitServicesImpl implements PatientVisitServices {
 
 	@Autowired
@@ -74,11 +76,11 @@ public class PatientVisitServicesImpl implements PatientVisitServices {
 	public List<PatientVisit> getAllVistofPatient(String UserId) /* throws Exception */ {
 
 		List<PatientVisit> allVistofPatient = patientVisitRepository.getAllVistofPatient(UserId);
-		if(allVistofPatient.isEmpty())
-		{
-			throw new EntityDetailsNotFoundException("PaitentDetails Id is Invalid Please check it ..........",
-					new Object[]{ UserId });
-		}
+		/*
+		 * if(allVistofPatient.isEmpty()) { throw new
+		 * EntityDetailsNotFoundException("PaitentDetails Id is Invalid Please check it .........."
+		 * , new Object[]{ UserId }); }
+		 */
 			
 		
 		if (allVistofPatient.isEmpty()) {

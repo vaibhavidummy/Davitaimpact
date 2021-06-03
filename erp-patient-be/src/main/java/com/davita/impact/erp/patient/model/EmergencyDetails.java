@@ -70,7 +70,7 @@ public class EmergencyDetails {
 
 	@NotBlank(message = "Email field is required")
 	@Email
-	@Column(name="emergency_contact_email_id",nullable = false, unique = true)
+	@Column(name="emergency_contact_email_id",nullable = false)
 	private String mailId;
 
 	@NotNull

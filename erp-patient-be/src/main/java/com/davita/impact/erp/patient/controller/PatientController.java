@@ -8,41 +8,28 @@ package com.davita.impact.erp.patient.controller;
 
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.davita.impact.erp.patient.comman.ResponseOnOk;
 import com.davita.impact.erp.patient.model.Allergies;
 import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
-import com.davita.impact.erp.patient.model.PatientVisit;
-import com.davita.impact.erp.patient.repository.PatientRepository;
 import com.davita.impact.erp.patient.service.LanguageServices;
 import com.davita.impact.erp.patient.service.PatientServices;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
@@ -54,7 +41,6 @@ import io.swagger.annotations.ApiResponse;
 @RestController
 @Api(value = "Patient Details service controller")
 @RequestMapping(value = "/healthcare")
-@CrossOrigin(origins="*", allowedHeaders="*")
 public class PatientController {
 
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(PatientController.class);
@@ -72,23 +58,14 @@ public class PatientController {
 	
 	
 
-	/*
-	 * @PostMapping("/patient/")
-	 * 
-	 * @ResponseStatus(code =HttpStatus.ACCEPTED) public
-	 * ResponseEntity<PatientDetails> addPatientDetails(@Valid @RequestBody
-	 * PatientDetails patient , BindingResult result) {
-	 * //LOGGER.debug("inside addPatientDetails"); PatientDetails addNewPatients =
-	 * patientServices.addNewPatient(patient); return new
-	 * ResponseEntity<PatientDetails>(addNewPatients, HttpStatus.OK); }
-	 */
-
+	
+	/* insert new Patainent Details */
 	@PostMapping("/patient/")
 	@ResponseBody
 	@ApiResponse(code = 201, message = "Patient Details Added Successfully", response = ResponseOnOk.class)
 	// @Transactional
-	public ResponseEntity<ResponseOnOk> createUser(@RequestBody PatientDetails patient) {
-		LOGGER.info("Inside createUser method of PatientController");
+	public ResponseEntity<ResponseOnOk> createUser(@Valid @RequestBody PatientDetails patient) {
+		LOGGER.info("Inside createUser method of PatientController For Patient Name >>> "+patient.getBasicDetails().getFirstName());
 		PatientDetails addNewPatients = patientServices.addNewPatient(patient);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(addNewPatients.getId());
@@ -101,30 +78,15 @@ public class PatientController {
 		// return addNewPatients.getId();
 	}
 
-	/*
-	 * @PutMapping("/patient/{userid}") //@Transactional public ResponseEntity<Map>
-	 * updatePatientDetails(@Valid @RequestBody PatientDetails patient
-	 * , @PathVariable("userid") String id, BindingResult result) {
-	 * Optional<PatientDetails> findById =
-	 * patientRepository.findById(patient.getId()); if(!findById.isPresent()) return
-	 * ResponseEntity.notFound().build(); PatientDetails updatePatient =
-	 * patientServices.updatePatient(patient); Map map = new HashMap();
-	 * map.put("status",200);
-	 * map.put("message","Patient Details Update Successfully");
-	 * map.put("id",updatePatient.getId()); Map result1 = new HashMap();
-	 * result1.put("result",map); return new ResponseEntity<Map>(result1,
-	 * HttpStatus.OK);
-	 * 
-	 * }
-	 */
-
+	
+	/* update patient Details */
 	@PutMapping("/patient/")
 	@ResponseBody
 	@ApiResponse(code = 200, message = "Patient Details Added Successfully", response = ResponseOnOk.class)
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> updatePatientDetails(@Valid @RequestBody PatientDetails patient)
 			throws Exception {
-		LOGGER.info("Inside updatePatientDetails method of PatientController");
+		LOGGER.info("Inside updatePatientDetails method of PatientController for PatientDetails Id >>>"+patient.getId());
 		PatientDetails updatePatient = patientServices.updatePatient(patient);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(updatePatient.getId());
@@ -134,15 +96,18 @@ public class PatientController {
 
 	}
 
-	@GetMapping("/patient/{userid}")
-	public ResponseEntity<PatientDetails> getPatientDetailsByID(@PathVariable("userid") String id) {
-		LOGGER.info("Inside getPatientDetailsByID method of PatientController");
+	
+	/* get  Details of Specific Patient */
+	@GetMapping("/patient/{patientID}")
+	public ResponseEntity<PatientDetails> getPatientDetailsByID(@PathVariable("patientID") String id) {
+		LOGGER.info("Inside getPatientDetailsByID method of PatientController fro PatientId >>> "+id);
 		// LOGGER.info("getPatientDetailsByID...");
 		PatientDetails patientById = patientServices.getPatientById(id);
 		return new ResponseEntity<PatientDetails>(patientById, HttpStatus.OK);
 
 	}
 
+	/* for fetch all patientDetails */
 	@GetMapping("/patient/")
 	public List<PatientDetails> getAllPatientDetails() {
 		LOGGER.info("Inside getAllPatientDetails method of PatientController");
@@ -168,59 +133,6 @@ public class PatientController {
 		return allLanguageKnown;
 	}
 
-	/*
-	 * Patient VisiteDetails
-	 */
-
-	/*
-	 * @ResponseBody
-	 * 
-	 * @GetMapping("/visitdetails") public List<PatientVisitDetails>
-	 * getAllVisitDetails() { List<PatientVisitDetails> allVisitDetails =
-	 * patientVisitDetailsServices.getAllVisitDetails(); return allVisitDetails; }
-	 * 
-	 * @GetMapping("/visitdetails/{patientId}")
-	 * 
-	 * @ResponseBody public List<PatientVisitDetails>
-	 * getVisitDetailsByPatientId(@PathVariable("patientId") int id) {
-	 * List<PatientVisitDetails> patientVisitDetailsByID =
-	 * patientVisitDetailsServices.getPatientVisitDetailsByID(id); return
-	 * patientVisitDetailsByID; }
-	 * 
-	 * @GetMapping("/visitdetails/{patientvisitId}")
-	 * 
-	 * @ResponseBody public PatientVisitDetails
-	 * getVisitDetailsByPatientVisitId(@PathVariable("patientvisitId") int visitid)
-	 * { PatientVisitDetails patientVisitDetailsByVisitID =
-	 * patientVisitDetailsServices.getPatientVisitDetailsByVisitID(visitid); return
-	 * patientVisitDetailsByVisitID; }
-	 */
-
-	
-/* Create Patient Visit */
-	
-	/*
-	 * @PostMapping("/createVisitId")
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @ApiResponse(code = 200, message = "Patient Details Added Successfully",
-	 * response = ResponseOnOk.class) public ResponseEntity<ResponseOnOk>
-	 * createPatientVisit(@Valid @RequestBody PatientVisit patientvisit) throws
-	 * Exception {
-	 * 
-	 * PatientVisit cretevisitId = patientVisitServices.cretevisitId(patientvisit);
-	 * ResponseOnOk responseOnOk = new ResponseOnOk();
-	 * responseOnOk.setId(cretevisitId.getId());
-	 * responseOnOk.setMessage("Patient Visit Id Created Successfully");
-	 * responseOnOk.setStatus(201); return new
-	 * ResponseEntity<ResponseOnOk>(responseOnOk, HttpStatus.OK);
-	 * 
-	 * }
-	 */
-	
-	
-	
 	
 	/*
 	 * Any instance of RuntimeException within the endpoint functions and return a

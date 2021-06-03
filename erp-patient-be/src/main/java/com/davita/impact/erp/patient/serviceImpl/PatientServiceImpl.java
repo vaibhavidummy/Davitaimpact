@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
+import com.davita.impact.erp.patient.feign.client.UdateUserStatus;
+import com.davita.impact.erp.patient.feign.client.UdateUserStatusFallbackFactory;
 import com.davita.impact.erp.patient.model.Allergies;
 import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
@@ -23,9 +25,12 @@ import com.davita.impact.erp.patient.repository.PatientRepository;
 import com.davita.impact.erp.patient.service.PatientServices;
 
 @Service
-//@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
+@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
 public class PatientServiceImpl implements PatientServices {
 
+	@Autowired
+	UdateUserStatus udateUserStatus;
+	
 	@Autowired
 	PatientRepository patientRepository;
 	@Autowired
@@ -57,27 +62,46 @@ public class PatientServiceImpl implements PatientServices {
 			allergiesSet.add(allergies);
 		});
 		patient.setAllergiesObject(allergiesSet);
-
+		PatientDetails addedPatient = patientRepository.save(patient);
+		
 		/*
-		 * if( patient.getProperty() == null) throw new IllegalArgumentException();
+		 * if(addedPatient==null) throw new
+		 * EntityDetailsNotFoundException("Patient  Details Not Save ", new Object[]{
+		 * patient.getBasicDetails().getFirstName() }); Boolean udpateStatusAtAdmin =
+		 * udateUserStatus.afterFirstAuthParamterChange(false, false,
+		 * patient.getUser_id_fk()); if(udpateStatusAtAdmin==false) throw new
+		 * EntityDetailsNotFoundException("Patient  Details Not Save  due to some admin Services Issue"
+		 * , new Object[]{ patient.getBasicDetails().getFirstName() });
 		 */
 
-		PatientDetails addedPatient = patientRepository.save(patient);
+
+		/*
+		 * ------------------- Yet To test following  start Code -------------------
+		 */
+		
+		/*
+		 * if (addedPatient==null) { // return ResponseEntity.notFound().build(); throw
+		 * new
+		 * EntityDetailsNotFoundException("Pataient Details are not save some issue is there..."
+		 * , new Object[]{ patient.getBasicDetails().getFirstName() }); }
+		 */
+		
+		/*
+		 * ------------------- Yet To test following  End Code -------------------
+		 */
+		
+		
 		return addedPatient;
 		// return null;
 	}
 
+	/* update patient Details */
 	@Override
 	@Transactional
 	public PatientDetails updatePatient(PatientDetails patient) throws Exception {
 
 		Optional<PatientDetails> findById2 = patientRepository.findById(patient.getId());
 
-		// Optional<PatientDetails> findById =
-		// patientRepository.findById(patient.getId());
-
-		
-		
 		if (!findById2.isPresent()) {
 			// return ResponseEntity.notFound().build();
 			throw new EntityDetailsNotFoundException("Id not found",
@@ -108,6 +132,7 @@ public class PatientServiceImpl implements PatientServices {
 		return save;
 	}
 
+	/* get Specific Pataient Details */
 	@Override
 	@Transactional
 	public PatientDetails getPatientById(String id) {
@@ -130,11 +155,7 @@ public class PatientServiceImpl implements PatientServices {
 		return findAll;
 	}
 
-	@Override
-	public PatientDetails addNewAllergy(Allergies allergies, String patientDetailsid) {
 
-		return null;
-	}
 
 	@Override
 	public PatientDetails findPatientbyId(String id) {
@@ -146,6 +167,12 @@ public class PatientServiceImpl implements PatientServices {
 		}
 		PatientDetails patientDetails = findById.get();
 		return patientDetails;
+	}
+
+	@Override
+	public PatientDetails addNewAllergy(Allergies allergies, String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

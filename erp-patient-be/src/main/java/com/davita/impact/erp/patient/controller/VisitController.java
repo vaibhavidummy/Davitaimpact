@@ -24,16 +24,17 @@ import org.springframework.web.bind.annotation.RestController;
 import com.davita.impact.erp.patient.comman.Diagnosis;
 import com.davita.impact.erp.patient.comman.ResponseOnOk;
 import com.davita.impact.erp.patient.comman.VisitDetailsRespons;
+import com.davita.impact.erp.patient.model.Appointment;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.model.PatientVisit;
 import com.davita.impact.erp.patient.repository.PatientVisitRepository;
 import com.davita.impact.erp.patient.service.PatientVisitServices;
 
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 
 @RestController
 @RequestMapping(value = "/healthcare/visit")
-@CrossOrigin(origins="*", allowedHeaders="*")
 public class VisitController {
 
 	private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(VisitController.class);
@@ -41,12 +42,16 @@ public class VisitController {
 	PatientVisitServices patientVisitServices;
 	
 	
+	
+	
+	
 	@PostMapping("/createvisit/")
 	@ResponseBody
+	@ApiOperation(value = "Visit Id Created Successfully", response = ResponseOnOk.class)
 	@ApiResponse(code = 201, message = "Visit Id Created Successfully", response = ResponseOnOk.class)
 	// @Transactional
 	public ResponseEntity<ResponseOnOk> createVisit(@RequestBody PatientVisit patientVisit) throws Exception {
-		LOGGER.info("Inside createVisit method of VisitController");
+		LOGGER.info("Inside createVisit method of VisitController for User Id >>> "+patientVisit.getUserIdfk());
 		  PatientVisit creteVisitId = patientVisitServices.creteVisitId(patientVisit);
 		ResponseOnOk responseOnOk = new ResponseOnOk();
 		responseOnOk.setId(creteVisitId.getId());
@@ -65,35 +70,11 @@ public class VisitController {
 	@ResponseBody
 	@ApiResponse(code = 200, message = "Patient Visit Id Details Shown")
 	public List<PatientVisit> showPatientVisit(@PathVariable("userId") String id) throws Exception {
-		LOGGER.info("Inside showPatientVisit method of VisitController");
+		LOGGER.info("Inside showPatientVisit method of VisitController for User Id >>> "+id);
 		List<PatientVisit> allVisitofPatient = patientVisitServices.getAllVistofPatient(id);
 		return allVisitofPatient;
 		
 	}
 	
-	/*
-	 * 
-	 * @GetMapping("/visitDetails/{visitid}") public
-	 * ResponseEntity<VisitDetailsRespons> visitDetails(@PathVariable("visitid")
-	 * String id) throws Exception {
-	 * LOGGER.info("Inside visitDetails method of VisitController"); //
-	 * LOGGER.info("getPatientDetailsByID..."); VisitDetailsRespons
-	 * visitDetailsRespons =new VisitDetailsRespons();
-	 * 
-	 * List<Diagnosis> diagnosisDetails = patientVisitServices.visitDetails(id);
-	 * visitDetailsRespons.setDiagnosis(diagnosisDetails);
-	 * 
-	 * 
-	 * PatientVisit vistDetails = patientVisitServices.getVistDetails(id);
-	 * visitDetailsRespons.setPatientvisit(vistDetails);
-	 * 
-	 * 
-	 * 
-	 * 
-	 * return new ResponseEntity<VisitDetailsRespons>(visitDetailsRespons,
-	 * HttpStatus.OK);
-	 * 
-	 * 
-	 * }
-	 */	
+	
 }

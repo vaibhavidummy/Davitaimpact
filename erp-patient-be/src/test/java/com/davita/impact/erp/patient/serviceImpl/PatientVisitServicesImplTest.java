@@ -60,7 +60,7 @@ class PatientVisitServicesImplTest {
 
 		// when
 
-		when(patientRepository.findById(patientVisit.getUserIdfk())).thenReturn(Optional.of(patientDetails));
+		when(patientRepository.checkUserID(patientVisit.getUserIdfk())).thenReturn(1);
 
 		when(patientVisitRepository.findByUserIdfkAndAppointmentIdfkAndAppointmentStatus(
 				patientVisit.getUserIdfk(), patientVisit.getAppointmentIdfk(),
@@ -107,8 +107,9 @@ class PatientVisitServicesImplTest {
 		PatientDetails patient = new PatientDetails();
 		patient.setId("zzz");
 		
+		
 		Optional<PatientDetails> mockVisitDetails = Optional.empty();
-		when(patientRepository.findById(patientVisit.getUserIdfk())).thenReturn(mockVisitDetails);
+		when(patientRepository.checkUserID(patientVisit.getUserIdfk())).thenReturn(0);
 
 		try {
 			patientVisitServicesImpl.creteVisitId(patientVisit);
