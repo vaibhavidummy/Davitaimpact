@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,7 @@ import com.davita.impact.erp.patient.model.AppointmentStatistics;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, String>{
 	
-	@Query("FROM Appointment a WHERE (a.physicianId= :userId OR a.patientId= :userId) and a.date= :date and a.status IN ('ACCEPTED','PENDING') " )
+	@Query("FROM Appointment a WHERE (a.physicianId= :userId OR a.patientId= :userId) and a.date= :date and a.status IN ('ACCEPTED','PENDING') ORDER BY a.startTime " )
 	public List<Appointment> findAllByUserIdByDate(String userId, LocalDate date);
 
 	@Query("SELECT new com.davita.impact.erp.patient.model.AppointmentStatistics(a.date,COUNT(a)) FROM Appointment a WHERE (a.physicianId= :userId OR a.patientId= :userId) and a.date BETWEEN :startDate and :endDate and a.status IN ('ACCEPTED','PENDING') "

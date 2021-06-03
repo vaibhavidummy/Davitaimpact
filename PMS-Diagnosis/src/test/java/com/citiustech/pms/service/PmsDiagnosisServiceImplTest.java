@@ -41,6 +41,7 @@ public class PmsDiagnosisServiceImplTest {
 	@Mock
 	private Diagnosis diagnosis;
 	
+	
 	@Test
 	public void retrieveAllItemsBasic() {
 		DiagnosisMaster diagnosisMaster = new DiagnosisMaster();
@@ -148,4 +149,101 @@ public class PmsDiagnosisServiceImplTest {
 			pmsDiagnosisServiceImpl.getProcedureByVisitId(str);
 		  });
 	}
+	
+	
+	@Test
+	public void addDiagnsisImpl() {
+		
+		Diagnosis diagnosisExp = new Diagnosis();
+		diagnosisExp.setName("A");
+		diagnosisExp.setDiagonosisId("101");
+		diagnosisExp.setDescription("A");
+		diagnosisExp.setCreated_by("admin");
+		diagnosisExp.setPatient_visit_id("P102");
+		
+		when(diagnosisRepo.save(diagnosisExp)).thenReturn(diagnosisExp);
+		
+	 	Diagnosis diagnosisActual = pmsDiagnosisServiceImpl.addDiagnosis(diagnosisExp);
+	 
+		assertEquals(diagnosisExp , diagnosisActual);
+	}
+	
+	@Test
+	public void checkAddDiagnosisId() {
+		
+		Diagnosis procedureMainExp = new Diagnosis();
+		procedureMainExp.setDiagonosisId(null);
+		
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(procedureMainExp);
+		  });	
+	 
+	}
+	
+	@Test
+	public void checkAddDiagnosisIdEmpty() {
+		
+		Diagnosis procedureMainExp = new Diagnosis();
+		procedureMainExp.setDiagonosisId(null);
+		procedureMainExp.setDiagonosisId("");
+		
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(procedureMainExp);
+		  });	
+	 
+	}
+
+	
+	@Test
+	public void checkAddDiagnosisName() {
+
+		Diagnosis procedureMainExp = new Diagnosis();
+		procedureMainExp.setDiagonosisId("P101");
+		procedureMainExp.setName(null);
+
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(procedureMainExp);
+		  });	
+
+	}
+	
+	@Test
+	public void checkAddDiagnosisNameEmpty() {
+
+		Diagnosis procedureMainExp = new Diagnosis();
+		procedureMainExp.setDiagonosisId("P101");
+		procedureMainExp.setName("");
+
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(procedureMainExp);
+		  });	
+
+	}
+	
+	@Test
+	public void checkAddDiagnosisDescription() {
+		
+		Diagnosis procedureMainExp = new Diagnosis();
+		procedureMainExp.setDiagonosisId("P101");
+		procedureMainExp.setName("A");
+		procedureMainExp.setDescription(null);
+		
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(procedureMainExp);
+		  });		
+	}
+	
+	@Test
+	public void checkAddDiagnosisDescriptionEmpty() {
+		
+		Diagnosis diagnosisMainExp = new Diagnosis();
+		diagnosisMainExp.setDiagonosisId("P101");
+		diagnosisMainExp.setName("A");
+		diagnosisMainExp.setDescription("");
+		
+		Assertions.assertThrows(DiagnosisException.class, () -> {
+			pmsDiagnosisServiceImpl.addDiagnosis(diagnosisMainExp);
+		  });		
+	}
+		
 }

@@ -12,22 +12,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.davita.impact.erp.patient.exception.EntityDetailsNotFoundException;
+import com.davita.impact.erp.patient.feign.client.UdateUserStatus;
 import com.davita.impact.erp.patient.model.Allergies;
 import com.davita.impact.erp.patient.model.LanguageKnown;
 import com.davita.impact.erp.patient.model.PatientDetails;
 import com.davita.impact.erp.patient.repository.AllergiesRepo;
 import com.davita.impact.erp.patient.repository.LanguageKnownRepository;
+import com.davita.impact.erp.patient.repository.LanguageRepo;
 import com.davita.impact.erp.patient.repository.PatientRepository;
 import com.davita.impact.erp.patient.service.PatientServices;
 
 @Service
-//@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
+@Transactional(rollbackFor = Exception.class, noRollbackFor = FileNotFoundException.class)
 public class PatientServiceImpl implements PatientServices {
 
 	@Autowired
+	UdateUserStatus udateUserStatus;
+	
+	@Autowired
 	PatientRepository patientRepository;
 	@Autowired
-	LanguageKnownRepository languageKnownRepository;
+	LanguageRepo languageKnownRepository;
 
 	@Autowired
 	AllergiesRepo allergiesRepo;
@@ -55,28 +61,31 @@ public class PatientServiceImpl implements PatientServices {
 			allergiesSet.add(allergies);
 		});
 		patient.setAllergiesObject(allergiesSet);
-
-		/*
-		 * if( patient.getProperty() == null) throw new IllegalArgumentException();
-		 */
-
 		PatientDetails addedPatient = patientRepository.save(patient);
+		
+		if(addedPatient==null)
+			throw new EntityDetailsNotFoundException("Patient  Details Not Save ",
+					new Object[]{ patient.getBasicDetails().getFirstName() });
+		Boolean udpateStatusAtAdmin = udateUserStatus.afterFirstAuthParamterChange(false, false, patient.getUser_id_fk());
+		if(udpateStatusAtAdmin==false)
+			throw new EntityDetailsNotFoundException("Patient  Details Not Save  due to some admin Services Issue",
+					new Object[]{ patient.getBasicDetails().getFirstName() });
+		
 		return addedPatient;
 		// return null;
 	}
 
+	/* update patient Details */
 	@Override
 	@Transactional
 	public PatientDetails updatePatient(PatientDetails patient) throws Exception {
 
 		Optional<PatientDetails> findById2 = patientRepository.findById(patient.getId());
 
-		// Optional<PatientDetails> findById =
-		// patientRepository.findById(patient.getId());
-
 		if (!findById2.isPresent()) {
 			// return ResponseEntity.notFound().build();
-			throw new Exception("No Id Found in DB");
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ patient.getId() });
 		}
 
 		List<Integer> lagid = patient.getLanguageKnown();
@@ -103,10 +112,18 @@ public class PatientServiceImpl implements PatientServices {
 		return save;
 	}
 
+	/* get Specific Pataient Details */
 	@Override
 	@Transactional
 	public PatientDetails getPatientById(String id) {
 		Optional<PatientDetails> findById = patientRepository.findById(id);
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ id });
+		}
+		
+		
 		PatientDetails patient = findById.get();
 		return patient;
 	}
@@ -118,17 +135,24 @@ public class PatientServiceImpl implements PatientServices {
 		return findAll;
 	}
 
-	@Override
-	public PatientDetails addNewAllergy(Allergies allergies, String patientDetailsid) {
 
-		return null;
-	}
 
 	@Override
 	public PatientDetails findPatientbyId(String id) {
 		Optional<PatientDetails> findById = patientRepository.findById(id);
+		if (!findById.isPresent()) {
+			// return ResponseEntity.notFound().build();
+			throw new EntityDetailsNotFoundException("Id not found",
+					new Object[]{ id });
+		}
 		PatientDetails patientDetails = findById.get();
 		return patientDetails;
+	}
+
+	@Override
+	public PatientDetails addNewAllergy(Allergies allergies, String id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

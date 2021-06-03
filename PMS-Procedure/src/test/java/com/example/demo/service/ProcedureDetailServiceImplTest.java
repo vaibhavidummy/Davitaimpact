@@ -40,7 +40,7 @@ public class ProcedureDetailServiceImplTest {
 	
 	@Mock
 	private ProcedureMain procedureMain;
-
+	
 	@Test
 	public void retrieveAllItems_basic() {
 		//  Given 
@@ -120,7 +120,7 @@ public class ProcedureDetailServiceImplTest {
 		List<ProcedureMain> getPatientVisitId = new ArrayList<>();
 
 		ProcedureMain procedureMain = new ProcedureMain();
-		procedureMain.setProcedureId("0001");
+		procedureMain.setProcedureId("1");
 		procedureMain.setName("ABC");
 		getPatientVisitId.add(procedureMain);
 
@@ -191,6 +191,18 @@ public class ProcedureDetailServiceImplTest {
 	}
 	
 	@Test
+	public void checkAddProcedureProcedureIdempty() {
+		
+		ProcedureMain procedureMainExp = new ProcedureMain();
+		procedureMainExp.setProcedureId("");
+		
+		Assertions.assertThrows(ProcedureException.class, () -> {
+			procedureDetailServiceImpl.addProcedure(procedureMainExp);
+		  });	
+	 
+	}
+	
+	@Test
 	public void checkAddProcedureName() {
 
 		ProcedureMain procedureMainExp = new ProcedureMain();
@@ -204,12 +216,39 @@ public class ProcedureDetailServiceImplTest {
 	}
 	
 	@Test
+	public void checkAddProcedureNameEmpty() {
+
+		ProcedureMain procedureMainExp = new ProcedureMain();
+		procedureMainExp.setProcedureId("P101");
+		procedureMainExp.setName("");
+
+		Assertions.assertThrows(ProcedureException.class, () -> {
+			procedureDetailServiceImpl.addProcedure(procedureMainExp);
+		});
+
+	}
+
+	
+	@Test
 	public void checkAddProcedureDescription() {
 		
 		ProcedureMain procedureMainExp = new ProcedureMain();
 		procedureMainExp.setProcedureId("P101");
 		procedureMainExp.setName("A");
-		procedureMainExp.setName("");
+		procedureMainExp.setDescription(null);
+		
+		Assertions.assertThrows(ProcedureException.class, () -> {
+			procedureDetailServiceImpl.addProcedure(procedureMainExp);
+		  });	
+	}
+	
+	@Test
+	public void checkAddProcedureDescriptionEmpty() {
+		
+		ProcedureMain procedureMainExp = new ProcedureMain();
+		procedureMainExp.setProcedureId("P101");
+		procedureMainExp.setName("A");
+		procedureMainExp.setDescription("");
 		
 		Assertions.assertThrows(ProcedureException.class, () -> {
 			procedureDetailServiceImpl.addProcedure(procedureMainExp);

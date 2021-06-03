@@ -38,7 +38,7 @@ public class Diagnosis implements Serializable {
 	@Column(updatable = false, nullable = false)
 	private Long seq_id;
 
-	@Column(name = "diagonosisId") // diagonosisId
+	@Column(name = "diagonosisId") 
 	private String diagonosisId;
 
 	@Column(name = "name")
@@ -47,16 +47,12 @@ public class Diagnosis implements Serializable {
 	@Column(name = "description")
 	private String description;
 
-	// ManyToOne
-	// @JoinColumn(name="patient_visit_id", nullable=false)  check and remove the join col if not needed
-	// private Patient_Visit_Id patient_visit_id;
-	
 	@Column(name = "patient_visit_id")
 	private String patient_visit_id;
 
 	@CreatedBy
 	@Column(nullable = false, updatable = false)
-	private String created_by = "sweeta";
+	private String created_by = "admin";
 
 	@CreatedDate
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
@@ -66,7 +62,7 @@ public class Diagnosis implements Serializable {
 
 	@LastModifiedBy
 	@Column(nullable = false)
-	private String last_modified_by = "sweeta";
+	private String last_modified_by = "admin";
 
 	@LastModifiedDate
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")

@@ -1,5 +1,6 @@
 FROM openjdk:8-jdk-alpine
 
-ADD target/service-registration-and-discovery-service-0.0.1-SNAPSHOT.jar service-registration-and-discovery-service-0.0.1-SNAPSHOT.jar
+COPY target/service-registry-docker.jar service-registry-docker.jar
 
-ENTRYPOINT ["sh","-c","java -jar /service-registration-and-discovery-service-0.0.1-SNAPSHOT.jar"]
+EXPOSE 8761
+ENTRYPOINT ["java", "-jar", "service-registry-docker.jar"]

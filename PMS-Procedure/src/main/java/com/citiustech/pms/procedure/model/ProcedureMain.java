@@ -48,7 +48,7 @@ public class ProcedureMain implements Serializable{
 	private String description;
 	
 	@CreatedBy
-    @Column(nullable = true , updatable = false)
+    @Column(nullable = false , updatable = false)
     private String createdBy="admin";
 
 	@CreatedDate
@@ -69,10 +69,5 @@ public class ProcedureMain implements Serializable{
     
     @Column(nullable = false)
     private String patientVisitId;
-    
-    
- // ManyToOne
- 	// @JoinColumn(name="patient_visit_id", nullable=false)  check and remove the join col if not needed
- 	// private Patient_Visit_Id patientVisitId;
     
 }

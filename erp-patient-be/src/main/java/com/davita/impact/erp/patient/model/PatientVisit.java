@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.davita.impact.erp.patient.utilities.Auditable;
+import com.davita.impact.erp.patient.utilities.Auditable_visit;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,22 +25,23 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Entity
-public class PatientVisit  extends Auditable<String>{
+public class PatientVisit  extends Auditable_visit<String>{
 
 	@Id
 	@GenericGenerator(name = "patient_visit_id", strategy = "com.davita.impact.erp.patient.utilities.PatientVisitIdGenerator")
 	@GeneratedValue(generator = "patient_visit_id")
 	private String id;
 	
-	private String pataintIdfk;
+	private String userIdfk;
 	
 	private String appointmentIdfk;
 	
 	private boolean appointmentStatus;
 	
 	
-	@ManyToOne
-	private PatientDetails patientDetailsForVisit;
+	/*
+	 * @ManyToOne private PatientDetails patientDetailsForVisit;
+	 */
 	
 	public PatientVisit(){
 		

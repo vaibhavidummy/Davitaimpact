@@ -85,7 +85,7 @@ public class Appointment extends Auditable<String> implements Serializable {
 	private LocalTime startTime;
 	
 	
-	@NotNull(message="Appointment end time is required")
+	@NotNull(message="Appointment End time is required")
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="HH:mm")
 	@JsonDeserialize(using = LocalTimeDeserializer.class)
     @JsonSerialize(using = LocalTimeSerializer.class)

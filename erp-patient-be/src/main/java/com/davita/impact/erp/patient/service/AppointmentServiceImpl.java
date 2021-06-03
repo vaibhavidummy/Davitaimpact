@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.ServiceNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +28,8 @@ public class AppointmentServiceImpl implements AppointmentService{
 	@Autowired
 	AppointmentRepository appointmentRepository;
 	
-	//@Autowired
-	//InboxServiceClient inboxServiceClient;
+	@Autowired
+	InboxServiceClient inboxServiceClient;
 
 	@Override
 	public Appointment addAppointment(Appointment appointment){
@@ -35,21 +37,23 @@ public class AppointmentServiceImpl implements AppointmentService{
 		if(checkForExistingAppointment(appointment) == false)
 		{	
 		appointmentStatus = appointmentRepository.save(appointment);
-		/*
-		 * Inbox inbox = new Inbox(null, appointmentStatus.getPhysicianName(),
-		 * "appointment/others", "upcoming appointment", appointmentStatus.getStatus(),
-		 * appointmentStatus.getStartTime(), appointmentStatus.getDate(),
-		 * appointmentStatus.getAppointmentId()); String inboxId=
-		 * inboxServiceClient.createInbox(inbox); System.out.println("inboxId  : "+
-		 * inboxId);
-		 */
 		}
 		return appointmentStatus;
 	}
+	
 
 	@Override
-	public Appointment updateAppointment(Appointment appointment) {
-		return appointmentRepository.save(appointment);
+	public Appointment updateAppointment(Appointment appointment,String appointmentId) {
+		
+		Appointment appointmentStatus=null;
+		Optional<Appointment> oldAppointment = appointmentRepository.findById(appointmentId);
+        if(oldAppointment.isPresent()==false){
+        	throw new EntityDetailsNotFoundException("Appointment not present for given appointment Id",
+					new Object[]{appointmentId });
+		}
+		 appointmentStatus=appointmentRepository.save(appointment);
+        
+		return appointmentStatus;
 	}
 
 	@Override
@@ -120,14 +124,4 @@ public class AppointmentServiceImpl implements AppointmentService{
 	}
 	
 	
-	/*
-	 * @Override public List<Date> getPhysicianAppointmentforDate(String
-	 * physicianId,LocalDate date){ List<Date> result=null;
-	 * result=appointmentRepository.findAllByPhysicianIdByDate(physicianId,date);
-	 * if(result.isEmpty()) { throw new
-	 * EntityDetailsNotFoundException("Appointment not present for given date", new
-	 * Object[]{ physicianId, date}); }
-	 * 
-	 * return result; }
-	 */
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.io.IOException;
@@ -19,18 +20,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.client.RestTemplate;
 
 import com.davita.impact.erp.patient.controller.AppointmentController;
 import com.davita.impact.erp.patient.model.Appointment;
@@ -40,15 +49,13 @@ import com.davita.impact.erp.patient.service.AppointmentService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-
-//@ImportAutoConfiguration(RefreshAutoConfiguration.class)
+@ContextConfiguration(classes = {AppointmentController.class, AppointmentService.class,RestTemplate.class})
 @WebMvcTest(AppointmentController.class)
-@RunWith(SpringRunner.class)
 class AppointmentControllerTest  {
-
+	
 	@Autowired
 	private MockMvc mockMvc;
+	
 	
 	@MockBean
 	private AppointmentService appointmentService;	
@@ -85,7 +92,7 @@ class AppointmentControllerTest  {
 				  "140","Smith", LocalDate.of(2021, 12, 12), LocalTime.parse("09:00"), LocalTime.parse("09:30"),"Meeting title",
 				  Status.PENDING, "New Appointment", "reason", "1");
 	   
-	   Mockito.when(appointmentService.updateAppointment(Mockito.any())).thenReturn(
+	   Mockito.when(appointmentService.updateAppointment(Mockito.any(),Mockito.any())).thenReturn(
 				  mockAppointment); 
 	  
 	   
