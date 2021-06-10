@@ -36,7 +36,7 @@ public class Diagnosis implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(updatable = false, nullable = false)
-	private Long seq_id;
+	private Long seqId;
 
 	@Column(name = "diagonosisId") 
 	private String diagonosisId;
@@ -48,26 +48,26 @@ public class Diagnosis implements Serializable {
 	private String description;
 
 	@Column(name = "patient_visit_id")
-	private String patient_visit_id;
+	private String patientVisitId;
 
 	@CreatedBy
 	@Column(nullable = false, updatable = false)
-	private String created_by = "admin";
+	private String createdBy = "admin";
 
 	@CreatedDate
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false, updatable = false)
-	private Date creation_on;
+	private Date creationOn;
 
 	@LastModifiedBy
 	@Column(nullable = false)
-	private String last_modified_by = "admin";
+	private String lastModifiedBy = "admin";
 
 	@LastModifiedDate
 	@JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private Date last_modified_on;
+	private Date lastModifiedOn;
 
 }
