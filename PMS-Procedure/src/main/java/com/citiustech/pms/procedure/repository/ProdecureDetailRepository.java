@@ -15,4 +15,6 @@ public interface ProdecureDetailRepository extends JpaRepository<ProcedureMain, 
 
 	@Query(value="SELECT * FROM procedure_main  WHERE patient_visit_id=:patientVisitId", nativeQuery = true )
 	List<ProcedureMain> checkForExistingPatientVisitId(@Param("patientVisitId") String patientVisitId);
+	
+	List<ProcedureMain> findByPatientVisitId(@Param("patientVisitId") String patientVisitId);
 }
