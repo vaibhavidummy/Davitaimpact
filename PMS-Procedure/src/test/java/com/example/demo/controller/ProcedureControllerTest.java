@@ -83,7 +83,7 @@ public class ProcedureControllerTest {
 	@Test
 	public void getProcedureByVisitId()
 	 {
-		String str ="P101";
+		String str = "P101";
 		
 		ProcedureSuccess ProcedureExp = new ProcedureSuccess();
 		

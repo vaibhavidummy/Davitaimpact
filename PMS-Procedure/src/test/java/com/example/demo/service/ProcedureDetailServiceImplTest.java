@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -128,7 +129,7 @@ public class ProcedureDetailServiceImplTest {
 		procedureExp.setSuccessFlag(Boolean.TRUE);
 		procedureExp.setProcedureMain(getPatientVisitId);
 
-		when(prodecureDetailRepository.checkForExistingPatientVisitId(str)).thenReturn(getPatientVisitId);
+		when(prodecureDetailRepository.findByPatientVisitId(str)).thenReturn(getPatientVisitId);
 
 		ProcedureSuccess ProcedureActual = procedureDetailServiceImpl.getProcedureByVisitId(str);
 

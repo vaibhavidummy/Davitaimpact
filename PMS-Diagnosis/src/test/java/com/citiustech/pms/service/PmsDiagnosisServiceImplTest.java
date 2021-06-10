@@ -113,7 +113,7 @@ public class PmsDiagnosisServiceImplTest {
 		String str ="P101";
 		List<Diagnosis> getPatientVisitId = new ArrayList<>();
 		Diagnosis diagnosis = new Diagnosis();
-		diagnosis.setPatient_visit_id("P101");
+		diagnosis.setPatientVisitId("P101");
 		diagnosis.setName("ABC");
 		getPatientVisitId.add(diagnosis);
 		
@@ -121,7 +121,7 @@ public class PmsDiagnosisServiceImplTest {
 		diagnosisExp.setSuccessFlag(Boolean.TRUE);
 		diagnosisExp.setDiagnosis(getPatientVisitId);
 		
-		when(diagnosisRepo.checkForExistingPatientVisitId(str)).thenReturn(getPatientVisitId);
+		when(diagnosisRepo.findByPatientVisitId(str)).thenReturn(getPatientVisitId);
 
 		DiagnosisSuccess ProcedureActual = pmsDiagnosisServiceImpl.getProcedureByVisitId(str);
 
@@ -142,7 +142,7 @@ public class PmsDiagnosisServiceImplTest {
 		String str = "P101";
 		List<Diagnosis> getPatientVisitId = new ArrayList<>();
 		Diagnosis diagnosis = new Diagnosis();
-		diagnosis.setPatient_visit_id(null);
+		diagnosis.setPatientVisitId(null);
 		getPatientVisitId.add(diagnosis);
 		
 		Assertions.assertThrows(DiagnosisException.class, () -> {
@@ -158,8 +158,8 @@ public class PmsDiagnosisServiceImplTest {
 		diagnosisExp.setName("A");
 		diagnosisExp.setDiagonosisId("101");
 		diagnosisExp.setDescription("A");
-		diagnosisExp.setCreated_by("admin");
-		diagnosisExp.setPatient_visit_id("P102");
+		diagnosisExp.setCreatedBy("admin");
+		diagnosisExp.setPatientVisitId("P102");
 		
 		when(diagnosisRepo.save(diagnosisExp)).thenReturn(diagnosisExp);
 		

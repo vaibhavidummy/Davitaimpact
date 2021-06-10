@@ -70,7 +70,7 @@ public class PmsDiagnosisControllerTest {
 		diagnosisExp.setName("A");
 		diagnosisExp.setDiagonosisId("101");
 		diagnosisExp.setDescription("A");
-		diagnosisExp.setSeq_id(101L);
+		diagnosisExp.setSeqId(101L);
 		
 		when(pmsDiagnosisServiceImpl.addDiagnosis(diagnosis)).thenReturn(diagnosisExp);
 		
