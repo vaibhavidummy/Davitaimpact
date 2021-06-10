@@ -14,4 +14,6 @@ public interface DiagnosisRepo extends JpaRepository<Diagnosis, Long> {
 
 	@Query(value="SELECT * FROM diagnosis WHERE patient_visit_id=:patientVisitId", nativeQuery = true )
 	List<Diagnosis> checkForExistingPatientVisitId(@Param("patientVisitId") String patientVisitId);
+	
+	List<Diagnosis> findByPatientVisitId(@Param("patientVisitId") String patientVisitId);
 }

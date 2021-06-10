@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.citiustech.pms.procedure.constants.ErrorConstant;
 import com.citiustech.pms.procedure.exception.ProcedureException;
 import com.citiustech.pms.procedure.model.ProcedureDetail;
 import com.citiustech.pms.procedure.model.ProcedureMain;
@@ -38,11 +39,11 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		LOGGER.info("Get in addProcedure ");
 		
 		if (Objects.isNull(procedureDetail.getProcedureId()) || procedureDetail.getProcedureId().isEmpty() ) {
-			throw new ProcedureException("Procedure Id cannot be Empty or Null");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_ID);
 		} else if (Objects.isNull(procedureDetail.getName()) || procedureDetail.getName().isEmpty()) {
-			throw new ProcedureException(" Procedure Name cannot be Empty or Null");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_NAME);
 		} else if (Objects.isNull(procedureDetail.getDescription()) || procedureDetail.getDescription().isEmpty()) {
-			throw new ProcedureException("Procedure Description cannot be Empty or Null ");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_DESCRIPTION);
 		}
 
 		procedureMain = prodecureDetailRepository.save(procedureDetail);
@@ -57,11 +58,12 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		List<ProcedureMain> getPatientVisitId = new ArrayList<>();
 
 		if (!patientVisitId.isEmpty()) {
-			getPatientVisitId = prodecureDetailRepository.checkForExistingPatientVisitId(patientVisitId);
+			getPatientVisitId = prodecureDetailRepository.findByPatientVisitId(patientVisitId);
 			LOGGER.info("List of Patient Visit Id : {} ",getPatientVisitId);
 			
 			if (getPatientVisitId.isEmpty()) {
-				throw new ProcedureException("Patient Visit Id Not Found");
+				LOGGER.error("Patient Visit Id Not Found in GetPatientVisitId ");
+				throw new ProcedureException(ErrorConstant.PROCEDURE_PATIENT_VISIT_ID);
 			}
 		}
 		return new ProcedureSuccess.ProcedureDto().setProcedureMain(getPatientVisitId).setSuccessFlag(Boolean.TRUE).build();
@@ -74,7 +76,8 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		LOGGER.info("Get Master Data: {} ",procedureMaster);
 		
 		if (procedureMaster.isEmpty()) {
-			throw new ProcedureException("No Data available");
+			LOGGER.error("No Data available in ProcedureMaster");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_GETDATA);
 		}
 		return new ProcedureSuccess.ProcedureDto().setProcedureMaster(procedureMaster).setSuccessFlag(Boolean.TRUE).build();
 	}
@@ -87,9 +90,11 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
 
 		if (procedureDetailDesc.getPatient_visit_id().isEmpty()) {
-			throw new ProcedureException("Patient Visit Id cannot be Empty");
+			LOGGER.error("Patient Visit Id cannot be Empty");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_DETAIL_ID);
 		} else if (procedureDetailDesc.getProcedure_details().isEmpty()) {
-			throw new ProcedureException("Procedure Description cannot be Empty");
+			LOGGER.error("Procedure Description cannot be Empty");
+			throw new ProcedureException(ErrorConstant.PROCEDURE_DETAIL_DESC);
 		}
 		LOGGER.info("Size : {} ",procedureDetailDesc.getProcedure_details().size());
 		

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.citiustech.pms.diagnosis.constants.ErrorConstant;
 import com.citiustech.pms.diagnosis.exception.DiagnosisException;
 import com.citiustech.pms.diagnosis.model.Diagnosis;
 import com.citiustech.pms.diagnosis.model.DiagnosisMaster;
@@ -39,18 +40,17 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		LOGGER.info("Get in addDiagnosis ");
 		
 		if (Objects.isNull(diagnosisAdd.getDiagonosisId()) ||  diagnosisAdd.getDiagonosisId().isEmpty()) {
-			throw new DiagnosisException("Diagnosis Id cannot be Empty or Null");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_ID);
 		} else if (Objects.isNull(diagnosisAdd.getName()) || diagnosisAdd.getName().isEmpty()) {
-			throw new DiagnosisException(" Diagnosis Name cannot be Empty or Null");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_NAME);
 		} else if (Objects.isNull(diagnosisAdd.getDescription()) || diagnosisAdd.getDescription().isEmpty()) {
-			throw new DiagnosisException("Diagnosis Description cannot be Empty or Null");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_DESCRIPTION);
 		}
 
 		diagnosis = diagnosisRepo.save(diagnosisAdd);
 		LOGGER.info("Diagnosis Added Successfully ");
 
 		return diagnosis;
-
 	}	
 
 	@Override
@@ -60,7 +60,8 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		LOGGER.info("Get Master Data: {} ",diagnosisMaster);
 
 		if (diagnosisMaster.isEmpty()) {
-			throw new DiagnosisException("No Data available");
+			LOGGER.error("No Data available in DiagnosisMaster");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_GETDATA);
 		}
 		return new DiagnosisSuccess.DiagnosisDto().setDiagnosisMaster(diagnosisMaster).setSuccessFlag(Boolean.TRUE).build();
 	}
@@ -73,16 +74,18 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		List<Diagnosis> diagnosisList = new ArrayList<>();
 
 		if (diagnosisModel.getPatient_visit_id().isEmpty()) {
-			throw new DiagnosisException("Patient Visit Id cannot be Empty");
+			LOGGER.error("Patient Visit Id cannot be Empty");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_DETAIL_ID);
 		} else if (diagnosisModel.getDiagnosis_details().isEmpty()) {
-			throw new DiagnosisException("Diagnosis Description cannot be Empty");
+			LOGGER.error("Procedure Description cannot be Empty");
+			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_DETAIL_DESC);
 		}
 		LOGGER.info("Size : {} ",diagnosisModel.getDiagnosis_details().size());
 
 		for (int i = 0; i < diagnosisModel.getDiagnosis_details().size(); i++) {
 			Diagnosis diagnosisDesc = new Diagnosis();
 
-			diagnosisDesc.setPatient_visit_id(diagnosisModel.getPatient_visit_id());
+			diagnosisDesc.setPatientVisitId(diagnosisModel.getPatient_visit_id());
 			diagnosisDesc.setDiagonosisId(diagnosisModel.getDiagnosis_details().get(i).getId());
 			diagnosisDesc.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
 			diagnosisDesc.setDescription(diagnosisModel.getDiagnosis_details().get(i).getDescription());
@@ -103,11 +106,12 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 		List<Diagnosis> getPatientVisitId = new ArrayList<>();
 
 		if (!patientVisitId.isEmpty()) {
-			getPatientVisitId = diagnosisRepo.checkForExistingPatientVisitId(patientVisitId);
+			getPatientVisitId = diagnosisRepo.findByPatientVisitId(patientVisitId);
 			LOGGER.info("List of Patient Visit Id : {} ",getPatientVisitId);
 
 			if (getPatientVisitId.isEmpty()) {
-				throw new DiagnosisException("Patient Visit Id Not Found");
+				LOGGER.error("Patient Visit Id Not Found in GetPatientVisitId ");
+				throw new DiagnosisException(ErrorConstant.DIAGNOSIS_PATIENT_VISIT_ID);
 			}
 		}
 		return new DiagnosisSuccess.DiagnosisDto().setDiagnosis(getPatientVisitId).setSuccessFlag(Boolean.TRUE).build();
