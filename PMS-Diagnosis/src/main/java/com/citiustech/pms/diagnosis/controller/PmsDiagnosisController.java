@@ -27,40 +27,28 @@ public class PmsDiagnosisController {
 	
 	@PostMapping("/addDiagnosis")
 	public ResponseEntity<Diagnosis> addDiagnosis(@RequestBody Diagnosis diagnosisDetail) {
-		
 		LOGGER.info("Reached addDiagnosis");
-		
-		Diagnosis addDiagnosisDetail = null;
-		addDiagnosisDetail = pmsDiagnosisService.addDiagnosis(diagnosisDetail);
-		return new ResponseEntity<Diagnosis>(addDiagnosisDetail, HttpStatus.CREATED);
+		return new ResponseEntity<>(pmsDiagnosisService.addDiagnosis(diagnosisDetail), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getalldiagnosis")
     public ResponseEntity<DiagnosisSuccess> getAllDiagnosis() {
-		
 		LOGGER.info("Reached getAllDiagnosis ");
-		
-		DiagnosisSuccess diagnosisSuccess =  pmsDiagnosisService.getAllDiagnosis();
-		return new ResponseEntity<DiagnosisSuccess>(diagnosisSuccess, HttpStatus.OK);
+		return new ResponseEntity<>(pmsDiagnosisService.getAllDiagnosis(), HttpStatus.OK);
     }
 	
 	@GetMapping("/{patientVisitId}")
     public ResponseEntity<DiagnosisSuccess> getDiagnosisByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
 		LOGGER.info("Reached getDiagnosisByVisitId ");
-		
-		DiagnosisSuccess procedureByVisitId =null;
-		procedureByVisitId = pmsDiagnosisService.getProcedureByVisitId(patientVisitId);
-         return new ResponseEntity<DiagnosisSuccess>(procedureByVisitId , HttpStatus.OK);
+         return new ResponseEntity<>(pmsDiagnosisService.getProcedureByVisitId(patientVisitId) , HttpStatus.OK);
     }
 
 	@PostMapping("/diagnosisDetailDesc")
 	public ResponseEntity<DiagnosisSuccess> getDiagnosisDetailDesc(@RequestBody DiagnosisModel diagnosisModel) 
     { 
 		LOGGER.info("Reached getDiagnosisDetailDesc: {} ",diagnosisModel);
-		
-		DiagnosisSuccess diagnosisSuccess =  pmsDiagnosisService.getDiagnosisDescription(diagnosisModel);
-		return new ResponseEntity<DiagnosisSuccess>(diagnosisSuccess, HttpStatus.CREATED);
+		return new ResponseEntity<>(pmsDiagnosisService.getDiagnosisDescription(diagnosisModel), HttpStatus.CREATED);
     }	
 	
 }
