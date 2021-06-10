@@ -1,6 +1,7 @@
 package com.citiustech.pms.procedure.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -26,6 +27,14 @@ public class ProcedureSuccess {
 		private List<ProcedureMaster> procedureMaster;
 		private List<ProcedureMain> procedureMain ;
 		
+		
+		public List<ProcedureMain> getProcedureMain() {
+			return procedureMain;
+		}
+		public ProcedureDto setProcedureMain(List<ProcedureMain> procedureMain) {
+			this.procedureMain = procedureMain;
+			return this;
+		}
 		public String getMessage() {
 			return message;
 		}
@@ -47,13 +56,7 @@ public class ProcedureSuccess {
 			this.procedureMaster = procedureMaster;
 			return this;
 		}
-		public List<ProcedureMain> getProcedureMain() {
-			return procedureMain;
-		}
-		public ProcedureDto setProcedureMain(List<ProcedureMain> procedureMain) {
-			this.procedureMain = procedureMain;
-			return this;
-		}
+		
 		
 		public ProcedureSuccess build()
 		{
