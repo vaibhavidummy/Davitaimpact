@@ -28,39 +28,27 @@ public class ProcedureController {
 	
 	@PostMapping("/addProcedure")
 	public ResponseEntity<ProcedureMain> addProcedure(@RequestBody ProcedureMain procedureMain) {
-		
 		LOGGER.info("Reached addProcedure");
-		
-		ProcedureMain addProcedureDetail = null;
-		addProcedureDetail = procedureDetailService.addProcedure(procedureMain);
-		return new ResponseEntity<ProcedureMain>(addProcedureDetail, HttpStatus.CREATED);
+		return new ResponseEntity<>(procedureDetailService.addProcedure(procedureMain), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/{patientVisitId}")
     public ResponseEntity<ProcedureSuccess> getProcedureByVisitId(@PathVariable("patientVisitId") String patientVisitId) 
     { 
 		LOGGER.info("Reached getProcedureByVisitId: ");
-		
-		ProcedureSuccess procedureByVisitId =null;
-		procedureByVisitId = procedureDetailService.getProcedureByVisitId(patientVisitId);
-         return new ResponseEntity<ProcedureSuccess>(procedureByVisitId , HttpStatus.OK);
+         return new ResponseEntity<>(procedureDetailService.getProcedureByVisitId(patientVisitId) , HttpStatus.OK);
     }
 	
 	@GetMapping("/getallProcedure")
     public ResponseEntity<ProcedureSuccess> getAllProcedure() {
-		
 		LOGGER.info("Reached getAllProcedure: ");
-		
-		ProcedureSuccess procedureSuccess =  procedureDetailService.getAllProcedure();
-		return new ResponseEntity<ProcedureSuccess>(procedureSuccess, HttpStatus.OK);
+		return new ResponseEntity<>(procedureDetailService.getAllProcedure(), HttpStatus.OK);
     }
 	
 	@PostMapping("/procedureDetailDesc")
 	public ResponseEntity<ProcedureSuccess> getProcedureDetailDesc(@RequestBody ProcedureDetail procedureDetail) 
     { 
 		LOGGER.info("Reached getProcedureDetailDesc: {}",procedureDetail);
-		
-		ProcedureSuccess procedureSuccess =  procedureDetailService.getProcedureDescription(procedureDetail);
-		return new ResponseEntity<ProcedureSuccess>(procedureSuccess, HttpStatus.CREATED);
+		return new ResponseEntity<>(procedureDetailService.getProcedureDescription(procedureDetail), HttpStatus.CREATED);
     }	
 }

@@ -4,4 +4,19 @@ public final class ErrorConstant {
 
 	public static final String ADMIN_CONTACT="Plase, Contact Administrator";
 	public static final String MYSQL_DOWN="Plase, My SQL Down";
+	
+	public static final String PROCEDURE_ID="Procedure Id cannot be Empty or Null";
+	
+	public static final String PROCEDURE_NAME="Procedure Name cannot be Empty or Null";
+	
+	public static final String PROCEDURE_DESCRIPTION="Procedure Description cannot be Empty or Null";
+	
+	public static final String PROCEDURE_GETDATA="No Data available";
+	
+	public static final String PROCEDURE_PATIENT_VISIT_ID="Patient Visit Id Not Found";
+	
+	public static final String PROCEDURE_DETAIL_ID="Patient Visit Id cannot be Empty";
+	
+	public static final String PROCEDURE_DETAIL_DESC="Procedure Description cannot be Empty";
+	
 }
