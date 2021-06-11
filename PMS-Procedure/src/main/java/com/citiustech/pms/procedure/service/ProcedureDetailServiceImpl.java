@@ -2,7 +2,7 @@ package com.citiustech.pms.procedure.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +37,18 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureMain addProcedure(ProcedureMain procedureDetail) {
 		LOGGER.info("Get in addProcedure ");
-		
-		if (Objects.isNull(procedureDetail.getProcedureId()) || procedureDetail.getProcedureId().isEmpty() ) {
-			throw new ProcedureException(ErrorConstant.PROCEDURE_ID);
-		} else if (Objects.isNull(procedureDetail.getName()) || procedureDetail.getName().isEmpty()) {
-			throw new ProcedureException(ErrorConstant.PROCEDURE_NAME);
-		} else if (Objects.isNull(procedureDetail.getDescription()) || procedureDetail.getDescription().isEmpty()) {
-			throw new ProcedureException(ErrorConstant.PROCEDURE_DESCRIPTION);
-		}
+
+		String procedureId = Optional.ofNullable(procedureDetail.getProcedureId()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new ProcedureException(ErrorConstant.PROCEDURE_ID));
+		LOGGER.info("procedure Id : {} ", procedureId);
+
+		String procedureName = Optional.ofNullable(procedureDetail.getName()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new ProcedureException(ErrorConstant.PROCEDURE_NAME));
+		LOGGER.info("procedure Name : {} ", procedureName);
+
+		String procedureDescription = Optional.ofNullable(procedureDetail.getDescription()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new ProcedureException(ErrorConstant.PROCEDURE_DESCRIPTION));
+		LOGGER.info("procedure Description : {} ", procedureDescription);
 
 		procedureMain = prodecureDetailRepository.save(procedureDetail);
 		LOGGER.info("Procedure Added Successfully");
@@ -85,7 +89,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public ProcedureSuccess getProcedureDescription(ProcedureDetail procedureDetailDesc) {
-		LOGGER.info("procedureDetailDesc : {} ",procedureDetailDesc);
+		LOGGER.info("procedureDetailDesc : {} ", procedureDetailDesc);
 
 		List<ProcedureMain> procedureMainList = new ArrayList<>();
 
@@ -96,23 +100,22 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
 			LOGGER.error("Procedure Description cannot be Empty");
 			throw new ProcedureException(ErrorConstant.PROCEDURE_DETAIL_DESC);
 		}
-		LOGGER.info("Size : {} ",procedureDetailDesc.getProcedure_details().size());
-		
-		for (int i = 0; i < procedureDetailDesc.getProcedure_details().size(); i++) {
-			ProcedureMain procedureDesc = new ProcedureMain();
+		LOGGER.info("Size : {} ", procedureDetailDesc.getProcedure_details().size());
 
+		procedureDetailDesc.getProcedure_details().stream().forEach(element -> {
+			ProcedureMain procedureDesc = new ProcedureMain();
 			procedureDesc.setPatientVisitId(procedureDetailDesc.getPatient_visit_id());
-			procedureDesc.setProcedureId(procedureDetailDesc.getProcedure_details().get(i).getId());
-			procedureDesc.setName(procedureDetailDesc.getProcedure_details().get(i).getName());
-			procedureDesc.setDescription(procedureDetailDesc.getProcedure_details().get(i).getDescription());
+			procedureDesc.setProcedureId(element.getId());
+			procedureDesc.setName(element.getName());
+			procedureDesc.setDescription(element.getDescription());
 
 			procedureMainList.add(procedureDesc);
-		}
-		for (int i = 0; i < procedureMainList.size(); i++) {
-			procedureMainList.stream().forEach(str -> prodecureDetailRepository.save(str));
-		}
-		LOGGER.info("Data Save Successfully");
-		
-		return new ProcedureSuccess.ProcedureDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE).build();
+		});
+
+		prodecureDetailRepository.saveAll(procedureMainList);
+		LOGGER.info("Data Save Successfully : {} ",procedureMainList);
+
+		return new ProcedureSuccess.ProcedureDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE)
+				.build();
 	}
 }
