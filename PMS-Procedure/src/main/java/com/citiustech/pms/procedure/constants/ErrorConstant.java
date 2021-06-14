@@ -19,4 +19,18 @@ public final class ErrorConstant {
 	
 	public static final String PROCEDURE_DETAIL_DESC="Procedure Description cannot be Empty";
 	
+	public static final String SUCCESS="Successful retrieval";
+	
+	public static final String UNAUTHORIZED="UNAUTHORIZED";
+	
+	public static final String FORBIDDEN="FORBIDDEN";
+	
+	public static final String NOT_FOUND="NOT FOUND";
+	
+	public static final String CREATED="CREATED";
+	
+	public static final String FAILURE="FAILURE";
+	
+	public static final String PATIENT_VISIT_ID="Patient Visit Id";
+	
 }

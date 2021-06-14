@@ -2,7 +2,7 @@ package com.citiustech.pms.diagnosis.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +38,25 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Transactional(rollbackFor = Exception.class)
 	public Diagnosis addDiagnosis(Diagnosis diagnosisAdd) {
 		LOGGER.info("Get in addDiagnosis ");
-		
-		if (Objects.isNull(diagnosisAdd.getDiagonosisId()) ||  diagnosisAdd.getDiagonosisId().isEmpty()) {
-			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_ID);
-		} else if (Objects.isNull(diagnosisAdd.getName()) || diagnosisAdd.getName().isEmpty()) {
-			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_NAME);
-		} else if (Objects.isNull(diagnosisAdd.getDescription()) || diagnosisAdd.getDescription().isEmpty()) {
-			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_DESCRIPTION);
-		}
+
+		String diagonosisId = Optional.ofNullable(diagnosisAdd.getDiagonosisId()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new DiagnosisException(ErrorConstant.DIAGNOSIS_ID));
+		LOGGER.info("diagonosis Id : {} ", diagonosisId);
+
+		String diagonosisName = Optional.ofNullable(diagnosisAdd.getName()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new DiagnosisException(ErrorConstant.DIAGNOSIS_NAME));
+		LOGGER.info("diagonosis Name : {} ", diagonosisName);
+
+		String diagonosisDescription = Optional.ofNullable(diagnosisAdd.getDescription()).filter(s -> !s.isEmpty())
+				.orElseThrow(() -> new DiagnosisException(ErrorConstant.DIAGNOSIS_DESCRIPTION));
+		LOGGER.info("diagonosis Description : {} ", diagonosisDescription);
 
 		diagnosis = diagnosisRepo.save(diagnosisAdd);
-		LOGGER.info("Diagnosis Added Successfully ");
-
+		LOGGER.info("Diagonosis data save successfully: {} ", diagnosisAdd);
+		
 		return diagnosis;
 	}	
+	
 
 	@Override
 	public DiagnosisSuccess getAllDiagnosis() {
@@ -69,7 +74,7 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	@Override
 	@Transactional(rollbackFor =  Exception.class)
 	public DiagnosisSuccess getDiagnosisDescription(DiagnosisModel diagnosisModel) {
-		LOGGER.info("procedureDetailDesc : {} ",diagnosisModel);
+		LOGGER.info("diagnosisModel : {} ", diagnosisModel);
 
 		List<Diagnosis> diagnosisList = new ArrayList<>();
 
@@ -80,23 +85,22 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 			LOGGER.error("Procedure Description cannot be Empty");
 			throw new DiagnosisException(ErrorConstant.DIAGNOSIS_DETAIL_DESC);
 		}
-		LOGGER.info("Size : {} ",diagnosisModel.getDiagnosis_details().size());
+		LOGGER.info("Size : {} ", diagnosisModel.getDiagnosis_details().size());
 
-		for (int i = 0; i < diagnosisModel.getDiagnosis_details().size(); i++) {
+		diagnosisModel.getDiagnosis_details().stream().forEach(element -> {
 			Diagnosis diagnosisDesc = new Diagnosis();
-
 			diagnosisDesc.setPatientVisitId(diagnosisModel.getPatient_visit_id());
-			diagnosisDesc.setDiagonosisId(diagnosisModel.getDiagnosis_details().get(i).getId());
-			diagnosisDesc.setName(diagnosisModel.getDiagnosis_details().get(i).getName());
-			diagnosisDesc.setDescription(diagnosisModel.getDiagnosis_details().get(i).getDescription());
+			diagnosisDesc.setDiagonosisId(element.getId());
+			diagnosisDesc.setName(element.getName());
+			diagnosisDesc.setDescription(element.getDescription());
 
 			diagnosisList.add(diagnosisDesc);
-		}
-
+		});
 		diagnosisRepo.saveAll(diagnosisList);
-		LOGGER.info("Data Save Successfully");
+		LOGGER.info("Data Save Successfully : {} ", diagnosisList);
 
-		return new DiagnosisSuccess.DiagnosisDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE).build();
+		return new DiagnosisSuccess.DiagnosisDto().setMessage("Added Successfully").setSuccessFlag(Boolean.TRUE)
+				.build();
 	}
 
 
