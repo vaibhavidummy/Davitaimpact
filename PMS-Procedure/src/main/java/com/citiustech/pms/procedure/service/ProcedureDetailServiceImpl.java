@@ -77,7 +77,7 @@ public class ProcedureDetailServiceImpl implements ProcedureDetailService {
     public ProcedureSuccess getAllProcedure()
 	{
 		List<ProcedureMaster> procedureMaster = procedureMasterRepo.findAll();
-		LOGGER.info("Get Master Data: {} ",procedureMaster);
+		LOGGER.info("Get Master Data size: {} ",procedureMaster.size());
 		
 		if (procedureMaster.isEmpty()) {
 			LOGGER.error("No Data available in ProcedureMaster");
