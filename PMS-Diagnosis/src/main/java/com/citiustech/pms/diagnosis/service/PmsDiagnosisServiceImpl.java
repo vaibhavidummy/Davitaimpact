@@ -62,7 +62,7 @@ public class PmsDiagnosisServiceImpl implements PmsDiagnosisServiceInterface {
 	public DiagnosisSuccess getAllDiagnosis() {
 
 		List<DiagnosisMaster> diagnosisMaster = diagnosisMasterRepo.findAll();
-		LOGGER.info("Get Master Data: {} ",diagnosisMaster);
+		LOGGER.info("Get Master Data size: {} ",diagnosisMaster.size());
 
 		if (diagnosisMaster.isEmpty()) {
 			LOGGER.error("No Data available in DiagnosisMaster");
